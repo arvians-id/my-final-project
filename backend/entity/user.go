@@ -3,14 +3,14 @@ package entity
 import "time"
 
 type User struct {
-	ID            int       `json:"id"`
-	Name          string    `json:"name"`
-	Unique_number string    `json:"unique_number"`
-	Phone         string    `json:"phone"`
-	Email         string    `json:"email"`
-	Password      string    `json:"password"`
-	Role          int       `json:"role"`
-	Image         string    `json:"image"`
-	Created_at    time.Time `json:"created_at"`
-	Updated_at    time.Time `json:"updated_at"`
+	ID            int
+	Name          string
+	Unique_number string
+	Phone         string
+	Email         string
+	Password      string
+	Role          int
+	Image         string
+	Created_at    time.Time
+	Updated_at    time.Time
 }
