@@ -21,7 +21,7 @@ type UserDetails struct {
 }
 
 type Birthdate interface {
-	getDOB(year, month, day int) time.Time
+	GetDOB(year, month, day int) time.Time
 }
 
 func GetDOB(year, month, day int) time.Time {
