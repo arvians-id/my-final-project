@@ -9,15 +9,15 @@ const (
 )
 
 type UserDetails struct {
-	ID                 int
-	User_id            int
-	Phone              string
-	Gender             int
-	Type_of_disability int
-	Address            string
-	Birthdate          Birthdate
-	Image              string
-	Description        string
+	Id               int
+	UserId           int
+	Phone            string
+	Gender           int
+	TypeOfDisability int
+	Address          string
+	Birthdate        Birthdate
+	Image            string
+	Description      string
 }
 
 type Birthdate interface {
