@@ -2,10 +2,10 @@ package entity
 
 import "time"
 
-type User struct {
+type Users struct {
 	Id                int
 	Name              string
-	UserName          string
+	Username          string
 	Email             string
 	Password          string
 	Role              string

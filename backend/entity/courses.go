@@ -2,8 +2,8 @@ package entity
 
 import "time"
 
-type Course struct {
-	ID          int
+type Courses struct {
+	Id          int
 	Name        string
 	CodeCourse  string
 	Class       string
