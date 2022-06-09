@@ -1,20 +1,17 @@
 import React from 'react'
-import { Button, ButtonGroup } from '@chakra-ui/react'
-import { Link, Route, Routes } from 'react-router-dom'
-import Home from './Home'
+import { Box, Button} from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 export default function Login() {
     return (
         <div>
-            <h1>Selamat Datang Di Halaman Login</h1>
-            <Routes>
-                <Route path="/" element={Login}>
-                    <Button as={Link}>Home</Button>
-                </Route>
-                <Route path="/home" element={Home}>
-                    <Button as={Link} to="/home">Home</Button>
-                </Route>
-            </Routes>
+            <Box m={10}>
+                <h1>Selamat Datang Di Halaman Login</h1>
+                <Box mr={20} mt={10}>
+                    <Link to="/home"><Button variantColor="teal"m={3}>Home</Button></Link>
+                    <Link to="/"><Button color={'red'}>Login</Button></Link>
+                </Box>
+            </Box>
         </div>
     )
 }
