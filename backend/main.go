@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rg-km/final-project-engineering-12/backend/controller"
@@ -15,11 +16,27 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	const PORT = ":8080"
 	userRepository := repository.NewUserRepository(database)
 	userService := service.NewUserService(&userRepository)
 	userController := controller.NewUserController(&userService)
 
 	routing := userController.Route()
+	teenager(PORT)
 	routing.Run(":8080")
+}
+
+func teenager(port string) {
+	fmt.Print(`
+
+	
+┏━━━━┓
+┃┏┓┏┓┃
+┗┛┃┃┣┻━┳━━┳━┓┏━━┳━━┳━━┳━┓
+╋╋┃┃┃┃━┫┃━┫┏┓┫┏┓┃┏┓┃┃━┫┏┛
+╋╋┃┃┃┃━┫┃━┫┃┃┃┏┓┃┗┛┃┃━┫┃
+╋╋┗┛┗━━┻━━┻┛┗┻┛┗┻━┓┣━━┻┛
+╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋┏━┛┃
+╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋┗━━┛
+`)
 }
