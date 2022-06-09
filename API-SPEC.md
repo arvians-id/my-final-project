@@ -1,10 +1,9 @@
-API Specification
-----------------------------------------------------------------
+# API Specification
 
 All API must use this authentication
 Request:
 - Header:
-    - X-Api-Key: "your secret api key"
+    - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
 - Users:                            Line 20
@@ -17,17 +16,18 @@ SUMMARY:
 - Answers:                          Line 872
 - Question:                         Line 989
 
-// Users
+## Users
 ------------------------------
-Create Users
-------------------------------
+## Create Users
+
 Request:
-- Method: POST
-- Endpoint: /api/users
+- Method: ```POST ```
+- Endpoint: ```/api/users ```
 - Header:
-    - Content-Type: application/json
-    - Accept: application/json
+    - Content-Type: ``` application/json ```
+    - Accept: ``` application/json ```
 - Body:
+    ``` json
     {
         "name" : "string",
         "username" : "string", // unique
@@ -36,7 +36,9 @@ Request:
         "role" : "integer", // enum(1,2)
         "email_verified_at" : "timestamp", // timestamp
     }
-Response:
+    ```
+- Response:
+    ``` json
     {   
         "code" : "number",
         "status" : "string",
@@ -52,6 +54,7 @@ Response:
             "updated_at" : "timestamp" // timestamp
         }
     }
+    ```
 ------------------------------
 Get Users
 ------------------------------
