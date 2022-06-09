@@ -302,7 +302,7 @@ Request:
         "type_of_disability" : "integer", // enum(1,2,3)
         "address" : "string",
         "birthdate" : "date", // date
-        "image" : "string,
+        "image" : "string",
         "description" : "string"
     }
 ```
@@ -319,7 +319,7 @@ Response:
             "type_of_disability" : "integer", // enum(1,2,3)
             "address" : "string",
             "birthdate" : "date", // date
-            "image" : "string,
+            "image" : "string",
             "description" : "string"
         }
     }
@@ -346,7 +346,7 @@ Response:
             "type_of_disability" : "integer", // enum(1,2,3)
             "address" : "string",
             "birthdate" : "date", // date
-            "image" : "string,
+            "image" : "string",
             "description" : "string"
         }
     }
@@ -369,7 +369,7 @@ Request:
         "type_of_disability" : "integer", // enum(1,2,3)
         "address" : "string",
         "birthdate" : "date", // date
-        "image" : "string,
+        "image" : "string",
         "description" : "string"
     }
 ```
@@ -386,7 +386,7 @@ Response:
             "type_of_disability" : "integer", // enum(1,2,3)
             "address" : "string",
             "birthdate" : "date", // date
-            "image" : "string,
+            "image" : "string",
             "description" : "string"
         }
     }
@@ -417,7 +417,7 @@ Response:
                 "type_of_disability" : "integer", // enum(1,2,3)
                 "address" : "string",
                 "birthdate" : "date", // date
-                "image" : "string,
+                "image" : "string",
                 "description" : "string"
             },
         ]
