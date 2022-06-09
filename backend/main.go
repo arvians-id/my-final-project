@@ -23,7 +23,7 @@ func main() {
 
 	routing := userController.Route()
 	teenager(PORT)
-	routing.Run(":8080")
+	routing.Run(PORT)
 }
 
 func teenager(port string) {
