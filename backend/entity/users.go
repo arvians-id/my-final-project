@@ -8,7 +8,7 @@ type Users struct {
 	Username          string
 	Email             string
 	Password          string
-	Role              string
+	Role              int
 	EmailVerification time.Time
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
