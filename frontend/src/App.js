@@ -1,8 +1,7 @@
-import Login from "./pages/Login";
-
+import Main from "./Main"
 function App() {
   return (
-    <Login />
+    <Main/>
   );
 }
 
