@@ -9,7 +9,7 @@ type UserRegister struct {
 	Email             string    `json:"email"`
 	Password          string    `json:"password"`
 	Role              string    `json:"role"`
-	EmailVerification time.Time `json:"email_verified_at"`
-	CreatedAt         time.Time `json:"created_at"`
-	UpdatedAt         time.Time `json:"updated_at"`
+	EmailVerification time.Time `json:"email_verification"`
+	Created_at        time.Time `json:"created_at"`
+	Updated_at        time.Time `json:"updated_at"`
 }
