@@ -5,6 +5,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
+	"strconv"
 )
 
 type CourseController struct {
@@ -21,10 +22,10 @@ func (controller *CourseController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api")
 	{
 		authorized.GET("/courses", controller.FindAll)
-		authorized.GET("/courses/:code", controller.FindByCode)
+		authorized.GET("/courses/:id", controller.FindById)
 		authorized.POST("/courses", controller.Create)
-		authorized.PATCH("/courses/:code", controller.Update)
-		authorized.DELETE("/courses/:code", controller.Delete)
+		authorized.PATCH("/courses/:id", controller.Update)
+		authorized.DELETE("/courses/:id", controller.Delete)
 	}
 
 	return router
@@ -48,9 +49,19 @@ func (controller *CourseController) FindAll(ctx *gin.Context) {
 	})
 }
 
-func (controller *CourseController) FindByCode(ctx *gin.Context) {
-	code := ctx.Param("code")
-	course, err := controller.CourseService.FindByCourse(ctx.Request.Context(), code)
+func (controller *CourseController) FindById(ctx *gin.Context) {
+	params := ctx.Param("id")
+	id, err := strconv.Atoi(params)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	course, err := controller.CourseService.FindById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -108,8 +119,17 @@ func (controller *CourseController) Update(ctx *gin.Context) {
 		return
 	}
 
-	code := ctx.Param("code")
-	course, err := controller.CourseService.Update(ctx, request, code)
+	params := ctx.Param("id")
+	id, err := strconv.Atoi(params)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+	course, err := controller.CourseService.Update(ctx, request, id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -127,9 +147,18 @@ func (controller *CourseController) Update(ctx *gin.Context) {
 }
 
 func (controller *CourseController) Delete(ctx *gin.Context) {
-	code := ctx.Param("code")
+	params := ctx.Param("id")
+	id, err := strconv.Atoi(params)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
 
-	err := controller.CourseService.Delete(ctx.Request.Context(), code)
+	err = controller.CourseService.Delete(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,

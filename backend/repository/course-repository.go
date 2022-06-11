@@ -9,10 +9,10 @@ import (
 
 type CourseRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.Courses, error)
-	FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.Courses, error)
+	FindById(ctx context.Context, tx *sql.Tx, id int) (entity.Courses, error)
 	Create(ctx context.Context, tx *sql.Tx, courses entity.Courses) (entity.Courses, error)
 	Update(ctx context.Context, tx *sql.Tx, courses entity.Courses) (entity.Courses, error)
-	Delete(ctx context.Context, tx *sql.Tx, code string) error
+	Delete(ctx context.Context, tx *sql.Tx, id int) error
 }
 
 type courseRepository struct {
@@ -59,9 +59,9 @@ func (repository *courseRepository) FindAll(ctx context.Context, tx *sql.Tx) ([]
 	return courses, nil
 }
 
-func (repository *courseRepository) FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.Courses, error) {
-	query := `SELECT * FROM courses WHERE code_course = ?`
-	queryContext, err := tx.QueryContext(ctx, query, code)
+func (repository *courseRepository) FindById(ctx context.Context, tx *sql.Tx, id int) (entity.Courses, error) {
+	query := `SELECT * FROM courses WHERE id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, id)
 	if err != nil {
 		return entity.Courses{}, err
 	}
@@ -142,9 +142,9 @@ func (repository *courseRepository) Update(ctx context.Context, tx *sql.Tx, cour
 	return courses, nil
 }
 
-func (repository *courseRepository) Delete(ctx context.Context, tx *sql.Tx, code string) error {
-	query := "DELETE FROM courses WHERE code_course = ?"
-	_, err := tx.ExecContext(ctx, query, code)
+func (repository *courseRepository) Delete(ctx context.Context, tx *sql.Tx, id int) error {
+	query := "DELETE FROM courses WHERE id = ?"
+	_, err := tx.ExecContext(ctx, query, id)
 	if err != nil {
 		return err
 	}

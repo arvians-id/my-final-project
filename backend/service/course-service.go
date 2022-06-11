@@ -11,10 +11,10 @@ import (
 
 type CourseService interface {
 	FindAll(ctx context.Context) ([]model.GetCourseResponse, error)
-	FindByCourse(ctx context.Context, code string) (model.GetCourseResponse, error)
+	FindById(ctx context.Context, id int) (model.GetCourseResponse, error)
 	Create(ctx context.Context, request model.CreateCourseRequest) (model.GetCourseResponse, error)
-	Update(ctx context.Context, request model.UpdateCourseRequest, code string) (model.GetCourseResponse, error)
-	Delete(ctx context.Context, code string) error
+	Update(ctx context.Context, request model.UpdateCourseRequest, id int) (model.GetCourseResponse, error)
+	Delete(ctx context.Context, id int) error
 }
 
 type courseService struct {
@@ -49,14 +49,14 @@ func (service *courseService) FindAll(ctx context.Context) ([]model.GetCourseRes
 	return courseResponses, nil
 }
 
-func (service *courseService) FindByCourse(ctx context.Context, code string) (model.GetCourseResponse, error) {
+func (service *courseService) FindById(ctx context.Context, id int) (model.GetCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	course, err := service.CourseRepository.FindByCode(ctx, tx, code)
+	course, err := service.CourseRepository.FindById(ctx, tx, id)
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
@@ -90,14 +90,14 @@ func (service *courseService) Create(ctx context.Context, request model.CreateCo
 	return utils.ToCourseResponse(course), nil
 }
 
-func (service *courseService) Update(ctx context.Context, request model.UpdateCourseRequest, code string) (model.GetCourseResponse, error) {
+func (service *courseService) Update(ctx context.Context, request model.UpdateCourseRequest, id int) (model.GetCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getCourse, err := service.CourseRepository.FindByCode(ctx, tx, code)
+	getCourse, err := service.CourseRepository.FindById(ctx, tx, id)
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
@@ -121,19 +121,19 @@ func (service *courseService) Update(ctx context.Context, request model.UpdateCo
 	return utils.ToCourseResponse(course), nil
 }
 
-func (service *courseService) Delete(ctx context.Context, code string) error {
+func (service *courseService) Delete(ctx context.Context, id int) error {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getCourse, err := service.CourseRepository.FindByCode(ctx, tx, code)
+	getCourse, err := service.CourseRepository.FindById(ctx, tx, id)
 	if err != nil {
 		return err
 	}
 
-	err = service.CourseRepository.Delete(ctx, tx, getCourse.CodeCourse)
+	err = service.CourseRepository.Delete(ctx, tx, getCourse.Id)
 	if err != nil {
 		return err
 	}
