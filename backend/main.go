@@ -28,8 +28,14 @@ func main() {
 	userService := service.NewUserService(&userRepository)
 	userController := controller.NewUserController(&userService)
 
+	// Course Setup
+	courseRepository := repository.NewCourseRepository()
+	courseService := service.NewCourseService(&courseRepository, database)
+	courseController := controller.NewCourseController(&courseService)
+
 	// Routing
 	userController.Route(router)
+	courseController.Route(router)
 
 	// Run
 	PORT := fmt.Sprintf(":%v", configuration.Get("PORT"))
