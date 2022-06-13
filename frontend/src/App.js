@@ -1,11 +1,7 @@
-// import Main from "./Main"
-// import Login from './pages/Login';
-import Register from './pages/Register';
+import Main from "./Main"
 function App() {
   return (
-    // <Main/>
-    // <Login />
-    <Register />
+    <Main/>
   );
 }
 
