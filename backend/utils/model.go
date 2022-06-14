@@ -18,3 +18,11 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 		UpdatedAt:   course.UpdatedAt,
 	}
 }
+
+func ToModuleArticlesResponse(ModArs entity.ModuleArticles) model.GetModuleArticlesResponse {
+	return model.GetModuleArticlesResponse{
+		Id:       ModArs.Id,
+		ModuleId: ModArs.ModuleId,
+		Content:  ModArs.Content,
+	}
+}
