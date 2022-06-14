@@ -10,11 +10,12 @@ import (
 )
 
 type CourseService interface {
-	FindAll(ctx context.Context) ([]model.GetCourseResponse, error)
+	FindAll(ctx context.Context, status bool, limit int) ([]model.GetCourseResponse, error)
 	FindById(ctx context.Context, id int) (model.GetCourseResponse, error)
 	Create(ctx context.Context, request model.CreateCourseRequest) (model.GetCourseResponse, error)
 	Update(ctx context.Context, request model.UpdateCourseRequest, id int) (model.GetCourseResponse, error)
 	Delete(ctx context.Context, id int) error
+	ChangeActiveCourse(ctx context.Context, request model.UpdateStatusCourseRequest, id int) error
 }
 
 type courseService struct {
@@ -29,14 +30,14 @@ func NewCourseService(courseRepository *repository.CourseRepository, db *sql.DB)
 	}
 }
 
-func (service *courseService) FindAll(ctx context.Context) ([]model.GetCourseResponse, error) {
+func (service *courseService) FindAll(ctx context.Context, status bool, limit int) ([]model.GetCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return []model.GetCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	courses, err := service.CourseRepository.FindAll(ctx, tx)
+	courses, err := service.CourseRepository.FindAll(ctx, tx, status, limit)
 	if err != nil {
 		return []model.GetCourseResponse{}, err
 	}
@@ -80,6 +81,7 @@ func (service *courseService) Create(ctx context.Context, request model.CreateCo
 		Description: request.Description,
 		CreatedAt:   utils.TimeNow(),
 		UpdatedAt:   utils.TimeNow(),
+		IsActive:    true,
 	}
 
 	course, err := service.CourseRepository.Create(ctx, tx, newCourse)
@@ -104,16 +106,16 @@ func (service *courseService) Update(ctx context.Context, request model.UpdateCo
 
 	newCourse := entity.Courses{
 		Name:        request.Name,
-		CodeCourse:  getCourse.CodeCourse,
 		Class:       request.Class,
 		Tools:       request.Tools,
 		About:       request.About,
 		Description: request.Description,
 		CreatedAt:   getCourse.CreatedAt,
 		UpdatedAt:   utils.TimeNow(),
+		IsActive:    getCourse.IsActive,
 	}
 
-	course, err := service.CourseRepository.Update(ctx, tx, newCourse)
+	course, err := service.CourseRepository.Update(ctx, tx, newCourse, id)
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
@@ -134,6 +136,26 @@ func (service *courseService) Delete(ctx context.Context, id int) error {
 	}
 
 	err = service.CourseRepository.Delete(ctx, tx, getCourse.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (service *courseService) ChangeActiveCourse(ctx context.Context, request model.UpdateStatusCourseRequest, id int) error {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	_, err = service.CourseRepository.FindById(ctx, tx, id)
+	if err != nil {
+		return err
+	}
+
+	err = service.CourseRepository.ChangeActiveCourse(ctx, tx, request.IsActive, id)
 	if err != nil {
 		return err
 	}

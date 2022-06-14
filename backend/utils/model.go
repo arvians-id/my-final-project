@@ -16,5 +16,6 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 		Description: course.Description,
 		CreatedAt:   course.CreatedAt,
 		UpdatedAt:   course.UpdatedAt,
+		IsActive:    course.IsActive,
 	}
 }

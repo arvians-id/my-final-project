@@ -26,13 +26,42 @@ func (controller *CourseController) Route(router *gin.Engine) *gin.Engine {
 		authorized.POST("/courses", controller.Create)
 		authorized.PATCH("/courses/:id", controller.Update)
 		authorized.DELETE("/courses/:id", controller.Delete)
+		authorized.PATCH("/courses/:id/status", controller.ChangeStatus)
 	}
 
 	return router
 }
 
 func (controller *CourseController) FindAll(ctx *gin.Context) {
-	courses, err := controller.CourseService.FindAll(ctx.Request.Context())
+	status := true
+	if ctx.Query("status") != "" {
+		statuses, err := strconv.ParseBool(ctx.Query("status"))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+				Code:   http.StatusInternalServerError,
+				Status: err.Error(),
+				Data:   nil,
+			})
+			return
+		}
+		status = statuses
+	}
+
+	limit := -1
+	if ctx.Query("limit") != "" {
+		limits, err := strconv.Atoi(ctx.Query("limit"))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+				Code:   http.StatusInternalServerError,
+				Status: err.Error(),
+				Data:   nil,
+			})
+			return
+		}
+		limit = limits
+	}
+
+	courses, err := controller.CourseService.FindAll(ctx.Request.Context(), status, limit)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -171,6 +200,45 @@ func (controller *CourseController) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "course successfully deleted",
+		Data:   nil,
+	})
+}
+
+func (controller *CourseController) ChangeStatus(ctx *gin.Context) {
+	var request model.UpdateStatusCourseRequest
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, model.WebResponse{
+			Code:   http.StatusBadRequest,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	params := ctx.Param("id")
+	id, err := strconv.Atoi(params)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+	err = controller.CourseService.ChangeActiveCourse(ctx, request, id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "course successfully updated",
 		Data:   nil,
 	})
 }
