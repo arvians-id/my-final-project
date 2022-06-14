@@ -72,7 +72,6 @@ func (service *moduleSubmissionsService) Create(ctx context.Context, request mod
 	defer utils.CommitOrRollback(tx)
 
 	newModsub := entity.ModuleSubmissions{
-		Id:       request.Id,
 		ModuleId: request.ModuleId,
 		File:     request.File,
 		Type:     request.Type,
@@ -100,8 +99,7 @@ func (service *moduleSubmissionsService) Update(ctx context.Context, request mod
 	}
 
 	newModsub := entity.ModuleSubmissions{
-		Id:       getModsub.Id,
-		ModuleId: request.ModuleId,
+		ModuleId: getModsub.ModuleId,
 		File:     request.File,
 		Type:     request.Type,
 		MaxSize:  request.MaxSize,
