@@ -11,11 +11,11 @@ import (
 
 type CourseService interface {
 	FindAll(ctx context.Context, status bool, limit int) ([]model.GetCourseResponse, error)
-	FindById(ctx context.Context, id int) (model.GetCourseResponse, error)
+	FindByCode(ctx context.Context, code string) (model.GetCourseResponse, error)
 	Create(ctx context.Context, request model.CreateCourseRequest) (model.GetCourseResponse, error)
-	Update(ctx context.Context, request model.UpdateCourseRequest, id int) (model.GetCourseResponse, error)
-	Delete(ctx context.Context, id int) error
-	ChangeActiveCourse(ctx context.Context, request model.UpdateStatusCourseRequest, id int) error
+	Update(ctx context.Context, request model.UpdateCourseRequest, code string) (model.GetCourseResponse, error)
+	Delete(ctx context.Context, code string) error
+	ChangeActiveCourse(ctx context.Context, request model.UpdateStatusCourseRequest, code string) error
 }
 
 type courseService struct {
@@ -50,14 +50,14 @@ func (service *courseService) FindAll(ctx context.Context, status bool, limit in
 	return courseResponses, nil
 }
 
-func (service *courseService) FindById(ctx context.Context, id int) (model.GetCourseResponse, error) {
+func (service *courseService) FindByCode(ctx context.Context, code string) (model.GetCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	course, err := service.CourseRepository.FindById(ctx, tx, id)
+	course, err := service.CourseRepository.FindByCode(ctx, tx, code)
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
@@ -92,20 +92,21 @@ func (service *courseService) Create(ctx context.Context, request model.CreateCo
 	return utils.ToCourseResponse(course), nil
 }
 
-func (service *courseService) Update(ctx context.Context, request model.UpdateCourseRequest, id int) (model.GetCourseResponse, error) {
+func (service *courseService) Update(ctx context.Context, request model.UpdateCourseRequest, code string) (model.GetCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getCourse, err := service.CourseRepository.FindById(ctx, tx, id)
+	getCourse, err := service.CourseRepository.FindByCode(ctx, tx, code)
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
 
 	newCourse := entity.Courses{
 		Name:        request.Name,
+		CodeCourse:  code,
 		Class:       request.Class,
 		Tools:       request.Tools,
 		About:       request.About,
@@ -115,7 +116,7 @@ func (service *courseService) Update(ctx context.Context, request model.UpdateCo
 		IsActive:    getCourse.IsActive,
 	}
 
-	course, err := service.CourseRepository.Update(ctx, tx, newCourse, id)
+	course, err := service.CourseRepository.Update(ctx, tx, newCourse, code)
 	if err != nil {
 		return model.GetCourseResponse{}, err
 	}
@@ -123,19 +124,19 @@ func (service *courseService) Update(ctx context.Context, request model.UpdateCo
 	return utils.ToCourseResponse(course), nil
 }
 
-func (service *courseService) Delete(ctx context.Context, id int) error {
+func (service *courseService) Delete(ctx context.Context, code string) error {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getCourse, err := service.CourseRepository.FindById(ctx, tx, id)
+	_, err = service.CourseRepository.FindByCode(ctx, tx, code)
 	if err != nil {
 		return err
 	}
 
-	err = service.CourseRepository.Delete(ctx, tx, getCourse.Id)
+	err = service.CourseRepository.Delete(ctx, tx, code)
 	if err != nil {
 		return err
 	}
@@ -143,19 +144,19 @@ func (service *courseService) Delete(ctx context.Context, id int) error {
 	return nil
 }
 
-func (service *courseService) ChangeActiveCourse(ctx context.Context, request model.UpdateStatusCourseRequest, id int) error {
+func (service *courseService) ChangeActiveCourse(ctx context.Context, request model.UpdateStatusCourseRequest, code string) error {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	_, err = service.CourseRepository.FindById(ctx, tx, id)
+	_, err = service.CourseRepository.FindByCode(ctx, tx, code)
 	if err != nil {
 		return err
 	}
 
-	err = service.CourseRepository.ChangeActiveCourse(ctx, tx, request.IsActive, id)
+	err = service.CourseRepository.ChangeActiveCourse(ctx, tx, request.IsActive, code)
 	if err != nil {
 		return err
 	}

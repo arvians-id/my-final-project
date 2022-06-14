@@ -5,7 +5,7 @@ import "time"
 type GetCourseResponse struct {
 	Id          int       `json:"id,omitempty"`
 	Name        string    `json:"name"`
-	CodeCourse  string    `json:"code_course,omitempty"`
+	CodeCourse  string    `json:"code_course"`
 	Class       string    `json:"class"`
 	Tools       string    `json:"tools"`
 	About       string    `json:"about"`

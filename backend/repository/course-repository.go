@@ -9,11 +9,11 @@ import (
 
 type CourseRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx, status bool, limit int) ([]entity.Courses, error)
-	FindById(ctx context.Context, tx *sql.Tx, id int) (entity.Courses, error)
+	FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.Courses, error)
 	Create(ctx context.Context, tx *sql.Tx, courses entity.Courses) (entity.Courses, error)
-	Update(ctx context.Context, tx *sql.Tx, courses entity.Courses, id int) (entity.Courses, error)
-	Delete(ctx context.Context, tx *sql.Tx, id int) error
-	ChangeActiveCourse(ctx context.Context, tx *sql.Tx, status bool, id int) error
+	Update(ctx context.Context, tx *sql.Tx, courses entity.Courses, code string) (entity.Courses, error)
+	Delete(ctx context.Context, tx *sql.Tx, code string) error
+	ChangeActiveCourse(ctx context.Context, tx *sql.Tx, status bool, code string) error
 }
 
 type courseRepository struct {
@@ -61,9 +61,9 @@ func (repository *courseRepository) FindAll(ctx context.Context, tx *sql.Tx, sta
 	return courses, nil
 }
 
-func (repository *courseRepository) FindById(ctx context.Context, tx *sql.Tx, id int) (entity.Courses, error) {
-	query := `SELECT * FROM courses WHERE id = ?`
-	queryContext, err := tx.QueryContext(ctx, query, id)
+func (repository *courseRepository) FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.Courses, error) {
+	query := `SELECT * FROM courses WHERE code_course = ?`
+	queryContext, err := tx.QueryContext(ctx, query, code)
 	if err != nil {
 		return entity.Courses{}, err
 	}
@@ -126,8 +126,8 @@ func (repository *courseRepository) Create(ctx context.Context, tx *sql.Tx, cour
 	return courses, nil
 }
 
-func (repository *courseRepository) Update(ctx context.Context, tx *sql.Tx, courses entity.Courses, id int) (entity.Courses, error) {
-	query := `UPDATE courses SET name = ?, class = ?, tools = ?, about = ?, description = ?, updated_at = ? WHERE id = ?`
+func (repository *courseRepository) Update(ctx context.Context, tx *sql.Tx, courses entity.Courses, code string) (entity.Courses, error) {
+	query := `UPDATE courses SET name = ?, class = ?, tools = ?, about = ?, description = ?, updated_at = ? WHERE code_course = ?`
 	_, err := tx.ExecContext(
 		ctx,
 		query,
@@ -137,7 +137,7 @@ func (repository *courseRepository) Update(ctx context.Context, tx *sql.Tx, cour
 		courses.About,
 		courses.Description,
 		courses.UpdatedAt,
-		id,
+		code,
 	)
 	if err != nil {
 		return entity.Courses{}, err
@@ -146,9 +146,9 @@ func (repository *courseRepository) Update(ctx context.Context, tx *sql.Tx, cour
 	return courses, nil
 }
 
-func (repository *courseRepository) Delete(ctx context.Context, tx *sql.Tx, id int) error {
-	query := "DELETE FROM courses WHERE id = ?"
-	_, err := tx.ExecContext(ctx, query, id)
+func (repository *courseRepository) Delete(ctx context.Context, tx *sql.Tx, code string) error {
+	query := "DELETE FROM courses WHERE code_course = ?"
+	_, err := tx.ExecContext(ctx, query, code)
 	if err != nil {
 		return err
 	}
@@ -156,13 +156,13 @@ func (repository *courseRepository) Delete(ctx context.Context, tx *sql.Tx, id i
 	return nil
 }
 
-func (repository *courseRepository) ChangeActiveCourse(ctx context.Context, tx *sql.Tx, status bool, id int) error {
-	query := `UPDATE courses SET is_active = ? WHERE id = ?`
+func (repository *courseRepository) ChangeActiveCourse(ctx context.Context, tx *sql.Tx, status bool, code string) error {
+	query := `UPDATE courses SET is_active = ? WHERE code_course = ?`
 	_, err := tx.ExecContext(
 		ctx,
 		query,
 		status,
-		id,
+		code,
 	)
 	if err != nil {
 		return err
