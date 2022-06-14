@@ -31,7 +31,7 @@ func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.En
 }
 
 func (controller *ModuleSubmissionsController) FindAll(ctx *gin.Context) {
-	courses, err := controller.ModuleSubmissionsService.FindAll(ctx.Request.Context())
+	Modsubs, err := controller.ModuleSubmissionsService.FindAll(ctx.Request.Context())
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -44,13 +44,13 @@ func (controller *ModuleSubmissionsController) FindAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "OK",
-		Data:   courses,
+		Data:   Modsubs,
 	})
 }
 
 func (controller *ModuleSubmissionsController) FindByCode(ctx *gin.Context) {
 	code := ctx.Param("code")
-	course, err := controller.ModuleSubmissionsService.FindByModId(ctx.Request.Context(), code)
+	Modsubs, err := controller.ModuleSubmissionsService.FindByModId(ctx.Request.Context(), code)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -63,7 +63,7 @@ func (controller *ModuleSubmissionsController) FindByCode(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "OK",
-		Data:   course,
+		Data:   Modsubs,
 	})
 }
 
@@ -79,7 +79,7 @@ func (controller *ModuleSubmissionsController) Create(ctx *gin.Context) {
 		return
 	}
 
-	course, err := controller.ModuleSubmissionsService.Create(ctx, request)
+	Modsubs, err := controller.ModuleSubmissionsService.Create(ctx, request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -92,7 +92,7 @@ func (controller *ModuleSubmissionsController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "course successfully created",
-		Data:   course,
+		Data:   Modsubs,
 	})
 }
 
@@ -109,7 +109,7 @@ func (controller *ModuleSubmissionsController) Update(ctx *gin.Context) {
 	}
 
 	code := ctx.Param("code")
-	course, err := controller.ModuleSubmissionsService.Update(ctx, request, code)
+	Modsubs, err := controller.ModuleSubmissionsService.Update(ctx, request, code)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -122,7 +122,7 @@ func (controller *ModuleSubmissionsController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "course successfully updated",
-		Data:   course,
+		Data:   Modsubs,
 	})
 }
 
