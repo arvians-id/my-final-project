@@ -1,7 +1,7 @@
 package entity
 
 type ModuleSubmissions struct {
-	ID       int
+	Id       int
 	ModuleId int
 	File     string
 	Type     string
