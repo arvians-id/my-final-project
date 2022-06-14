@@ -19,8 +19,8 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 	}
 }
 
-func ToModuleSubmissionsResponse(modsub entity.ModuleSubmissions) model.GetModuleSubmissions {
-	return model.GetModuleSubmissions{
+func ToModuleSubmissionsResponse(modsub entity.ModuleSubmissions) model.GetModuleSubmissionsResponse {
+	return model.GetModuleSubmissionsResponse{
 		Id:       modsub.Id,
 		ModuleId: modsub.ModuleId,
 		File:     modsub.File,

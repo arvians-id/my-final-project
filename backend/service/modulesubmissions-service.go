@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 	"database/sql"
-	"strconv"
-
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/repository"
@@ -12,10 +10,10 @@ import (
 )
 
 type ModuleSubmissionsService interface {
-	FindAll(ctx context.Context) ([]model.GetModuleSubmissions, error)
-	FindByCourse(ctx context.Context, code string) (model.GetModuleSubmissions, error)
-	Create(ctx context.Context, request model.CreateModuleSubmissions) (model.GetModuleSubmissions, error)
-	Update(ctx context.Context, request model.UpdateModuleSubmissions, code string) (model.GetModuleSubmissions, error)
+	FindAll(ctx context.Context) ([]model.GetModuleSubmissionsResponse, error)
+	FindByModId(ctx context.Context, code string) (model.GetModuleSubmissionsResponse, error)
+	Create(ctx context.Context, request model.CreateModuleSubmissionsRequest) (model.GetModuleSubmissionsResponse, error)
+	Update(ctx context.Context, request model.UpdateModuleSubmissionsRequest, code string) (model.GetModuleSubmissionsResponse, error)
 	Delete(ctx context.Context, code string) error
 }
 
@@ -24,26 +22,26 @@ type moduleSubmissionsService struct {
 	DB                          *sql.DB
 }
 
-func NewModuleSubmissionsService(moduleSubmissionsRepository *repository.ModuleSubmissionsRepository, db *sql.DB) moduleSubmissionsService {
-	return moduleSubmissionsService{
+func NewModuleSubmissionsService(moduleSubmissionsRepository *repository.ModuleSubmissionsRepository, db *sql.DB) ModuleSubmissionsService {
+	return &moduleSubmissionsService{
 		ModuleSubmissionsRepository: *moduleSubmissionsRepository,
 		DB:                          db,
 	}
 }
 
-func (service *moduleSubmissionsService) FindAll(ctx context.Context) ([]model.GetModuleSubmissions, error) {
+func (service *moduleSubmissionsService) FindAll(ctx context.Context) ([]model.GetModuleSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
-		return []model.GetModuleSubmissions{}, err
+		return []model.GetModuleSubmissionsResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
 	modsubs, err := service.ModuleSubmissionsRepository.FindAll(ctx, tx)
 	if err != nil {
-		return []model.GetModuleSubmissions{}, err
+		return []model.GetModuleSubmissionsResponse{}, err
 	}
 
-	var modsubResponses []model.GetModuleSubmissions
+	var modsubResponses []model.GetModuleSubmissionsResponse
 	for _, modsub := range modsubs {
 		modsubResponses = append(modsubResponses, utils.ToModuleSubmissionsResponse(modsub))
 	}
@@ -51,25 +49,25 @@ func (service *moduleSubmissionsService) FindAll(ctx context.Context) ([]model.G
 	return modsubResponses, nil
 }
 
-func (service *moduleSubmissionsService) FindByCourse(ctx context.Context, code string) (model.GetModuleSubmissions, error) {
+func (service *moduleSubmissionsService) FindByModId(ctx context.Context, code string) (model.GetModuleSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	modsub, err := service.ModuleSubmissionsRepository.FindByCode(ctx, tx, code)
+	modsub, err := service.ModuleSubmissionsRepository.FindByModId(ctx, tx, code)
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 
 	return utils.ToModuleSubmissionsResponse(modsub), nil
 }
 
-func (service *moduleSubmissionsService) Create(ctx context.Context, request model.CreateModuleSubmissions) (model.GetModuleSubmissions, error) {
+func (service *moduleSubmissionsService) Create(ctx context.Context, request model.CreateModuleSubmissionsRequest) (model.GetModuleSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
@@ -83,22 +81,22 @@ func (service *moduleSubmissionsService) Create(ctx context.Context, request mod
 
 	modsub, err := service.ModuleSubmissionsRepository.Create(ctx, tx, newModsub)
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 
 	return utils.ToModuleSubmissionsResponse(modsub), nil
 }
 
-func (service *moduleSubmissionsService) Update(ctx context.Context, request model.UpdateModuleSubmissions, code string) (model.GetModuleSubmissions, error) {
+func (service *moduleSubmissionsService) Update(ctx context.Context, request model.UpdateModuleSubmissionsRequest, code string) (model.GetModuleSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getModsub, err := service.ModuleSubmissionsRepository.FindByCode(ctx, tx, code)
+	getModsub, err := service.ModuleSubmissionsRepository.FindByModId(ctx, tx, code)
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 
 	newModsub := entity.ModuleSubmissions{
@@ -111,7 +109,7 @@ func (service *moduleSubmissionsService) Update(ctx context.Context, request mod
 
 	modsub, err := service.ModuleSubmissionsRepository.Update(ctx, tx, newModsub)
 	if err != nil {
-		return model.GetModuleSubmissions{}, err
+		return model.GetModuleSubmissionsResponse{}, err
 	}
 
 	return utils.ToModuleSubmissionsResponse(modsub), nil
@@ -124,12 +122,12 @@ func (service *moduleSubmissionsService) Delete(ctx context.Context, code string
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getModsub, err := service.ModuleSubmissionsRepository.FindByCode(ctx, tx, code)
+	getModsub, err := service.ModuleSubmissionsRepository.FindByModId(ctx, tx, code)
 	if err != nil {
 		return err
 	}
 
-	err = service.ModuleSubmissionsRepository.Delete(ctx, tx, strconv.Itoa(getModsub.Id))
+	err = service.ModuleSubmissionsRepository.Delete(ctx, tx, utils.ToString(getModsub.ModuleId))
 	if err != nil {
 		return err
 	}

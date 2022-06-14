@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
@@ -51,7 +50,7 @@ func (controller *ModuleSubmissionsController) FindAll(ctx *gin.Context) {
 
 func (controller *ModuleSubmissionsController) FindByCode(ctx *gin.Context) {
 	code := ctx.Param("code")
-	course, err := controller.ModuleSubmissionsService.FindByCourse(ctx.Request.Context(), code)
+	course, err := controller.ModuleSubmissionsService.FindByModId(ctx.Request.Context(), code)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -69,7 +68,7 @@ func (controller *ModuleSubmissionsController) FindByCode(ctx *gin.Context) {
 }
 
 func (controller *ModuleSubmissionsController) Create(ctx *gin.Context) {
-	var request model.CreateModuleSubmissions
+	var request model.CreateModuleSubmissionsRequest
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.WebResponse{
@@ -98,7 +97,7 @@ func (controller *ModuleSubmissionsController) Create(ctx *gin.Context) {
 }
 
 func (controller *ModuleSubmissionsController) Update(ctx *gin.Context) {
-	var request model.UpdateModuleSubmissions
+	var request model.UpdateModuleSubmissionsRequest
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.WebResponse{

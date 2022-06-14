@@ -4,13 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 )
 
 type ModuleSubmissionsRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.ModuleSubmissions, error)
-	FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.ModuleSubmissions, error)
+	FindByModId(ctx context.Context, tx *sql.Tx, code string) (entity.ModuleSubmissions, error)
 	Create(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions) (entity.ModuleSubmissions, error)
 	Update(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions) (entity.ModuleSubmissions, error)
 	Delete(ctx context.Context, tx *sql.Tx, code string) error
@@ -24,7 +23,7 @@ func NewModuleSubmissionsRepository() ModuleSubmissionsRepository {
 }
 
 func (repository *moduleSubmissionsRepository) FindAll(ctx context.Context, tx *sql.Tx) ([]entity.ModuleSubmissions, error) {
-	query := `SELECT * FROM module_submissions ORDER BY id, module_id ASC`
+	query := `SELECT * FROM module_submissions ORDER BY module_id ASC`
 	queryContext, err := tx.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -56,8 +55,8 @@ func (repository *moduleSubmissionsRepository) FindAll(ctx context.Context, tx *
 	return modsubs, nil
 }
 
-func (repository *moduleSubmissionsRepository) FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.ModuleSubmissions, error) {
-	query := `SELECT * FROM module_submissions WHERE id = ?`
+func (repository *moduleSubmissionsRepository) FindByModId(ctx context.Context, tx *sql.Tx, code string) (entity.ModuleSubmissions, error) {
+	query := `SELECT * FROM module_submissions WHERE module_id = ?`
 	queryContext, err := tx.QueryContext(ctx, query, code)
 	if err != nil {
 		return entity.ModuleSubmissions{}, err
@@ -85,7 +84,7 @@ func (repository *moduleSubmissionsRepository) FindByCode(ctx context.Context, t
 		return modsub, nil
 	}
 
-	return modsub, errors.New("module submissions not found")
+	return modsub, errors.New("submissions not found")
 }
 
 func (repository *moduleSubmissionsRepository) Create(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions) (entity.ModuleSubmissions, error) {
@@ -112,11 +111,10 @@ func (repository *moduleSubmissionsRepository) Create(ctx context.Context, tx *s
 }
 
 func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions) (entity.ModuleSubmissions, error) {
-	query := `UPDATE module_submissions SET module_id = ?, file = ?, type = ?, max_size = ? WHERE id = ?`
+	query := `UPDATE module_submissions SET file = ?, type = ?, max_size = ? WHERE module_id = ?`
 	_, err := tx.ExecContext(
 		ctx,
 		query,
-		&modsub.ModuleId,
 		&modsub.File,
 		&modsub.Type,
 		&modsub.MaxSize,
@@ -129,7 +127,7 @@ func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *s
 }
 
 func (repository *moduleSubmissionsRepository) Delete(ctx context.Context, tx *sql.Tx, code string) error {
-	query := "DELETE FROM module_submissions WHERE id = ?"
+	query := "DELETE FROM module_submissions WHERE module_id = ?"
 	_, err := tx.ExecContext(ctx, query, code)
 	if err != nil {
 		return err
