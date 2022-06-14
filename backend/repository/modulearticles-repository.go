@@ -11,15 +11,15 @@ import (
 type ModuleArticlesRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.ModuleArticles, error)
 	FindByModId(ctx context.Context, tx *sql.Tx, code string) (entity.ModuleArticles, error)
-	Create(ctx context.Context, tx *sql.Tx, courses entity.ModuleArticles) (entity.ModuleArticles, error)
-	Update(ctx context.Context, tx *sql.Tx, courses entity.ModuleArticles) (entity.ModuleArticles, error)
+	Create(ctx context.Context, tx *sql.Tx, ModArs entity.ModuleArticles) (entity.ModuleArticles, error)
+	Update(ctx context.Context, tx *sql.Tx, ModArs entity.ModuleArticles) (entity.ModuleArticles, error)
 	Delete(ctx context.Context, tx *sql.Tx, code string) error
 }
 
 type moduleArticlesRepository struct {
 }
 
-func NewModuleArticlesRepository() CourseRepository {
+func NewModuleArticlesRepository() ModuleArticlesRepository {
 	return &moduleArticlesRepository{}
 }
 
@@ -55,10 +55,10 @@ func (repository *moduleArticlesRepository) FindAll(ctx context.Context, tx *sql
 }
 
 func (repository *moduleArticlesRepository) FindByModId(ctx context.Context, tx *sql.Tx, code string) (entity.ModuleArticles, error) {
-	query := `SELECT * FROM courses WHERE code_course = ?`
+	query := `SELECT * FROM module_articles WHERE module_id = ?`
 	queryContext, err := tx.QueryContext(ctx, query, code)
 	if err != nil {
-		return entity.Courses{}, err
+		return entity.ModuleArticles{}, err
 	}
 	defer func(queryContext *sql.Rows) {
 		err := queryContext.Close()
@@ -67,78 +67,60 @@ func (repository *moduleArticlesRepository) FindByModId(ctx context.Context, tx 
 		}
 	}(queryContext)
 
-	var course entity.Courses
+	var ModAr entity.ModuleArticles
 	if queryContext.Next() {
 		err := queryContext.Scan(
-			&course.Id,
-			&course.Name,
-			&course.CodeCourse,
-			&course.Class,
-			&course.Tools,
-			&course.About,
-			&course.Description,
-			&course.CreatedAt,
-			&course.UpdatedAt,
+			&ModAr.Id,
+			&ModAr.ModuleId,
+			&ModAr.Content,
 		)
 		if err != nil {
-			return entity.Courses{}, err
+			return entity.ModuleArticles{}, err
 		}
 
-		return course, nil
+		return ModAr, nil
 	}
 
-	return course, errors.New("course not found")
+	return ModAr, errors.New("article not found")
 }
 
-func (repository *courseRepository) Create(ctx context.Context, tx *sql.Tx, courses entity.Courses) (entity.Courses, error) {
-	query := `INSERT INTO courses(name,code_course,class,tools,about,description,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)`
+func (repository *moduleArticlesRepository) Create(ctx context.Context, tx *sql.Tx, ModArs entity.ModuleArticles) (entity.ModuleArticles, error) {
+	query := `INSERT INTO module_articles(module_id,content) VALUES(?,?)`
 	queryContext, err := tx.ExecContext(
 		ctx,
 		query,
-		courses.Name,
-		courses.CodeCourse,
-		courses.Class,
-		courses.Tools,
-		courses.About,
-		courses.Description,
-		courses.CreatedAt,
-		courses.UpdatedAt,
+		ModArs.ModuleId,
+		ModArs.Content,
 	)
 	if err != nil {
-		return entity.Courses{}, err
+		return entity.ModuleArticles{}, err
 	}
 
 	id, err := queryContext.LastInsertId()
 	if err != nil {
-		return entity.Courses{}, err
+		return entity.ModuleArticles{}, err
 	}
-	courses.Id = int(id)
+	ModArs.Id = int(id)
 
-	return courses, nil
+	return ModArs, nil
 }
 
-func (repository *courseRepository) Update(ctx context.Context, tx *sql.Tx, courses entity.Courses) (entity.Courses, error) {
-	query := `UPDATE courses SET name = ?, class = ?, tools = ?, about = ?, description = ?, updated_at = ? WHERE code_course = ?`
+func (repository *moduleArticlesRepository) Update(ctx context.Context, tx *sql.Tx, ModArs entity.ModuleArticles) (entity.ModuleArticles, error) {
+	query := `UPDATE module_articles SET content = ? WHERE module_id = ?`
 	_, err := tx.ExecContext(
 		ctx,
 		query,
-		courses.Name,
-		courses.Class,
-		courses.Tools,
-		courses.About,
-		courses.Description,
-		courses.UpdatedAt,
-		courses.CodeCourse,
+		ModArs.Content,
 	)
 	if err != nil {
-		return entity.Courses{}, err
+		return entity.ModuleArticles{}, err
 	}
 
-	return courses, nil
+	return ModArs, nil
 }
 
-func (repository *courseRepository) Delete(ctx context.Context, tx *sql.Tx, code string) error {
-	query := "DELETE FROM courses WHERE code_course = ?"
+func (repository *moduleArticlesRepository) Delete(ctx context.Context, tx *sql.Tx, code string) error {
+	query := "DELETE FROM module_articles WHERE module_id = ?"
 	_, err := tx.ExecContext(ctx, query, code)
 	if err != nil {
 		return err
