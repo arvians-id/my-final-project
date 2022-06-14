@@ -33,9 +33,15 @@ func main() {
 	courseService := service.NewCourseService(&courseRepository, database)
 	courseController := controller.NewCourseController(&courseService)
 
+	// Module Articles Setup
+	moduleArticlesRepository := repository.NewModuleArticlesRepository()
+	moduleArticlesService := service.NewModuleArticlesService(&moduleArticlesRepository, database)
+	moduleArticlesController := controller.NewModuleArticlesController(&moduleArticlesService)
+
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
+	moduleArticlesController.Route(router)
 
 	// Run
 	PORT := fmt.Sprintf(":%v", configuration.Get("PORT"))
