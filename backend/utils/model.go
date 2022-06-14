@@ -18,3 +18,13 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 		UpdatedAt:   course.UpdatedAt,
 	}
 }
+
+func ToModuleSubmissionsResponse(modsub entity.ModuleSubmissions) model.GetModuleSubmissions {
+	return model.GetModuleSubmissions{
+		Id:       modsub.Id,
+		ModuleId: modsub.ModuleId,
+		File:     modsub.File,
+		Type:     modsub.Type,
+		MaxSize:  modsub.MaxSize,
+	}
+}
