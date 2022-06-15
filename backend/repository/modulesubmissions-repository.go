@@ -88,7 +88,7 @@ func (repository *moduleSubmissionsRepository) FindByModId(ctx context.Context, 
 }
 
 func (repository *moduleSubmissionsRepository) Create(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions) (entity.ModuleSubmissions, error) {
-	query := `INSERT INTO module_submissions(id, module_id, file, type, max_size) VALUES(?,?,?,?,?)`
+	query := `INSERT INTO module_submissions(module_id, file, type, max_size) VALUES(?,?,?,?)`
 	queryContext, err := tx.ExecContext(
 		ctx,
 		query,
@@ -118,6 +118,7 @@ func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *s
 		&modsub.File,
 		&modsub.Type,
 		&modsub.MaxSize,
+		&modsub.ModuleId,
 	)
 	if err != nil {
 		return entity.ModuleSubmissions{}, err

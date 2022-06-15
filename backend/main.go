@@ -44,7 +44,7 @@ func main() {
 	moduleSubmissionController.Route(router)
 
 	// Run
-	PORT := fmt.Sprintf(":%v", configuration.Get("PORT"))
+	PORT := fmt.Sprintf(":%v", configuration.Get("APP_PORT"))
 	teenager(PORT)
 
 	err = router.Run(PORT)

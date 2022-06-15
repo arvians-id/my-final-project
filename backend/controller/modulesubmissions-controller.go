@@ -23,7 +23,7 @@ func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.En
 		authorized.GET("/submissions", controller.FindAll)
 		authorized.GET("/submissions/:code", controller.FindByCode)
 		authorized.POST("/submissions", controller.Create)
-		authorized.PATCH("/submissions/:code", controller.Update)
+		authorized.PUT("/submissions/:code", controller.Update)
 		authorized.DELETE("/submissions/:code", controller.Delete)
 	}
 
