@@ -173,6 +173,13 @@ export default function Login() {
                             </VStack>
                         </form>
                     </Box>
+<<<<<<< HEAD
+=======
+                    <Button as={Link} to="/register" colorScheme="blue" variant="outline" width="full" p={5}>
+                      Daftar Sekarang
+                    </Button>
+                  </VStack>
+>>>>>>> 475ea02f4b46dc8bad7c83062695b2adf46870ee
                 </Box>
             </Box>
             <Box
