@@ -5,6 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/entity"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 )
@@ -20,29 +22,31 @@ func NewUserController(userService *service.UserServiceImplement) UserController
 }
 
 func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
-	router.GET("/api/users", controller.getUser)
-	router.POST("/api/users", controller.userRegister)
-	router.GET("/api/users/:id", controller.getUserByID)
-	router.DELETE("/api/users/:id", controller.deleteUser)
-	router.PUT("/api/users/:id", controller.updateUser)
 
+	router.Use(func(c *gin.Context) {
+		c.Header("Content-Type", "application/json")
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
+		c.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
+		c.Header("Access-Control-Allow-Credentials", "true")
+	})
+
+	api := router.Group("/api")
+	{
+		api.POST("/users", controller.userRegister)
+		api.POST("/users/login", controller.userLogin)
+		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
+		api.GET("/users/verifytoken/:token", controller.verifyToken)
+		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
+		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))
+		api.GET("/users", middleware.AdminHandler(controller.listUser))
+		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))
+		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
+	}
 	return router
 }
 
-func (controller *UserController) getUser(ctx *gin.Context) {
-	responses, err := controller.UserService.GetAllUser()
-
-	if err != nil {
-		return
-	}
-
-	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
-		Code:   200,
-		Status: "Get All User Successfull",
-		Data:   responses,
-	})
-}
-
+//Function to register new user
 func (controller *UserController) userRegister(ctx *gin.Context) {
 	var user model.UserRegister
 
@@ -66,27 +70,203 @@ func (controller *UserController) userRegister(ctx *gin.Context) {
 	})
 }
 
-func (controller *UserController) deleteUser(ctx *gin.Context) {
+//Function to login user
+func (controller *UserController) userLogin(ctx *gin.Context) {
+	var user model.UserRegister
+
+	if err := ctx.BindJSON(&user); err != nil {
+		return
+	}
+
+	response, err := controller.UserService.UserLogin(user.Email, user.Password)
+
+	if err != nil {
+		return
+	}
+
+	if response.Name == "" {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "User Not Found",
+		})
+		return
+	}
+
+	ctx.Header("Accept", "application/json")
+	ctx.Header("Content-Type", "application/json")
+
+	token := service.JWTAuthService().GenerateToken(entity.Users{
+		Id:   response.Id,
+		Name: response.Name,
+		Role: response.Role,
+	})
+
+	ctx.Header("Authorization", "Bearer "+token)
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Login Successfull",
+		Token:  token,
+		Data:   response,
+	})
+}
+
+//Function to get user status
+func (controller *UserController) userStatus(ctx *gin.Context) {
+	token := ctx.GetHeader("Authorization")
+
+	claims, err := service.JWTAuthService().ParseToken(token)
+
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	if ok := service.JWTAuthService().CheckToken(claims.Raw); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	ctx.Header("Accept", "application/json")
+	ctx.Header("Content-Type", "application/json")
+	ctx.Header("Authorization", "Bearer "+token)
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Get User Status Successfull",
+		Data:   claims,
+	})
+}
+
+//Function to verify token
+func (controller *UserController) verifyToken(ctx *gin.Context) {
+	token := ctx.Param("token")
+
+	claims, err := service.JWTAuthService().ParseToken(token)
+
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	if ok := service.JWTAuthService().CheckToken(claims.Raw); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	ctx.Header("Accept", "application/json")
+	ctx.Header("Content-Type", "application/json")
+	ctx.Header("Authorization", "Bearer "+token)
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Get User Status Successfull",
+		Data:   claims,
+	})
+}
+
+//Function to logout user
+func (controller *UserController) userLogout(ctx *gin.Context) {
+	ctx.Header("Accept", "application/json")
+	ctx.Header("Content-Type", "application/json")
+
+	token := ctx.GetHeader("Authorization")
+
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+		})
+		return
+	}
+
+	if ok := service.JWTAuthService().CheckToken(token); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	err := service.JWTAuthService().DeleteToken(token)
+
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+		})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Logout Successfull",
+	})
+}
+
+//Function to get user by id
+func (controller *UserController) getUserByID(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	if err != nil {
 		return
 	}
 
-	err = controller.UserService.DeleteUser(id)
+	response, err := controller.UserService.GetUserbyID(id)
 
 	if err != nil {
 		return
 	}
 
-	ctx.Header("Accept", "application/json")
+	if response.Name == "" {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"message": "User Not Found",
+		})
+		return
+	}
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{
-		"code":   200,
-		"Status": "Delete User Successfull",
+	ctx.Header("Accept", "application/json")
+	ctx.Header("Content-Type", "application/json")
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Get User By ID Successfull",
+		Data:   response,
 	})
 }
 
+//Function to show list user
+func (controller *UserController) listUser(ctx *gin.Context) {
+	responses, err := controller.UserService.ListUser()
+
+	if err != nil {
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Get All User Successfull",
+		Data:   responses,
+	})
+}
+
+//Function to update user
 func (controller *UserController) updateUser(ctx *gin.Context) {
 	var user model.UserRegister
 
@@ -116,20 +296,17 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 	})
 }
 
-func (controller *UserController) getUserByID(ctx *gin.Context) {
+//Function to delete user
+func (controller *UserController) deleteUser(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	if err != nil {
 		return
 	}
 
-	response, err := controller.UserService.GetUserbyID(id)
+	err = controller.UserService.DeleteUser(id)
 
 	if err != nil {
-		return
-	}
-
-	if response.Name == "" {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"message": "User Not Found",
 		})
@@ -137,11 +314,9 @@ func (controller *UserController) getUserByID(ctx *gin.Context) {
 	}
 
 	ctx.Header("Accept", "application/json")
-	ctx.Header("Content-Type", "application/json")
 
-	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
-		Code:   200,
-		Status: "Get User By ID Successfull",
-		Data:   response,
+	ctx.IndentedJSON(http.StatusOK, gin.H{
+		"code":   200,
+		"Status": "Delete User Successfull",
 	})
 }
