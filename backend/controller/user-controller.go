@@ -21,9 +21,7 @@ func NewUserController(userService *service.UserServiceImplement) UserController
 	}
 }
 
-func (controller *UserController) Route() *gin.Engine {
-	router := gin.Default()
-
+func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 	router.Use(func(c *gin.Context) {
 		c.Header("Content-Type", "application/json")
 		c.Header("Access-Control-Allow-Origin", "*")

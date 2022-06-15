@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="teenager" uuid="9af30f2e-5f87-4431-ae08-289728d29e5c">
+    <data-source source="LOCAL" name="teenager" uuid="5b619a2a-924c-47d2-9b63-189f52877baa">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:E:\Data Widdy\final-project-engineering-12\backend\teenager.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\laragon\www\final-project-engineering-12\backend\teenager.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

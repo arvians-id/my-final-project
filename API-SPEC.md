@@ -10,11 +10,11 @@ SUMMARY:
 - User_course:                      Line 170
 - User_details:                     Line 286
 - Courses:                          Line 442
-- Modules:                          Line 594
-- Module_submission:                Line 738
-- Module_articles:                  Line 870
-- Answers:                          Line 990
-- Question:                         Line 1124
+- Modules:                          Line 620
+- Module_submission:                Line 764
+- Module_articles:                  Line 896
+- Answers:                          Line 1016
+- Question:                         Line 1150
 
 ## Users
 ------------------------------
@@ -472,6 +472,7 @@ Response:
             "class" : "string",
             "tools" : "string", // longtext
             "about" : "string", // longtext
+            "is_active" : "boolean",
             "description" : "string", // longtext
             "created_at" : "timestamp", // timestamp
             "updated_at" : "timestamp" // timestamp 
@@ -483,7 +484,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/courses/{id}```
+- Endpoint: ```/api/courses/{code}```
 - Header:
     - Accept: ```application/json```
 
@@ -500,6 +501,7 @@ Response:
             "tools" : "string", // longtext
             "about" : "string", // longtext
             "description" : "string", // longtext
+            "is_active" : "boolean",
             "created_at" : "timestamp", // timestamp
             "updated_at" : "timestamp" // timestamp 
         }
@@ -509,8 +511,8 @@ Response:
 ## Update Courses
 ------------------------------
 Request:
-- Method: ```PUT```
-- Endpoint: ```/api/courses/{id}```
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}```
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
@@ -518,7 +520,6 @@ Request:
 ``` json
     {
         "name" : "string",
-        "code_course" : "string", // unique
         "class" : "string",
         "tools" : "string", // longtext
         "about" : "string", // longtext
@@ -531,13 +532,13 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
             "name" : "string",
             "code_course" : "string", // unique
             "class" : "string",
             "tools" : "string", // longtext
             "about" : "string", // longtext
             "description" : "string", // longtext
+            "is_active" : "boolean",
             "created_at" : "timestamp", // timestamp
             "updated_at" : "timestamp" // timestamp 
         }
@@ -548,12 +549,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/courses```
+- Endpoint: ```/api/courses?status=true&limit=1```
 - Header:
     - Accept: ```application/json```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+    - status : ```boolean``` ```optional``` ```default = true```
+    - limit : ```number``` ```optional``` ```default = all list```
 
 Response:
 ``` json
@@ -569,6 +570,7 @@ Response:
                 "tools" : "string", // longtext
                 "about" : "string", // longtext
                 "description" : "string", // longtext
+                "is_active" : "boolean",
                 "created_at" : "timestamp", // timestamp
                 "updated_at" : "timestamp" // timestamp 
             },
@@ -580,7 +582,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/courses/{id}```
+- Endpoint: ```/api/courses/{code}```
 - Header:
     - Accept: ```application/json```
 
@@ -588,7 +590,31 @@ Response:
 ``` json
     {
         "code" : "number",
-        "status" : "string"
+        "status" : "string",
+        "data" : null
+    }
+```
+------------------------------
+## Deactivate Courses
+------------------------------
+Request:
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}/status```
+- Header:
+  - Accept: ```application/json```
+- Body:
+``` json
+    {
+        "is_active" : "boolean",
+    }
+```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : null
     }
 ```
 ## Modules
