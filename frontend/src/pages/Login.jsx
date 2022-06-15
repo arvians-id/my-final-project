@@ -105,7 +105,7 @@ export default function Login() {
                     <Box as='p' fontSize='m' color="grey" textAlign="center">
                       Atau Anda Sudah Memiliki Akun
                     </Box>
-                    <Button as={Link} to="/register" colorScheme="red" variant="outline" width="full" p={5}>
+                    <Button as={Link} to="/register" colorScheme="blue" variant="outline" width="full" p={5}>
                       Daftar Sekarang
                     </Button>
                   </VStack>
