@@ -111,6 +111,7 @@ func (repository *moduleArticlesRepository) Update(ctx context.Context, tx *sql.
 		ctx,
 		query,
 		ModArs.Content,
+		ModArs.ModuleId,
 	)
 	if err != nil {
 		return entity.ModuleArticles{}, err

@@ -23,7 +23,7 @@ func (controller *ModuleArticlesController) Route(router *gin.Engine) *gin.Engin
 		authorized.GET("/articles", controller.FindAll)
 		authorized.GET("/articles/:code", controller.FindByCode)
 		authorized.POST("/articles", controller.Create)
-		authorized.PATCH("/articles/:code", controller.Update)
+		authorized.PUT("/articles/:code", controller.Update)
 		authorized.DELETE("/articles/:code", controller.Delete)
 	}
 
