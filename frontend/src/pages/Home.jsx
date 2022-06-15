@@ -13,7 +13,7 @@ import React from 'react';
 
 export default function Home() {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [placement, setPlacement] = React.useState('right');
+    const [placement, setPlacement] = React.useState('left');
 
     return (
         <>
