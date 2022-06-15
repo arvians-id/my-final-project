@@ -1,9 +1,44 @@
-import React from 'react'
+import {
+    Drawer,
+    DrawerBody,
+    DrawerHeader,
+    DrawerOverlay,
+    DrawerContent,
+    Button,
+    useDisclosure,
+    Link,
+} from '@chakra-ui/react';
+import { HamburgerIcon } from '@chakra-ui/icons';
+import React from 'react';
 
 export default function Home() {
-  return (
-    <div>
-        <h1>Selamat Datang Di Halaman Home</h1>
-    </div>
-  )
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [placement, setPlacement] = React.useState('right');
+
+    return (
+        <>
+            <Button colorScheme="blue" onClick={onOpen}>
+                <HamburgerIcon />
+            </Button>
+            <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerHeader borderBottomWidth="1px">
+                        Dashboard
+                    </DrawerHeader>
+                    <DrawerBody>
+                        <p>
+                            <Link>Series</Link>
+                        </p>
+                        <p>
+                            <Link>Courses</Link>
+                        </p>
+                        <p>
+                            <Link>Account</Link>
+                        </p>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
+        </>
+    );
 }
