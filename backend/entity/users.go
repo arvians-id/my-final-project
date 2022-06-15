@@ -8,7 +8,10 @@ type Users struct {
 	Username          string
 	Email             string
 	Password          string
-	Role              string
+	Role              int
+	Gender            int
+	DisabilityType    int
+	Birthdate         string
 	EmailVerification time.Time
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
