@@ -8,6 +8,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/controller"
 	"github.com/rg-km/final-project-engineering-12/backend/repository"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
+	"github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -22,6 +23,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	
+	// gin cors allows all origins
+	router.Use(cors.Default())
 
 	// User Setup
 	userRepository := repository.NewUserRepository(database)

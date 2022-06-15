@@ -1,8 +1,100 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Flex, VStack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Select, NumberInput, InputGroup, InputLeftAddon, Heading } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { API_REGISTER } from '../api/auth';
+import { createStandaloneToast } from '@chakra-ui/toast'
 
 export default function Register() {
+  const { toast } = createStandaloneToast()
+  const [registerForm, setRegisterForm] = useState({
+    name: "",
+    username: "",
+    email: "",
+    password: "",
+    role: 2,
+    gender: 0,
+    type_of_disability: 0,
+    birthdate: "",
+    loading: false
+  })
+  const navigate = useNavigate()
+
+  const disabledButtonRegister = () => {
+    if(!registerForm.email  || !registerForm.password || !registerForm.gender || !registerForm.type_of_disability || !registerForm.birthdate ) 
+        return true
+    return false
+  }
+
+  const handleSubmitRegister = async (e) => {
+      e.preventDefault();
+      setRegisterForm({
+          ...registerForm,
+          loading: true
+      })
+      const res = await API_REGISTER({
+        name: registerForm.name,
+        username: registerForm.username,
+        email: registerForm.email,
+        password: registerForm.password,
+        role: registerForm.role,
+        gender: registerForm.gender,
+        type_of_disability: registerForm.type_of_disability,
+        birthdate: registerForm.birthdate,
+      })
+      setRegisterForm({
+          ...registerForm,
+          loading: false
+      })
+      if(res.status === 200) {      
+          clearRegisterForm();   
+          gotoLoginPage();   
+      } else {
+          toast({
+              position: 'bottom',
+              title: 'Error Login.',
+              description: res.message,
+              status: 'error',
+              duration: 9000,
+              isClosable: true,
+          })
+      }
+  }
+
+  const gotoLoginPage = () => {
+    toast({
+      position: 'bottom',
+      title: 'Berhasil Mendaftar Akun.',
+      description: 'Anda akan diahrakan kehalaman login dalam 3 detik',
+      status: 'success',
+      duration: 9000,
+      isClosable: false,    
+    })
+    setTimeout(() => {
+      navigate('/login')
+    },3000)
+  }
+
+  const onChangeRegisterForm = (e) => {
+      setRegisterForm({
+          ...registerForm,
+          [e.target.name]: e.target.value
+      })
+  }
+
+  const clearRegisterForm = () => {
+      setRegisterForm({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        role: 0,
+        gender: 0,
+        type_of_disability: 0,
+        birthdate: "",
+        loading: false
+      })
+  }
+   
   return (
     <Flex minHeight="100vh" width="full" flexDirection="row">
       <Box width="40%" height="100vh" bg="#6A67CE" display="flex" alignItems="center" position="sticky" top="0" left="0" overflowY="auto">

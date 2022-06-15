@@ -23,13 +23,13 @@ func NewUserController(userService *service.UserServiceImplement) UserController
 
 func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
-	router.Use(func(c *gin.Context) {
-		c.Header("Content-Type", "application/json")
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
-		c.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
-		c.Header("Access-Control-Allow-Credentials", "true")
-	})
+	// router.Use(func(c *gin.Context) {
+	// 	c.Header("Content-Type", "application/json")
+	// 	c.Header("Access-Control-Allow-Origin", "*")
+	// 	c.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
+	// 	c.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
+	// 	c.Header("Access-Control-Allow-Credentials", "true")
+	// })
 
 	api := router.Group("/api")
 	{

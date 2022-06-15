@@ -44,7 +44,7 @@ export default function Login() {
           loading: false
       })
       if(res.status === 200) {
-          localSaveToken(res.data.data.token)
+          localSaveToken(res.data.token)
           setUser(res.data.data)
           clearLoginForm();
           navigate('/')
