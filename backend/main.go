@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
 	"github.com/rg-km/final-project-engineering-12/backend/controller"
 	"github.com/rg-km/final-project-engineering-12/backend/repository"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
-	"github.com/gin-contrib/cors"
 )
 
 func main() {
@@ -19,13 +20,13 @@ func main() {
 
 	// setup gin cors
 	router.Use(cors.New(cors.Config{
-    AllowOrigins:     []string{"*"},
-    AllowMethods:     []string{"GET","POST","PUT","DELETE","OPTIONS","PATCH"},
-    AllowHeaders:     []string{"Authorization", "Content-Type"},
-    // ExposeHeaders:    []string{"Content-Length"},
-    AllowCredentials: true,
-    // MaxAge: 12 * time.Hour,
-  }))
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowHeaders: []string{"Authorization", "Content-Type"},
+		// ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		// MaxAge: 12 * time.Hour,
+	}))
 
 	// Setup Proxies (optional)
 	// You can comment this section
@@ -33,7 +34,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	// User Setup
 	userRepository := repository.NewUserRepository(database)
 	userService := service.NewUserService(&userRepository)

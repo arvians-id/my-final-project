@@ -24,13 +24,13 @@ func NewUserController(userService *service.UserServiceImplement) UserController
 
 func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
-	// router.Use(func(c *gin.Context) {
-	// 	c.Header("Content-Type", "application/json")
-	// 	c.Header("Access-Control-Allow-Origin", "*")
-	// 	c.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
-	// 	c.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
-	// 	c.Header("Access-Control-Allow-Credentials", "true")
-	// })
+	router.Use(func(c *gin.Context) {
+		c.Header("Content-Type", "application/json")
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type,Authorization")
+		c.Header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS")
+		c.Header("Access-Control-Allow-Credentials", "true")
+	})
 
 	api := router.Group("/api")
 	{
@@ -48,7 +48,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
 //Function to register new user
 func (controller *UserController) userRegister(ctx *gin.Context) {
-	var user model.UserRegister
+	var user model.UserRegisterResponse
 
 	if err := ctx.BindJSON(&user); err != nil {
 		return
@@ -72,7 +72,7 @@ func (controller *UserController) userRegister(ctx *gin.Context) {
 
 //Function to login user
 func (controller *UserController) userLogin(ctx *gin.Context) {
-	var user model.UserRegister
+	var user model.GetUserLogin
 
 	if err := ctx.BindJSON(&user); err != nil {
 		return
@@ -85,8 +85,9 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 	}
 
 	if response.Name == "" {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"message": "User Not Found",
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   404,
+			Status: "User Not Found",
 		})
 		return
 	}
@@ -141,7 +142,6 @@ func (controller *UserController) userStatus(ctx *gin.Context) {
 		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 			Code:   401,
 			Status: "Cannot parse token",
-			Data:   "",
 		})
 		return
 	}
@@ -211,13 +211,53 @@ func (controller *UserController) getUserByID(ctx *gin.Context) {
 
 	response, err := controller.UserService.GetUserbyID(id)
 
+	token := ctx.GetHeader("Authorization")
+
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	if ok := service.JWTAuthService().CheckToken(token); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Invalid Token",
+		})
+		return
+	}
+
+	tokenClaims := jwt.MapClaims{}
+	_, err = jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
+		return []byte("your secret api key"), nil
+	},
+	)
+
+	iduser := tokenClaims["id"].(float64)
+	role := tokenClaims["role"].(string)
+	iduserint := int(iduser)
+
+	if iduserint != id && role != "1" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "You are not authorized to view this user",
+		})
+		return
+	}
+
 	if err != nil {
 		return
 	}
 
 	if response.Name == "" {
-		ctx.JSON(http.StatusNotFound, gin.H{
-			"message": "User Not Found",
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   404,
+			Status: "User Not Found",
 		})
 		return
 	}
@@ -249,7 +289,7 @@ func (controller *UserController) listUser(ctx *gin.Context) {
 
 //Function to update user
 func (controller *UserController) updateUser(ctx *gin.Context) {
-	var user model.UserRegister
+	var user model.GetUserDetailUpdate
 
 	if err := ctx.BindJSON(&user); err != nil {
 		return
@@ -258,6 +298,45 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
 
 	if err != nil {
+		return
+	}
+
+	token := ctx.GetHeader("Authorization")
+
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	if ok := service.JWTAuthService().CheckToken(token); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Invalid Token",
+		})
+		return
+	}
+
+	tokenClaims := jwt.MapClaims{}
+	_, err = jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
+		return []byte("your secret api key"), nil
+	},
+	)
+
+	iduser := tokenClaims["id"].(float64)
+	role := tokenClaims["role"].(string)
+	iduserint := int(iduser)
+
+	if iduserint != id && role != "1" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "You are not authorized to update this user",
+		})
 		return
 	}
 
@@ -270,10 +349,10 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 	ctx.Header("Accept", "application/json")
 	ctx.Header("Content-Type", "application/json")
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{
-		"code":   200,
-		"Status": "Update User Successfull",
-		"Data":   responses,
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Update User Successfull",
+		Data:   responses,
 	})
 }
 
