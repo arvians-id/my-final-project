@@ -6,33 +6,34 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 )
 
-type QuestionController struct {
-	QuestionService service.QuestionService
+type AnswerController struct {
+	AnswerService service.AnswerService
 }
 
-func NewQuestionController(questionService *service.QuestionService) *QuestionController {
-	return &QuestionController{
-		QuestionService: *questionService,
+func NewAnswerController(answerService *service.AnswerService) *AnswerController {
+	return &AnswerController{
+		AnswerService: *answerService,
 	}
 }
 
-func (controller *QuestionController) Route(router *gin.Engine) *gin.Engine {
+func (controller *AnswerController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api")
 	{
-		authorized.GET("/questions/all", controller.FindAll)
-		authorized.POST("/questions/create", controller.Create)
-		authorized.PUT("/questions/update/:questionId", controller.Update)
-		authorized.DELETE("/questions/:questionId", controller.Delete)
-		authorized.GET("/questions/by-user/:userId", controller.FindByUserId)
+		authorized.GET("/answers/all", controller.FindAll)
+		authorized.POST("/answers/create", middleware.UserHandler(controller.Create))
+		authorized.PUT("/answers/update/:answerId", middleware.UserHandler(controller.Update))
+		authorized.DELETE("/answers/:answerId", middleware.UserHandler(controller.Delete))
+		authorized.GET("/answers/by-user/:userId", controller.FindByUserId)
 	}
-
+	
 	return router
 }
 
-func (controller *QuestionController) FindAll(ctx *gin.Context) {
-	questions, err := controller.QuestionService.FindAll(ctx.Request.Context())
+func (controller *AnswerController) FindAll(ctx *gin.Context) {
+	answers, err := controller.AnswerService.FindAll(ctx.Request.Context())
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -45,12 +46,12 @@ func (controller *QuestionController) FindAll(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "OK",
-		Data:   questions,
+		Data:   answers,
 	})
 }
 
-func (controller *QuestionController) Create(ctx *gin.Context) {
-	var request model.CreateQuestionRequest
+func (controller *AnswerController) Create(ctx *gin.Context) {
+	var request model.CreateAnswerRequest
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.WebResponse{
@@ -61,7 +62,7 @@ func (controller *QuestionController) Create(ctx *gin.Context) {
 		return
 	}
 
-	question, err := controller.QuestionService.Create(ctx, request)
+	answer, err := controller.AnswerService.Create(ctx, request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -73,15 +74,15 @@ func (controller *QuestionController) Create(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
-		Status: "question successfully created",
-		Data:   question,
+		Status: "answer successfully created",
+		Data:   answer,
 	})
 }
 
-func (controller *QuestionController) Delete(ctx *gin.Context) {
-	questionId := utils.ToInt(ctx.Param("questionId"))
+func (controller *AnswerController) Delete(ctx *gin.Context) {
+	answerId := utils.ToInt(ctx.Param("answerId"))
 
-	err := controller.QuestionService.Delete(ctx.Request.Context(), questionId)
+	err := controller.AnswerService.Delete(ctx.Request.Context(), answerId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -93,15 +94,15 @@ func (controller *QuestionController) Delete(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
-		Status: "question successfully deleted",
+		Status: "answer successfully deleted",
 		Data:   nil,
 	})
 }
 
 
 
-func (controller *QuestionController) Update(ctx *gin.Context) {
-	var request model.UpdateQuestionRequest
+func (controller *AnswerController) Update(ctx *gin.Context) {
+	var request model.UpdateAnswerRequest
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.WebResponse{
@@ -112,9 +113,9 @@ func (controller *QuestionController) Update(ctx *gin.Context) {
 		return
 	}
 
-	questionId := utils.ToInt(ctx.Param("questionId"))
+	answerId := utils.ToInt(ctx.Param("answerId"))
 	
-	question, err := controller.QuestionService.Update(ctx, request, questionId)
+	answer, err := controller.AnswerService.Update(ctx, request, answerId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -126,14 +127,14 @@ func (controller *QuestionController) Update(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
-		Status: "question successfully update",
-		Data:   question,
+		Status: "answer successfully update",
+		Data:   answer,
 	})
 }
 
-func (controller *QuestionController) FindByUserId(ctx *gin.Context) {
+func (controller *AnswerController) FindByUserId(ctx *gin.Context) {
 	userId := utils.ToInt(ctx.Param("userId"))
-	questions, err := controller.QuestionService.FindByUserId(ctx.Request.Context(), userId)
+	answers, err := controller.AnswerService.FindByUserId(ctx.Request.Context(), userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -146,6 +147,6 @@ func (controller *QuestionController) FindByUserId(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "OK",
-		Data:   questions,
+		Data:   answers,
 	})
 }

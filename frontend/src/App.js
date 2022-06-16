@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { API_CHECK_LOGIN } from './api/auth';
+import { API_CHECK_STATUS } from './api/auth';
 import Main from './Main';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -14,21 +14,15 @@ function App() {
     const [isReady, setIsReady] = useState(false);
 
     const checkLogin = async () => {
-        const token = localLoadToken();
-        if (token) {
-            const res = await API_CHECK_LOGIN(token);
-            // kalo oke, berarti set user di zustand
-            if (res.status === 200) {
-                setUser(res.data.data);
-            } else {
-                // buang token kalo token user invalid
-                localClearToken();
-            }
+        const res = await API_CHECK_STATUS();
+        // kalo oke, berarti set user di zustand
+        if (res.status === 200) {
+            setUser(res.data.data);
         }
 
         setIsReady(true);
     };
-    // API_CHECK_LOGIN
+    // API_CHECK_STATUS
     useEffect(() => {
         checkLogin();
     }, []);

@@ -9,10 +9,10 @@ export const axiosWithToken = (options = {}) => {
     const token = localLoadToken();
     const config = token
         ? {
-              headers: {
-                  'Teenager-Token': token,
-              },
-          }
+            headers: {
+                'Authorization': token,
+            },
+        }
         : {};
     const instance = Axios.create(config);
 
@@ -26,7 +26,7 @@ export const axiosWithToken = (options = {}) => {
                     if (
                         !error.response.data.success &&
                         error.response.data.message ===
-                            'expired token, please relogin'
+                        'expired token, please relogin'
                     ) {
                         localClearToken();
                         window.location.href = '/login';

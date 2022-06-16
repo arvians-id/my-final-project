@@ -29,36 +29,36 @@ export default function Login() {
         return false;
     };
 
-    const handleSubmitLogin = async (e) => {
-        e.preventDefault();
-        setLoginForm({
-            ...loginForm,
-            loading: true,
-        });
-        const res = await API_LOGIN({
-            email: loginForm.email,
-            password: loginForm.password,
-        });
-        setLoginForm({
-            ...loginForm,
-            loading: false,
-        });
-        if (res.status === 200) {
-            localSaveToken(res.data.data.token);
-            setUser(res.data.data);
-            clearLoginForm();
-            navigate('/');
-        } else {
-            toast({
-                position: 'bottom',
-                title: 'Error Login.',
-                description: res.message,
-                status: 'error',
-                duration: 9000,
-                isClosable: true,
-            });
-        }
-    };
+  const handleSubmitLogin = async (e) => {
+      e.preventDefault();
+      setLoginForm({
+          ...loginForm,
+          loading: true
+      })
+      const res = await API_LOGIN({
+          email: loginForm.email,
+          password: loginForm.password
+      })
+      setLoginForm({
+          ...loginForm,
+          loading: false
+      })
+      if(res.status === 200) {
+          localSaveToken(res.data.token)
+          setUser(res.data.data)
+          clearLoginForm();
+          navigate('/')
+      } else {
+          toast({
+              position: 'bottom',
+              title: 'Error Login.',
+              description: res.message,
+              status: 'error',
+              duration: 9000,
+              isClosable: true,
+          })
+      }
+  }
 
     const onChangeLoginForm = (e) => {
         setLoginForm({
