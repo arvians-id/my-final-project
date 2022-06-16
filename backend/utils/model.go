@@ -33,3 +33,14 @@ func ToQuestionResponse(question entity.Questions) model.GetQuestionResponse {
 		UpdatedAt:   	question.UpdatedAt,
 	}
 }
+
+func ToAnswerResponse(answer entity.Answers) model.GetAnswerResponse {
+	return model.GetAnswerResponse{
+		Id:         	answer.Id,
+		QuestionId:   answer.QuestionId,
+		UserId:   		answer.UserId,
+		Description: 	answer.Description,
+		CreatedAt:   	answer.CreatedAt,
+		UpdatedAt:   	answer.UpdatedAt,
+	}
+}

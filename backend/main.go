@@ -42,10 +42,16 @@ func main() {
 	questionService := service.NewQuestionService(&questionRepository, database)
 	questionController := controller.NewQuestionController(&questionService)
 
+	// Answer Setup
+	answerRepository := repository.NewAnswerRepository()
+	answerService := service.NewAnswerService(&answerRepository, &questionRepository, database)
+	answerController := controller.NewAnswerController(&answerService)
+
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
 	questionController.Route(router)
+	answerController.Route(router)
 
 	// Run
 	PORT := fmt.Sprintf(":%v", configuration.Get("APP_PORT"))
