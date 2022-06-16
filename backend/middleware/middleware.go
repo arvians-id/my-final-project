@@ -42,7 +42,6 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
 				Status: "Token is required",
-				Data:   "",
 			})
 			return
 		}
@@ -67,7 +66,6 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
 				Status: "Cannot parse token",
-				Data:   "",
 			})
 			return
 		}
@@ -76,7 +74,6 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
 				Status: "You are not admin",
-				Data:   "",
 			})
 			return
 		}
