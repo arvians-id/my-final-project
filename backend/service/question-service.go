@@ -12,7 +12,7 @@ import (
 
 type QuestionService interface {
 	FindAll(ctx context.Context) ([]model.GetQuestionResponse, error)
-	Create(ctx context.Context, request model.CreateQuestionRequest, createddBy int) (model.GetQuestionResponse, error)
+	Create(ctx context.Context, request model.CreateQuestionRequest) (model.GetQuestionResponse, error)
 	Delete(ctx context.Context, questionId int) error
 	Update(ctx context.Context, request model.UpdateQuestionRequest, questionId int) (model.GetQuestionResponse, error)
 	FindByUserId(ctx context.Context, userId int) ([]model.GetQuestionResponse, error)
@@ -30,7 +30,7 @@ func NewQuestionService(questionRepository *repository.QuestionRepository, db *s
 	}
 }
 
-func (service *questionService) Create(ctx context.Context, request model.CreateQuestionRequest, userId int) (model.GetQuestionResponse, error) {
+func (service *questionService) Create(ctx context.Context, request model.CreateQuestionRequest) (model.GetQuestionResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetQuestionResponse{}, err
@@ -38,7 +38,7 @@ func (service *questionService) Create(ctx context.Context, request model.Create
 	defer utils.CommitOrRollback(tx)
 
 	newQuestion := entity.Questions{
-		UserId:				userId,
+		UserId:				request.UserId,
 		ModuleId:  		request.ModuleId,
 		Title:  			request.Title,
 		Tags:      		request.Tags,
@@ -78,7 +78,7 @@ func (service *questionService) FindAll(ctx context.Context) ([]model.GetQuestio
 
 
 func (service *questionService) Delete(ctx context.Context, questionId int) error {
-	userId := 11; // ini nanti akan diubah pakai data auth user-id dari middleware auth
+	// userId := 11; // ini nanti akan diubah pakai data auth user-id dari middleware auth
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return err
@@ -90,11 +90,11 @@ func (service *questionService) Delete(ctx context.Context, questionId int) erro
 		return err
 	}
 
-	if getQuestions.UserId != userId {
-		return errors.New("access not allowed")
-	}
+	// if getQuestions.UserId != userId {
+	// 	return errors.New("access not allowed")
+	// }
 	
-	err = service.QuestionRepository.Delete(ctx, tx, questionId)
+	err = service.QuestionRepository.Delete(ctx, tx, getQuestions.Id)
 	if err != nil {
 		return err
 	}
@@ -103,7 +103,6 @@ func (service *questionService) Delete(ctx context.Context, questionId int) erro
 }
 
 func (service *questionService) Update(ctx context.Context, request model.UpdateQuestionRequest, questionId int) (model.GetQuestionResponse, error) {
-	userId := 10; // ini nanti akan diubah pakai data auth user-id dari middleware auth
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetQuestionResponse{}, err
@@ -115,7 +114,7 @@ func (service *questionService) Update(ctx context.Context, request model.Update
 		return model.GetQuestionResponse{}, err
 	}
 
-	if getQuestions.UserId != userId {
+	if getQuestions.UserId != request.UserId {
 		return model.GetQuestionResponse{}, errors.New("access not allowed")
 	}
 

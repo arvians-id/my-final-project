@@ -14,6 +14,7 @@ type GetQuestionResponse struct {
 }
 
 type CreateQuestionRequest struct {
+	UserId     		int   	`json:"user_id"`
 	Title  				string	`json:"title"`
 	ModuleId     	int   	`json:"module_id"`	
 	Tags        	string  `json:"tags"`
@@ -22,6 +23,7 @@ type CreateQuestionRequest struct {
 
 
 type UpdateQuestionRequest struct {
+	UserId     		int   	`json:"user_id"`
 	Title  				string	`json:"title"`
 	ModuleId     	int   	`json:"module_id"`	
 	Tags        	string  `json:"tags"`

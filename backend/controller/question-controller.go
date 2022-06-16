@@ -51,7 +51,6 @@ func (controller *QuestionController) FindAll(ctx *gin.Context) {
 
 func (controller *QuestionController) Create(ctx *gin.Context) {
 	var request model.CreateQuestionRequest
-	userId := utils.ToInt(10); // dapatkan user id dari user yang request create question
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, model.WebResponse{
@@ -62,7 +61,7 @@ func (controller *QuestionController) Create(ctx *gin.Context) {
 		return
 	}
 
-	question, err := controller.QuestionService.Create(ctx, request, userId)
+	question, err := controller.QuestionService.Create(ctx, request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
