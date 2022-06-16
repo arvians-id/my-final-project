@@ -17,6 +17,16 @@ func main() {
 	router := gin.Default()
 	database := config.NewSQLite(configuration)
 
+	// setup gin cors
+	router.Use(cors.New(cors.Config{
+    AllowOrigins:     []string{"*"},
+    AllowMethods:     []string{"GET","POST","PUT","DELETE","OPTIONS","PATCH"},
+    AllowHeaders:     []string{"Authorization", "Content-Type"},
+    // ExposeHeaders:    []string{"Content-Length"},
+    AllowCredentials: true,
+    // MaxAge: 12 * time.Hour,
+  }))
+
 	// Setup Proxies (optional)
 	// You can comment this section
 	err := router.SetTrustedProxies([]string{configuration.Get("APP_URL")})
@@ -24,9 +34,6 @@ func main() {
 		panic(err)
 	}
 	
-	// gin cors allows all origins
-	router.Use(cors.Default())
-
 	// User Setup
 	userRepository := repository.NewUserRepository(database)
 	userService := service.NewUserService(&userRepository)
