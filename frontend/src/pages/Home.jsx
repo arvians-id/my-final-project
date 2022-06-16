@@ -1,44 +1,25 @@
-import {
-    Drawer,
-    DrawerBody,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    Button,
-    useDisclosure,
-    Link,
-} from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
-import React from 'react';
-
+import React from 'react'
+import { Box, Flex } from '@chakra-ui/react'
+import Navbar from '../components/Navbar'
+import Sidebar from '../components/Sidebar'
 export default function Home() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [placement, setPlacement] = React.useState('left');
+  return (
+    <div>
+      <Navbar />
 
-    return (
-        <>
-            <Button colorScheme="blue" onClick={onOpen}>
-                <HamburgerIcon />
-            </Button>
-            <Drawer placement={placement} onClose={onClose} isOpen={isOpen}>
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerHeader borderBottomWidth="1px">
-                        Dashboard
-                    </DrawerHeader>
-                    <DrawerBody>
-                        <p>
-                            <Link>Series</Link>
-                        </p>
-                        <p>
-                            <Link>Courses</Link>
-                        </p>
-                        <p>
-                            <Link>Account</Link>
-                        </p>
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
-        </>
-    );
+      <Flex direction="row" justifyContent="center" alignItems="center">
+        <Flex width="20%" minHeight="90vh" bgColor="grey.100" boxShadow='dark-lg'>
+          <Sidebar />
+        </Flex>
+
+        <Flex width="80%" minHeight="90vh" bg="white">
+          <Box m={5}>
+            <Box as="h1" fontSize="xl" fontWeight="semibold" mb={2}>
+              Home
+            </Box>
+          </Box>
+        </Flex>
+      </Flex>
+    </div>
+  )
 }
