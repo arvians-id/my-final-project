@@ -34,12 +34,18 @@ func main() {
 	courseService := service.NewCourseService(&courseRepository, database)
 	courseController := controller.NewCourseController(&courseService)
 
+	// Module Setup
+	moduleRepository := repository.NewModuleRepository()
+	moduleService := service.NewModuleService(&moduleRepository, &courseRepository, database)
+	moduleController := controller.NewModuleController(&moduleService)
+
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
+	moduleController.Route(router)
 
 	// Run
-	PORT := fmt.Sprintf(":%v", configuration.Get("PORT"))
+	PORT := fmt.Sprintf(":%v", configuration.Get("APP_PORT"))
 	teenager(PORT)
 
 	err = router.Run(PORT)
@@ -50,8 +56,6 @@ func main() {
 
 func teenager(port string) {
 	fmt.Print(`
-
-	
 ┏━━━━┓
 ┃┏┓┏┓┃
 ┗┛┃┃┣┻━┳━━┳━┓┏━━┳━━┳━━┳━┓

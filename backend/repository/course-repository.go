@@ -10,6 +10,7 @@ import (
 type CourseRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx, status bool, limit int) ([]entity.Courses, error)
 	FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.Courses, error)
+	FindById(ctx context.Context, tx *sql.Tx, id int) (entity.Courses, error)
 	Create(ctx context.Context, tx *sql.Tx, courses entity.Courses) (entity.Courses, error)
 	Update(ctx context.Context, tx *sql.Tx, courses entity.Courses, code string) (entity.Courses, error)
 	Delete(ctx context.Context, tx *sql.Tx, code string) error
@@ -64,6 +65,43 @@ func (repository *courseRepository) FindAll(ctx context.Context, tx *sql.Tx, sta
 func (repository *courseRepository) FindByCode(ctx context.Context, tx *sql.Tx, code string) (entity.Courses, error) {
 	query := `SELECT * FROM courses WHERE code_course = ?`
 	queryContext, err := tx.QueryContext(ctx, query, code)
+	if err != nil {
+		return entity.Courses{}, err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	var course entity.Courses
+	if queryContext.Next() {
+		err := queryContext.Scan(
+			&course.Id,
+			&course.Name,
+			&course.CodeCourse,
+			&course.Class,
+			&course.Tools,
+			&course.About,
+			&course.Description,
+			&course.CreatedAt,
+			&course.UpdatedAt,
+			&course.IsActive,
+		)
+		if err != nil {
+			return entity.Courses{}, err
+		}
+
+		return course, nil
+	}
+
+	return course, errors.New("course not found")
+}
+
+func (repository *courseRepository) FindById(ctx context.Context, tx *sql.Tx, id int) (entity.Courses, error) {
+	query := `SELECT * FROM courses WHERE id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, id)
 	if err != nil {
 		return entity.Courses{}, err
 	}

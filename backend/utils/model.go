@@ -19,3 +19,15 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 		IsActive:    course.IsActive,
 	}
 }
+
+func ToModuleResponse(course entity.Modules) model.GetModuleResponse {
+	return model.GetModuleResponse{
+		Id:       course.Id,
+		CourseId: course.CourseId,
+		Name:     course.Name,
+		IsLocked: course.IsLocked,
+		Estimate: course.Estimate,
+		Deadline: course.Deadline,
+		Grade:    course.Grade,
+	}
+}
