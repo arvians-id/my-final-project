@@ -6,17 +6,17 @@ Request:
     - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- Users:                            Line 19
-- User_course:                      Line 170
-- User_details:                     Line 286
-- Courses:                          Line 442
-- Modules:                          Line 594
-- Module_submission:                Line 738
-- Module_articles:                  Line 870
-- Answers:                          Line 990
-- Question:                         Line 1124
+- [Users](#users)
+- [User_course](#user-course)
+- [User_details](#user-details)
+- [Courses](#courses)
+- [Modules](#modules)
+- [Module_submissions](#module-submissions)
+- [Module_articles](#module-articles)
+- [Answers](#answers)
+- [Questions](#questions)
 
-## Users
+## users
 ------------------------------
 ## Create Users
 ------------------------------
@@ -167,7 +167,7 @@ Response:
         "status" : "string"
     }
 ```
-## User_course
+## User course
 ------------------------------
 ## Create User_course
 ------------------------------
@@ -283,7 +283,7 @@ Response:
         "status" : "string"
     }
 ```
-## User_details
+## User details
 ------------------------------
 ## Create User_details
 ------------------------------
@@ -735,7 +735,7 @@ Response:
         "status" : "string"
     }
 ```
-## Module_submissions
+## Module submissions
 ------------------------------
 ## Create Module_submissions
 ------------------------------
@@ -867,7 +867,7 @@ Response:
         "status" : "string"
     }
 ```
-## Module_articles
+## Module articles
 ------------------------------
 ## Create Module_articles
 ------------------------------

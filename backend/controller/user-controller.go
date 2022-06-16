@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 	"github.com/rg-km/final-project-engineering-12/backend/middleware"
@@ -36,7 +37,6 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 		api.POST("/users", controller.userRegister)
 		api.POST("/users/login", controller.userLogin)
 		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
-		api.GET("/users/verifytoken/:token", controller.verifyToken)
 		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
 		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))
 		api.GET("/users", middleware.AdminHandler(controller.listUser))
@@ -100,7 +100,7 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 		Role: response.Role,
 	})
 
-	ctx.Header("Authorization", "Bearer "+token)
+	ctx.Header("Authorization", token)
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
@@ -114,69 +114,50 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 func (controller *UserController) userStatus(ctx *gin.Context) {
 	token := ctx.GetHeader("Authorization")
 
-	claims, err := service.JWTAuthService().ParseToken(token)
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
 
+	if ok := service.JWTAuthService().CheckToken(token); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Invalid Token",
+		})
+		return
+	}
+
+	tokenClaims := jwt.MapClaims{}
+	_, err := jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
+		return []byte("your secret api key"), nil
+	},
+	)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Please Login First",
+			Status: "Cannot parse token",
+			Data:   "",
 		})
 		return
 	}
 
-	if ok := service.JWTAuthService().CheckToken(claims.Raw); ok != nil {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Please Login First",
-		})
-		return
-	}
+	id := tokenClaims["id"].(float64)
 
-	ctx.Header("Accept", "application/json")
-	ctx.Header("Content-Type", "application/json")
-	ctx.Header("Authorization", "Bearer "+token)
-
-	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
-		Code:   200,
-		Status: "Get User Status Successfull",
-		Data:   claims,
-	})
-}
-
-//Function to verify token
-func (controller *UserController) verifyToken(ctx *gin.Context) {
-	token := ctx.Param("token")
-
-	claims, err := service.JWTAuthService().ParseToken(token)
+	user, err := controller.UserService.GetUserbyID(int(id))
 
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Please Login First",
-		})
 		return
 	}
-
-	if ok := service.JWTAuthService().CheckToken(claims.Raw); ok != nil {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Please Login First",
-		})
-		return
-	}
-
-	ctx.Header("Accept", "application/json")
-	ctx.Header("Content-Type", "application/json")
-	ctx.Header("Authorization", "Bearer "+token)
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
-		Status: "Get User Status Successfull",
-		Data:   claims,
+		Status: "User Already Logged In",
+		Data:   user,
 	})
 }
 
