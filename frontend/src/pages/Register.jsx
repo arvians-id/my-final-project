@@ -1,26 +1,38 @@
-import React, { useState } from 'react';
-import { Box, Flex, VStack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Select, NumberInput, InputGroup, InputLeftAddon, Heading } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Flex, VStack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Select, NumberInput, InputGroup, InputLeftAddon, Heading, Hide, createStandaloneToast } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { API_REGISTER } from '../api/auth';
-import { createStandaloneToast } from '@chakra-ui/toast'
+import { useState } from 'react';
+import {API_REGISTER} from '../api/auth'
 
 export default function Register() {
+  const navigate = useNavigate();
   const { toast } = createStandaloneToast()
   const [registerForm, setRegisterForm] = useState({
-    name: "",
-    username: "",
-    email: "",
-    password: "",
-    role: 2,
+    fullname: '',
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
     gender: 0,
-    type_of_disability: 0,
-    birthdate: "",
+    disability: 0,
+    role: 2,
+    phoneNumber: '',
+    address: '',
+    birthdate: '',
     loading: false
   })
-  const navigate = useNavigate()
+
+  const onChangeRegisterForm = (e) => {
+    setRegisterForm({
+      ...registerForm,
+      [e.target.name]: e.target.value
+    })
+  }
+
+
 
   const disabledButtonRegister = () => {
-    if(!registerForm.email  || !registerForm.password || !registerForm.gender || !registerForm.type_of_disability || !registerForm.birthdate ) 
+    if(!registerForm.fullname || !registerForm.email  || !registerForm.password || !registerForm.birthdate || !registerForm.password || !registerForm.phoneNumber) 
         return true
     return false
   }
@@ -32,20 +44,21 @@ export default function Register() {
           loading: true
       })
       const res = await API_REGISTER({
-        name: registerForm.name,
+        name: registerForm.fullname,
         username: registerForm.username,
         email: registerForm.email,
         password: registerForm.password,
         role: registerForm.role,
-        gender: registerForm.gender,
-        type_of_disability: registerForm.type_of_disability,
+        gender: Number(registerForm.gender),
+        type_of_disability: Number(registerForm.disability),
         birthdate: registerForm.birthdate,
       })
       setRegisterForm({
           ...registerForm,
           loading: false
       })
-      if(res.status === 200) {      
+      console.log('res', res)
+      if(res.status === 201) {      
           clearRegisterForm();   
           gotoLoginPage();   
       } else {
@@ -74,40 +87,39 @@ export default function Register() {
     },3000)
   }
 
-  const onChangeRegisterForm = (e) => {
-      setRegisterForm({
-          ...registerForm,
-          [e.target.name]: e.target.value
-      })
+  const clearRegisterForm = () => {
+    setRegisterForm({
+      fullname: '',
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      gender: 0,
+      disability: 0,
+      role: 0,
+      phoneNumber: '',
+      address: '',
+      birthdate: '',
+      loading: false
+    })
+  
   }
 
-  const clearRegisterForm = () => {
-      setRegisterForm({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        role: 0,
-        gender: 0,
-        type_of_disability: 0,
-        birthdate: "",
-        loading: false
-      })
-  }
-   
   return (
     <Flex minHeight="100vh" width="full" flexDirection="row">
-      <Box width="40%" height="100vh" bg="#6A67CE" display="flex" alignItems="center" position="sticky" top="0" left="0" overflowY="auto">
-        <Box m={10} width="100%">
-          <Box as="h1" fontSize="6xl" fontWeight="bold" mb={3} color="#EEF3D2">
-            Teenager
+      <Hide below='md'>
+        <Box width="40%" height="100vh" bg="#6A67CE" display="flex" alignItems="center" position="sticky" top="0" left="0" overflowY="auto">
+          <Box m={10} width="100%">
+            <Box as="h1" fontSize="6xl" fontWeight="bold" mb={3} color="#EEF3D2">
+              Teenager
+            </Box>
+            <Box as="span" fontSize="lg" color="#EEF3D2">
+              Tempat mengajar dan berbagi kecerdasan
+            </Box>
+            <Box as="p" fontSize="m" color="grey"></Box>
           </Box>
-          <Box as="span" fontSize="lg" color="#EEF3D2">
-            Tempat mengajar dan berbagi kecerdasan
-          </Box>
-          <Box as="p" fontSize="m" color="grey"></Box>
         </Box>
-      </Box>
+      </Hide>
       <Box width="60%" minheight="100%" display="flex" alignItems="center">
         <Box m={10} width="100%">
           <Box textAlign="center" as="h1" fontSize="2xl" fontWeight="bold" mb={3}>
@@ -121,57 +133,51 @@ export default function Register() {
           <Box maxWidth="80%" m={5}>
             <VStack spacing={4} align="stretch">
               <Box>
-                <FormLabel htmlFor="first-name" fontWeight="bold">
-                  First Name
+                <FormLabel htmlFor="full-name" fontWeight="bold">
+                  Full Name
                 </FormLabel>
-                <Input id="first-name" type="text" maxWidth="full" height={50} placeholder="First Name" />
+                <Input id="fullname" name="fullname" type="text" maxWidth="full" height={50} placeholder="Full Name" value={registerForm.fullname} onChange={onChangeRegisterForm} />
               </Box>
               <Box>
-                <FormLabel htmlFor="last-name" fontWeight="bold">
-                  Last Name
+                <FormLabel htmlFor="username" fontWeight="bold">
+                  Username
                 </FormLabel>
-                <Input id="last-name" type="text" maxWidth="full" height={50} placeholder="Last Name" />
+                <Input id="username" name="username" type="text" maxWidth="full" height={50} placeholder="User Name" value={registerForm.username} onChange={onChangeRegisterForm} />
               </Box>
               <Box>
                 <FormLabel htmlFor="email" fontWeight="bold">
                   Email address
                 </FormLabel>
-                <Input id="email" type="email" maxWidth="full" height={50} placeholder="Masukkan Alamat Email Anda" />
-              </Box>
-              <Box>
-                <FormLabel htmlFor="email" fontWeight="bold">
-                  Repeat Email
-                </FormLabel>
-                <Input id="re-email" type="email" maxWidth="full" height={50} placeholder="Repeat Email Anda" />
+                <Input id="email" name="email" type="email" maxWidth="full" height={50} placeholder="Masukkan Alamat Email Anda" value={registerForm.email} onChange={onChangeRegisterForm} />
               </Box>
               <Box>
                 <FormLabel htmlFor="email" fontWeight="bold">
                   Password
                 </FormLabel>
-                <Input id="password" type="password" colorScheme="red" maxWidth="full" height={50} placeholder="Masukkan Password Anda" />
+                <Input id="password" type="password" name="password" colorScheme="red" maxWidth="full" height={50} placeholder="Masukkan Password Anda" value={registerForm.password} onChange={onChangeRegisterForm} />
               </Box>
               <Box>
                 <FormLabel htmlFor="email" fontWeight="bold">
                   Confirm Password
                 </FormLabel>
-                <Input id="co-password" type="password" colorScheme="red" maxWidth="full" height={50} placeholder="Masukkan Password Anda" />
+                <Input id="co-password" name="confirmPassword" type="password" colorScheme="red" maxWidth="full" height={50} placeholder="Masukkan Password Anda" value={registerForm.confirmPassword} onChange={onChangeRegisterForm} />
               </Box>
               <Box>
                 <FormLabel htmlFor="email" fontWeight="bold">
                   Gender
                 </FormLabel>
-                <Select id="gender" placeholder="Select Gender">
-                  <option>Male</option>
-                  <option>Female</option>
+                <Select id="gender" placeholder="Select Gender" name="gender" value={registerForm.gender} onChange={onChangeRegisterForm}>
+                  <option value={1} >Pria</option>
+                  <option value={2}>Wanita</option>
                 </Select>
               </Box>
               <Box>
                 <FormLabel htmlFor="email" fontWeight="bold">
                   Disabilitas
                 </FormLabel>
-                <Select id="gender" placeholder="Select Disabilitas">
-                  <option>Tunanetra</option>
-                  <option>Tunarungu</option>
+                <Select id="disability" name="disability" placeholder="Select Disabilitas" value={registerForm.disability} onChange={onChangeRegisterForm}>
+                  <option value={1}>Tunanetra</option>
+                  <option value={2}>Tunarungu</option>
                 </Select>
               </Box>
               <Box>
@@ -180,13 +186,21 @@ export default function Register() {
                 </FormLabel>
                 <InputGroup mt={5}>
                   <InputLeftAddon children="+62" />
-                  <Input type="tel" placeholder="phone number" />
+                  <Input type="tel" placeholder="phone number" name="phoneNumber" value={registerForm.phoneNumber} onChange={onChangeRegisterForm} />
+                </InputGroup>
+              </Box>
+              <Box>
+                <FormLabel htmlFor="birthdate" fontWeight="bold">
+                  Tanggal Lahir
+                </FormLabel>
+                <InputGroup mt={5}>
+                  <Input type="date" placeholder="Tanggal Lahir" name="birthdate" value={registerForm.birthdate} onChange={onChangeRegisterForm} />
                 </InputGroup>
               </Box>
               <Box>
                 <VStack spacing={3} mt={5}>
-                  <Button as={Link} to="/login" colorScheme="blue" variant="outline" width="150px" p={5}>
-                    Login
+                  <Button disabled={disabledButtonRegister()} onClick={handleSubmitRegister} as={Link} to="/login" colorScheme="blue" loading={registerForm.loading} variant="outline" width="100%" p={5}>
+                    Daftar Sekarang
                   </Button>
                 </VStack>
               </Box>
