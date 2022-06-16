@@ -3,5 +3,6 @@ package model
 type WebResponse struct {
 	Code   int         `json:"code"`
 	Status string      `json:"status"`
-	Data   interface{} `json:"data"`
+	Token  string      `json:"token ,omitempty"`
+	Data   interface{} `json:"data ,omitempty"`
 }
