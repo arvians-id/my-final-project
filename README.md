@@ -115,6 +115,7 @@ Request:
     - Content-Type: ``` application/json ```
     - Accept: ``` application/json ```
     - Authorization: ```{token} ```
+
 Response:
 ``` json
     {   
@@ -145,6 +146,7 @@ Request:
     - Content-Type: ``` application/json ```
     - Accept: ``` application/json ```
     - Authorization: ```{token} ```
+
 Response:
 ``` json
     {   
@@ -162,6 +164,7 @@ Request:
     - Accept: ```application/json```  
     - Authorization: ```{token}```
 - Variable: ```id```
+
 Response:
 ``` json
     {
@@ -236,6 +239,7 @@ Request:
 - Header:
     - Accept: ```application/json```
     - Authorization: ```{token}```
+
 Response:
 ``` json
     {
@@ -267,6 +271,7 @@ Request:
 - Header:
     - Accept: ```application/json```
     - Authorization: ```{token}```
+    
 Response:
 ``` json
     {
