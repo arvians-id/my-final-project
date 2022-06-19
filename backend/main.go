@@ -45,6 +45,11 @@ func main() {
 	courseService := service.NewCourseService(&courseRepository, database)
 	courseController := controller.NewCourseController(&courseService)
 
+	// UserCourse Setup
+	userCourseRepository := repository.NewUserCourseRepository()
+	userCourseService := service.NewUserCourseService(&userCourseRepository, database)
+	userCourseController := controller.NewUserCourseController(&userCourseService)
+
 	// Question Setup
 	questionRepository := repository.NewQuestionRepository()
 	questionService := service.NewQuestionService(&questionRepository, database)
@@ -58,6 +63,7 @@ func main() {
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
+	userCourseController.Route(router)
 	questionController.Route(router)
 	answerController.Route(router)
 
