@@ -13,8 +13,8 @@ import (
 type UserCourseService interface {
 	FindAll(ctx context.Context) ([]model.GetUserCourseResponse, error)
 	FindByUserId(ctx context.Context, code string) (model.GetUserCourseResponse, error)
-	Create(ctx context.Context, requestusercourse model.CreateUserCourseRequest, requestusers model.UserDetailResponse, requestcourse model.GetCourseResponse) (model.GetUserCourseResponse, error)
-	Delete(ctx context.Context, code string) error
+	Create(ctx context.Context, request model.CreateUserCourseRequest) (model.GetUserCourseResponse, error)
+	Delete(ctx context.Context, code1 int, code2 int) error
 }
 
 type usercourseService struct {
@@ -64,29 +64,19 @@ func (service *usercourseService) FindByUserId(ctx context.Context, code string)
 	return utils.ToUserCourseResponse(usercourse), nil
 }
 
-func (service *usercourseService) Create(ctx context.Context, requestusercourse model.CreateUserCourseRequest, requestusers model.UserDetailResponse, requestcourse model.GetCourseResponse) (model.GetUserCourseResponse, error) {
+func (service *usercourseService) Create(ctx context.Context, request model.CreateUserCourseRequest) (model.GetUserCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetUserCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	newUserCourse := entity.UserCourse{
-		UserId:   requestusercourse.UserId,
-		CourseId: requestusercourse.CourseId,
+	usercourses := entity.UserCourse{
+		UserId:   request.UserId,
+		CourseId: request.CourseId,
 	}
 
-	users := entity.Users{
-		Id:       requestusers.Id,
-		Username: requestusers.Username,
-	}
-
-	course := entity.Courses{
-		Id:         requestcourse.Id,
-		CodeCourse: requestcourse.CodeCourse,
-	}
-
-	usercourse, err := service.UserCourseRepository.Create(ctx, tx, newUserCourse, users, course)
+	usercourse, err := service.UserCourseRepository.Create(ctx, tx, usercourses)
 	if err != nil {
 		return model.GetUserCourseResponse{}, err
 	}
@@ -94,19 +84,19 @@ func (service *usercourseService) Create(ctx context.Context, requestusercourse 
 	return utils.ToUserCourseResponse(usercourse), nil
 }
 
-func (service *usercourseService) Delete(ctx context.Context, code string) error {
+func (service *usercourseService) Delete(ctx context.Context, code1 int, code2 int) error {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	getCourse, err := service.UserCourseRepository.FindByUserId(ctx, tx, code)
+	getCourse, err := service.UserCourseRepository.FindByUserId(ctx, tx, utils.ToString(code1))
 	if err != nil {
 		return err
 	}
 
-	err = service.UserCourseRepository.Delete(ctx, tx, utils.ToString(getCourse.UserId))
+	err = service.UserCourseRepository.Delete(ctx, tx, getCourse.UserId, code2)
 	if err != nil {
 		return err
 	}

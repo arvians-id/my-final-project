@@ -37,21 +37,19 @@ func (controller *UserCourseController) Route(router *gin.Engine) *gin.Engine {
 		api.POST("/usercourse", middleware.AdminHandler(controller.usercourseCreate))
 		api.GET("/usercourse/:id", middleware.UserHandler(controller.getUserCourseByUserId))
 		api.GET("/usercourse", middleware.AdminHandler(controller.listUserCourse))
-		api.DELETE("/usercourse/:id", middleware.AdminHandler(controller.deleteUserCourse))
+		api.DELETE("/usercourse/:userid/:courseid", middleware.AdminHandler(controller.deleteUserCourse))
 	}
 	return router
 }
 
 func (controller *UserCourseController) usercourseCreate(ctx *gin.Context) {
 	var usercourse model.CreateUserCourseRequest
-	var users model.UserDetailResponse
-	var courses model.GetCourseResponse
 
 	if err := ctx.BindJSON(&usercourse); err != nil {
 		return
 	}
 
-	responses, err := controller.UserCourseService.Create(ctx, usercourse, users, courses)
+	responses, err := controller.UserCourseService.Create(ctx, usercourse)
 
 	if err != nil {
 		return
@@ -62,7 +60,7 @@ func (controller *UserCourseController) usercourseCreate(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusCreated, model.WebResponse{
 		Code:   201,
-		Status: "User Register Succesfully",
+		Status: "User Course Create Succesfully",
 		Data:   responses,
 	})
 }
@@ -126,7 +124,7 @@ func (controller *UserCourseController) getUserCourseByUserId(ctx *gin.Context) 
 	if response.UserId < 0 {
 		ctx.JSON(http.StatusNotFound, model.WebResponse{
 			Code:   404,
-			Status: "User Not Found",
+			Status: "User Course Not Found",
 		})
 		return
 	}
@@ -136,7 +134,7 @@ func (controller *UserCourseController) getUserCourseByUserId(ctx *gin.Context) 
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
-		Status: "Get User By ID Successfull",
+		Status: "Get User By User Id Successfull",
 		Data:   response,
 	})
 }
@@ -150,23 +148,24 @@ func (controller *UserCourseController) listUserCourse(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
-		Status: "Get All User Successfull",
+		Status: "Get All User Course Successfull",
 		Data:   responses,
 	})
 }
 
 func (controller *UserCourseController) deleteUserCourse(ctx *gin.Context) {
-	id, err := strconv.Atoi(ctx.Param("id"))
+	userid, _ := strconv.Atoi(ctx.Param("userid"))
+	courseid, err := strconv.Atoi(ctx.Param("courseid"))
 
 	if err != nil {
 		return
 	}
 
-	err = controller.UserCourseService.Delete(ctx, utils.ToString(id))
+	err = controller.UserCourseService.Delete(ctx, userid, courseid)
 
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
-			"message": "User Not Found",
+			"message": "User Course Not Found",
 		})
 		return
 	}
@@ -175,6 +174,6 @@ func (controller *UserCourseController) deleteUserCourse(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, gin.H{
 		"code":   200,
-		"Status": "Delete User Successfull",
+		"Status": "Delete User Course Successfull",
 	})
 }
