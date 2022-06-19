@@ -20,6 +20,13 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 	}
 }
 
+func ToUserCourseResponse(usercourse entity.UserCourse) model.GetUserCourseResponse {
+	return model.GetUserCourseResponse{
+		UserId:   		usercourse.UserId,
+		CourseId:   	usercourse.CourseId,
+	}
+}
+
 func ToQuestionResponse(question entity.Questions) model.GetQuestionResponse {
 	fmt.Println(question)
 	return model.GetQuestionResponse{
