@@ -34,7 +34,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("/users", controller.userRegister)
+		api.POST("/users", controller.UserRegister)
 		api.POST("/users/login", controller.userLogin)
 		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
 		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
@@ -48,7 +48,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 }
 
 //Function to register new user
-func (controller *UserController) userRegister(ctx *gin.Context) {
+func (controller *UserController) UserRegister(ctx *gin.Context) {
 	var user model.UserRegisterResponse
 
 	if err := ctx.BindJSON(&user); err != nil {
