@@ -22,11 +22,11 @@ func NewAnswerController(answerService *service.AnswerService) *AnswerController
 func (controller *AnswerController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api")
 	{
-		authorized.GET("/answers/all", controller.FindAll)
+		authorized.GET("/answers/all", middleware.UserHandler(controller.FindAll))
 		authorized.POST("/answers/create", middleware.UserHandler(controller.Create))
 		authorized.PUT("/answers/update/:answerId", middleware.UserHandler(controller.Update))
 		authorized.DELETE("/answers/:answerId", middleware.UserHandler(controller.Delete))
-		authorized.GET("/answers/by-user/:userId", controller.FindByUserId)
+		authorized.GET("/answers/by-user/:userId", middleware.UserHandler(controller.FindByUserId))
 	}
 	
 	return router
