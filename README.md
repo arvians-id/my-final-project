@@ -231,6 +231,37 @@ Response:
     }
 ```
 ------------------------------
+## Update Users Role [x]
+------------------------------
+Request:
+- Method: ```PUT```
+- Endpoint: ```/api/users/roleupdate/{id}```
+- Header:
+    - Content-Type: ```application/json```
+    - Accept: ```application/json```
+- Variable:
+    - id: ```integer```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "name" : "string",
+            "username" : "string", // unique
+            "role" : "integer", // enum(1,2)
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability": "integer", // enum(0,1,2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
+        }
+    }
+```
+------------------------------
 ## List Users [x]
 ------------------------------
 Request:
