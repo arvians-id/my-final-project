@@ -36,8 +36,8 @@ func main() {
 	}
 
 	// User Setup
-	userRepository := repository.NewUserRepository(database)
-	userService := service.NewUserService(&userRepository)
+	userRepository := repository.NewUserRepository()
+	userService := service.NewUserService(&userRepository, database)
 	userController := controller.NewUserController(&userService)
 
 	// Course Setup

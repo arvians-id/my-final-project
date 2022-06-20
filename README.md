@@ -6,6 +6,12 @@
   3. Umbu Theofilus Dendimara - Backend Developer - BE2144668 ([Rendydinar](https://github.com/Rendydinar))
   4. Widdy Arfiansyah - Backend Developer - BE2108902 ([arvians-id](https://github.com/arvians-id))
   5. Muhammad Abid Fajar - Backend Developer - BE2219863 ([abid313](https://github.com/abid313))
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
+=======
+>>>>>>> Stashed changes
   6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
 
 # API Specification
@@ -231,6 +237,40 @@ Response:
     }
 ```
 ------------------------------
+<<<<<<< Updated upstream
+=======
+## Update Users Role [x]
+------------------------------
+Request:
+- Method: ```PUT```
+- Endpoint: ```/api/users/roleupdate/{id}```
+- Header:
+    - Content-Type: ```application/json```
+    - Accept: ```application/json```
+- Variable:
+    - id: ```integer```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "name" : "string",
+            "username" : "string", // unique
+            "role" : "integer", // enum(1,2)
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability": "integer", // enum(0,1,2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
+        }
+    }
+```
+------------------------------
+>>>>>>> Stashed changes
 ## List Users [x]
 ------------------------------
 Request:
@@ -1222,4 +1262,9 @@ Response:
         "code" : "number",
         "status" : "string"
     }
+<<<<<<< Updated upstream
 ```
+=======
+```
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
