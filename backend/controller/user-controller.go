@@ -38,6 +38,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 		api.POST("/users/login", controller.userLogin)
 		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
 		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
+		api.PUT("/users/roleupdate/:id", middleware.AdminHandler(controller.userRoleUpdate))
 		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))
 		api.GET("/users", middleware.AdminHandler(controller.listUser))
 		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))
@@ -54,7 +55,7 @@ func (controller *UserController) userRegister(ctx *gin.Context) {
 		return
 	}
 
-	responses, err := controller.UserService.RegisterUser(user)
+	responses, err := controller.UserService.RegisterUser(ctx, user)
 
 	if err != nil {
 		return
@@ -78,7 +79,7 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 		return
 	}
 
-	response, err := controller.UserService.UserLogin(user.Email, user.Password)
+	response, err := controller.UserService.UserLogin(ctx, user)
 
 	if err != nil {
 		return
@@ -148,7 +149,7 @@ func (controller *UserController) userStatus(ctx *gin.Context) {
 
 	id := tokenClaims["id"].(float64)
 
-	user, err := controller.UserService.GetUserbyID(int(id))
+	user, err := controller.UserService.GetUserbyID(ctx, int(id))
 
 	if err != nil {
 		return
@@ -201,6 +202,85 @@ func (controller *UserController) userLogout(ctx *gin.Context) {
 	})
 }
 
+//Function to update user role
+func (controller *UserController) userRoleUpdate(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id"))
+
+	if err != nil {
+		return
+	}
+
+	token := ctx.GetHeader("Authorization")
+
+	if token == "" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Please Login First",
+		})
+		return
+	}
+
+	if ok := service.JWTAuthService().CheckToken(token); ok != nil {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "Invalid Token",
+		})
+		return
+	}
+
+	tokenClaims := jwt.MapClaims{}
+	_, err = jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
+		return []byte("your secret api key"), nil
+	},
+	)
+
+	iduser := tokenClaims["id"].(float64)
+	role := tokenClaims["role"].(string)
+	iduserint := int(iduser)
+
+	if iduserint != id && role != "1" {
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Unauthorized",
+			Data:   "You are not authorized to update role this user",
+		})
+		return
+	}
+
+	if err != nil {
+		return
+	}
+
+	response, err := controller.UserService.UpdateUserRole(ctx, id)
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   500,
+			Status: "Internal Server Error",
+		})
+		return
+	}
+
+	if response.Name == "" {
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   404,
+			Status: "User Not Found",
+		})
+		return
+	}
+
+	ctx.Header("Accept", "application/json")
+	ctx.Header("Content-Type", "application/json")
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Update User Successfull",
+		Data:   response,
+	})
+}
+
 //Function to get user by id
 func (controller *UserController) getUserByID(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
@@ -209,7 +289,15 @@ func (controller *UserController) getUserByID(ctx *gin.Context) {
 		return
 	}
 
-	response, err := controller.UserService.GetUserbyID(id)
+	response, err := controller.UserService.GetUserbyID(ctx, id)
+
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   500,
+			Status: "Internal Server Error",
+		})
+		return
+	}
 
 	token := ctx.GetHeader("Authorization")
 
@@ -274,7 +362,7 @@ func (controller *UserController) getUserByID(ctx *gin.Context) {
 
 //Function to show list user
 func (controller *UserController) listUser(ctx *gin.Context) {
-	responses, err := controller.UserService.ListUser()
+	responses, err := controller.UserService.ListUser(ctx)
 
 	if err != nil {
 		return
@@ -327,6 +415,14 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 	},
 	)
 
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   500,
+			Status: "Internal Server Error",
+		})
+		return
+	}
+
 	iduser := tokenClaims["id"].(float64)
 	role := tokenClaims["role"].(string)
 	iduserint := int(iduser)
@@ -340,7 +436,7 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 		return
 	}
 
-	responses, err := controller.UserService.UpdateUser(id, user)
+	responses, err := controller.UserService.UpdateUser(ctx, id, user)
 
 	if err != nil {
 		return
@@ -364,7 +460,7 @@ func (controller *UserController) deleteUser(ctx *gin.Context) {
 		return
 	}
 
-	err = controller.UserService.DeleteUser(id)
+	err = controller.UserService.DeleteUser(ctx, id)
 
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

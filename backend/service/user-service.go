@@ -1,41 +1,55 @@
 package service
 
 import (
+	"context"
+	"database/sql"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/repository"
+	"github.com/rg-km/final-project-engineering-12/backend/utils"
 )
 
 type UserService interface {
-	RegisterUser(user model.UserRegisterResponse) (model.UserRegisterResponse, error)
-	UserLogin(email string, password string) (model.UserLoginResponse, error)
-	ListUser() ([]model.UserDetailResponse, error)
-	GetUserbyID(id int) (model.UserDetailResponse, error)
-	UpdateUser(id int, user model.UserDetailResponse) (model.UserDetailResponse, error)
-	DeleteUser(id int) error
-}
-
-func NewUserService(userRepository *repository.UserRepository) UserServiceImplement {
-	return UserServiceImplement{
-		userRepository: *userRepository,
-	}
+	RegisterUser(ctx context.Context, user model.UserRegisterResponse) (model.UserRegisterResponse, error)
+	UserLogin(ctx context.Context, user model.GetUserLogin) (model.UserLoginResponse, error)
+	UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error)
+	ListUser(ctx context.Context) ([]model.UserDetailResponse, error)
+	GetUserbyID(ctx context.Context, id int) (model.UserDetailResponse, error)
+	UpdateUser(ctx context.Context, id int, user model.UserDetailResponse) (model.UserDetailResponse, error)
+	DeleteUser(ctx context.Context, id int) error
 }
 
 type UserServiceImplement struct {
 	userRepository repository.UserRepository
+	DB             *sql.DB
+}
+
+func NewUserService(userRepository *repository.UserRepository, db *sql.DB) UserServiceImplement {
+	return UserServiceImplement{
+		userRepository: *userRepository,
+		DB:             db,
+	}
 }
 
 // RegisterUser is used to register new user
-func (service *UserServiceImplement) RegisterUser(user model.UserRegisterResponse) (model.UserRegisterResponse, error) {
+func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.UserRegisterResponse) (model.UserRegisterResponse, error) {
 	var response model.UserRegisterResponse
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserRegisterResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
 
 	user.Created_at = time.Now()
 	user.Updated_at = time.Now()
 	user.EmailVerification = time.Now()
 
-	service.userRepository.Register(entity.Users{
+	service.userRepository.Register(ctx, tx, entity.Users{
 		Name:              user.Name,
 		Username:          user.Username,
 		Email:             user.Email,
@@ -50,7 +64,7 @@ func (service *UserServiceImplement) RegisterUser(user model.UserRegisterRespons
 		UpdatedAt:         user.Updated_at,
 	})
 
-	temp, err := service.userRepository.GetLastInsertUser()
+	temp, err := service.userRepository.GetLastInsertUser(ctx, tx)
 
 	if err != nil {
 		return model.UserRegisterResponse{}, err
@@ -76,9 +90,17 @@ func (service *UserServiceImplement) RegisterUser(user model.UserRegisterRespons
 }
 
 // UserLogin is used to login user
-func (service *UserServiceImplement) UserLogin(email string, password string) (model.UserLoginResponse, error) {
+func (service *UserServiceImplement) UserLogin(ctx *gin.Context, data model.GetUserLogin) (model.UserLoginResponse, error) {
 	var response model.UserLoginResponse
-	user, err := service.userRepository.Login(email, password)
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserLoginResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	user, err := service.userRepository.Login(ctx, tx, data)
 
 	if err != nil {
 		return model.UserLoginResponse{}, err
@@ -96,9 +118,52 @@ func (service *UserServiceImplement) UserLogin(email string, password string) (m
 	return response, nil
 }
 
-func (service *UserServiceImplement) GetUserbyID(id int) (model.UserDetailResponse, error) {
+// UpdateUserRole is used to update user role
+func (service *UserServiceImplement) UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error) {
 	var response model.UserDetailResponse
-	user, err := service.userRepository.GetUserByID(id)
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserDetailResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	user, err := service.userRepository.UpdateRole(ctx, tx, id)
+
+	if err != nil {
+		return model.UserDetailResponse{}, err
+	}
+
+	response = model.UserDetailResponse{
+		Id:             user.Id,
+		Name:           user.Name,
+		Username:       user.Username,
+		Role:           user.Role,
+		Phone:          user.Phone,
+		Gender:         user.Gender,
+		DisabilityType: user.DisabilityType,
+		Address:        user.Address,
+		Birthdate:      user.Birthdate,
+		Image:          user.Image,
+		Description:    user.Description,
+	}
+
+	return response, nil
+}
+
+// GetUserbyID is used to get user by id
+func (service *UserServiceImplement) GetUserbyID(ctx *gin.Context, id int) (model.UserDetailResponse, error) {
+	var response model.UserDetailResponse
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserDetailResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	user, err := service.userRepository.GetUserByID(ctx, tx, id)
 
 	if err != nil {
 		return model.UserDetailResponse{}, err
@@ -122,12 +187,19 @@ func (service *UserServiceImplement) GetUserbyID(id int) (model.UserDetailRespon
 }
 
 // UpdateUser is used to update user
-func (service *UserServiceImplement) UpdateUser(id int, user model.GetUserDetailUpdate) (model.UserDetailResponse, error) {
+func (service *UserServiceImplement) UpdateUser(ctx *gin.Context, id int, user model.GetUserDetailUpdate) (model.UserDetailResponse, error) {
 	var response model.UserDetailResponse
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserDetailResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
 
 	user.UpdateAt = time.Now()
 
-	err := service.userRepository.Update(entity.Users{
+	err = service.userRepository.Update(ctx, tx, entity.Users{
 		Id:             id,
 		Name:           user.Name,
 		Username:       user.Username,
@@ -164,9 +236,17 @@ func (service *UserServiceImplement) UpdateUser(id int, user model.GetUserDetail
 }
 
 // ListUser is used to list all user
-func (service *UserServiceImplement) ListUser() ([]model.UserDetailResponse, error) {
+func (service *UserServiceImplement) ListUser(ctx *gin.Context) ([]model.UserDetailResponse, error) {
 	var responses = []model.UserDetailResponse{}
-	users, err := service.userRepository.ListUser()
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return []model.UserDetailResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	users, err := service.userRepository.ListUser(ctx, tx)
 
 	if err != nil {
 		return nil, err
@@ -192,8 +272,16 @@ func (service *UserServiceImplement) ListUser() ([]model.UserDetailResponse, err
 }
 
 // DeleteUser is used to delete user
-func (service *UserServiceImplement) DeleteUser(id int) error {
-	err := service.userRepository.Delete(id)
+func (service *UserServiceImplement) DeleteUser(ctx *gin.Context, id int) error {
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	err = service.userRepository.Delete(ctx, tx, id)
 
 	if err != nil {
 		return err

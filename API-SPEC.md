@@ -29,12 +29,15 @@ Request:
 - Body:
 ``` json
     {
-        "name" : "string",
-        "username" : "string", // unique
-        "email" : "string", // unique
-        "password" : "string",
-        "role" : "integer", // enum(1,2)
-        "email_verified_at" : "timestamp", // timestamp
+        "name": "string",
+        "username": "string",
+        "email": "string",
+        "password": "string",
+        "role": "integer", // enum (1, 2)
+        "phone": "string",
+        "gender": "integer", // enum (1, 2)
+        "type_of_disability": "integer", // enum (0, 1, 2)
+        "birthdate": "date"
     }
 ```
 Response:
@@ -43,15 +46,19 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
-            "role" : "integer", // enum(1,2)
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "email": "string", // unique
+            "password": "string",
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "integer", // enum (1, 2)
+            "type_of_disability": "integer", // enum (0, 1, 2)
+            "birthdate": "string",
+            "email_verification": "timestamp",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         }
     }
 ```
@@ -63,22 +70,25 @@ Request:
 - Endpoint: ```/api/users/{id}```
 - Header:
     - Accept: ```application/json```  
-
+- Variable:
+    - id: ```integer```
 Response:
 ``` json
     {
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
-            "role" : "integer", // enum(1,2)
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "integer", // enum (1, 2)
+            "type_of_disability": "integer", // enum (0, 1, 2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
         }
     }
 ```
@@ -91,16 +101,54 @@ Request:
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
+- Variable:
+    - id: ```integer```
 - Body:
 ``` json
     {
-        "name" : "string",
-        "username" : "string", // unique
-        "email" : "string", // unique
-        "password" : "string",
-        "role" : "integer", // enum(1,2)
+        "name": "string",
+        "username": "string", // unique
+        "role": "integer", // enum (1, 2)
+        "phone": "string",
+        "gender": "integer", // enum (1, 2)
+        "type_of_disability": "integer", // enum (0, 1, 2)
+        "address": "string",
+        "birthdate": "string",
+        "image": "string",
+        "description": "string"
     }
 ```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "string", // enum (1, 2)
+            "type_of_disability": "integer", // enum(0, 1, 2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
+        }
+    }
+```
+------------------------------
+## Update Users Role
+------------------------------
+Request:
+- Method: ```PUT```
+- Endpoint: ```/api/users/roleupdate/{id}```
+- Header:
+    - Content-Type: ```application/json```
+    - Accept: ```application/json```
+- Variable:
+    - id: ```integer```
 Response:
 ``` json
     {
@@ -110,12 +158,14 @@ Response:
             "id" : "integer", // primary key
             "name" : "string",
             "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
             "role" : "integer", // enum(1,2)
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability": "integer", // enum(0,1,2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
         }
     }
 ```
@@ -130,7 +180,6 @@ Request:
 - Query Param:
     - size : ```number```
     - page : ```number```
-
 Response:
 ``` json
     {
@@ -138,28 +187,31 @@ Response:
         "status" : "string",
         "data" : [
             {
-                "id" : "integer", // primary key
-                "name" : "string",
-                "username" : "string", // unique
-                "email" : "string", // unique
-                "password" : "string",
-                "role" : "integer", // enum(1,2)
-                "email_verified_at" : "timestamp", // timestamp
-                "created_at" : "timestamp", // timestamp
-                "updated_at" : "timestamp" // timestamp
+                "id": "integer", // primary
+                "name": "string",
+                "username": "string", // unique
+                "role": "integer", // enum(1, 2)
+                "phone": "string",
+                "gender": "integer", // enum(1, 2)
+                "type_of_disability": "integer", // enum(0, 1, 2)
+                "address": "string",
+                "birthdate": "string",
+                "image": "string",
+                "description": "string"
             },
         ]
     }
 ```
 ------------------------------
-Delete Users
+## Delete Users
 ------------------------------
 Request:
 - Method: ```DELETE```
 - Endpoint: ```/api/users/{id}```
 - Header:
     - Accept: ```application/json```
-
+- Variable:
+  - id: ```integer```
 Response:
 ``` json
     {
