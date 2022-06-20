@@ -237,8 +237,11 @@ Response:
     }
 ```
 ------------------------------
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 ## Update Users Role [x]
 ------------------------------
 Request:
@@ -270,7 +273,10 @@ Response:
     }
 ```
 ------------------------------
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 ## List Users [x]
 ------------------------------
 Request:

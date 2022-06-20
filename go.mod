@@ -24,6 +24,7 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	golang.org/x/crypto v0.0.0-20210711020723-a769d52b0f97 // indirect
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
@@ -42,6 +43,11 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
+	golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
+	golang.org/x/text v0.3.7 // indirect
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

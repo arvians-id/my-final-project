@@ -1,6 +1,7 @@
 package service
 
 import (
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 <<<<<<< Updated upstream
@@ -10,6 +11,10 @@ import (
 	"database/sql"
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+	"context"
+	"database/sql"
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +25,7 @@ import (
 )
 
 type UserService interface {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	RegisterUser(user model.UserRegisterResponse) (model.UserRegisterResponse, error)
 	UserLogin(email string, password string) (model.UserLoginResponse, error)
@@ -36,6 +42,8 @@ type UserService interface {
 >>>>>>> Stashed changes
 	DeleteUser(id int) error
 =======
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	RegisterUser(ctx context.Context, user model.UserRegisterResponse) (model.UserRegisterResponse, error)
 	UserLogin(ctx context.Context, user model.GetUserLogin) (model.UserLoginResponse, error)
 	UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error)
@@ -43,7 +51,10 @@ type UserService interface {
 	GetUserbyID(ctx context.Context, id int) (model.UserDetailResponse, error)
 	UpdateUser(ctx context.Context, id int, user model.UserDetailResponse) (model.UserDetailResponse, error)
 	DeleteUser(ctx context.Context, id int) error
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 }
 
 type UserServiceImplement struct {
@@ -59,8 +70,12 @@ func NewUserService(userRepository *repository.UserRepository, db *sql.DB) UserS
 }
 
 // RegisterUser is used to register new user
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (service *UserServiceImplement) RegisterUser(user model.UserRegisterResponse) (model.UserRegisterResponse, error) {
+=======
+func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.UserRegisterResponse) (model.UserRegisterResponse, error) {
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	var response model.UserRegisterResponse
 =======
 <<<<<<< Updated upstream
@@ -78,6 +93,13 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 	}
 	defer utils.CommitOrRollback(tx)
 >>>>>>> Stashed changes
+
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserRegisterResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
 
 	user.Created_at = time.Now()
 	user.Updated_at = time.Now()
@@ -98,6 +120,7 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 		UpdatedAt:         user.Updated_at,
 	})
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	temp, err := service.userRepository.GetLastInsertUser()
 =======
@@ -107,6 +130,9 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 =======
 	temp, err := service.userRepository.GetLastInsertUser(ctx, tx)
 >>>>>>> Stashed changes
+=======
+	temp, err := service.userRepository.GetLastInsertUser(ctx, tx)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return model.UserRegisterResponse{}, err
@@ -136,6 +162,7 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 }
 
 // UserLogin is used to login user
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (service *UserServiceImplement) UserLogin(email string, password string) (model.UserLoginResponse, error) {
 	var response model.UserLoginResponse
@@ -148,6 +175,10 @@ func (service *UserServiceImplement) UserLogin(email string, password string) (m
 =======
 func (service *UserServiceImplement) UserLogin(ctx *gin.Context, data model.GetUserLogin) (model.UserLoginResponse, error) {
 	var response model.UserLoginResponse
+=======
+func (service *UserServiceImplement) UserLogin(ctx *gin.Context, data model.GetUserLogin) (model.UserLoginResponse, error) {
+	var response model.UserLoginResponse
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	tx, err := service.DB.Begin()
 
@@ -157,12 +188,15 @@ func (service *UserServiceImplement) UserLogin(ctx *gin.Context, data model.GetU
 	defer utils.CommitOrRollback(tx)
 
 	user, err := service.userRepository.Login(ctx, tx, data)
+<<<<<<< HEAD
 
 	if err != nil {
 		return model.UserLoginResponse{}, err
 	}
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return model.UserLoginResponse{}, err
@@ -180,6 +214,7 @@ func (service *UserServiceImplement) UserLogin(ctx *gin.Context, data model.GetU
 	return response, nil
 }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (service *UserServiceImplement) GetUserbyID(id int) (model.UserDetailResponse, error) {
 	var response model.UserDetailResponse
@@ -193,6 +228,11 @@ func (service *UserServiceImplement) GetUserbyID(id int) (model.UserRegister, er
 // UpdateUserRole is used to update user role
 func (service *UserServiceImplement) UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error) {
 	var response model.UserDetailResponse
+=======
+// UpdateUserRole is used to update user role
+func (service *UserServiceImplement) UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error) {
+	var response model.UserDetailResponse
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	tx, err := service.DB.Begin()
 
@@ -236,12 +276,15 @@ func (service *UserServiceImplement) GetUserbyID(ctx *gin.Context, id int) (mode
 	defer utils.CommitOrRollback(tx)
 
 	user, err := service.userRepository.GetUserByID(ctx, tx, id)
+<<<<<<< HEAD
 
 	if err != nil {
 		return model.UserDetailResponse{}, err
 	}
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return model.UserDetailResponse{}, err
@@ -265,8 +308,12 @@ func (service *UserServiceImplement) GetUserbyID(ctx *gin.Context, id int) (mode
 }
 
 // UpdateUser is used to update user
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (service *UserServiceImplement) UpdateUser(id int, user model.GetUserDetailUpdate) (model.UserDetailResponse, error) {
+=======
+func (service *UserServiceImplement) UpdateUser(ctx *gin.Context, id int, user model.GetUserDetailUpdate) (model.UserDetailResponse, error) {
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	var response model.UserDetailResponse
 =======
 <<<<<<< Updated upstream
@@ -274,8 +321,16 @@ func (service *UserServiceImplement) UpdateUser(id int, user model.UserRegister)
 	var response model.UserRegister
 >>>>>>> Stashed changes
 
+	tx, err := service.DB.Begin()
+
+	if err != nil {
+		return model.UserDetailResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
 	user.UpdateAt = time.Now()
 
+<<<<<<< HEAD
 	err := service.userRepository.Update(entity.Users{
 <<<<<<< Updated upstream
 =======
@@ -303,6 +358,9 @@ func (service *UserServiceImplement) UpdateUser(ctx *gin.Context, id int, user m
 
 	err = service.userRepository.Update(ctx, tx, entity.Users{
 >>>>>>> Stashed changes
+=======
+	err = service.userRepository.Update(ctx, tx, entity.Users{
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 		Id:             id,
 		Name:           user.Name,
 		Username:       user.Username,
@@ -343,6 +401,7 @@ func (service *UserServiceImplement) UpdateUser(ctx *gin.Context, id int, user m
 }
 
 // ListUser is used to list all user
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (service *UserServiceImplement) ListUser() ([]model.UserDetailResponse, error) {
 	var responses = []model.UserDetailResponse{}
@@ -355,6 +414,10 @@ func (service *UserServiceImplement) ListUser() ([]model.UserRegister, error) {
 =======
 func (service *UserServiceImplement) ListUser(ctx *gin.Context) ([]model.UserDetailResponse, error) {
 	var responses = []model.UserDetailResponse{}
+=======
+func (service *UserServiceImplement) ListUser(ctx *gin.Context) ([]model.UserDetailResponse, error) {
+	var responses = []model.UserDetailResponse{}
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	tx, err := service.DB.Begin()
 
@@ -364,7 +427,10 @@ func (service *UserServiceImplement) ListUser(ctx *gin.Context) ([]model.UserDet
 	defer utils.CommitOrRollback(tx)
 
 	users, err := service.userRepository.ListUser(ctx, tx)
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return nil, err

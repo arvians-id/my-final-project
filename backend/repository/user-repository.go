@@ -11,6 +11,7 @@ import (
 )
 
 type UserRepository interface {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	Register(user entity.Users) error
 	Login(email string, password string) (entity.Users, error)
@@ -28,6 +29,8 @@ type UserRepository interface {
 	Delete(id int) error
 	Update(user entity.Users) error
 =======
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	Register(ctx context.Context, tx *sql.Tx, user entity.Users) error
 	Login(ctx context.Context, tx *sql.Tx, data model.GetUserLogin) (entity.Users, error)
 	UpdateRole(ctx context.Context, tx *sql.Tx, id int) (entity.Users, error)
@@ -36,7 +39,10 @@ type UserRepository interface {
 	GetLastInsertUser(ctx context.Context, tx *sql.Tx) (entity.Users, error)
 	Delete(ctx context.Context, tx *sql.Tx, id int) error
 	Update(ctx context.Context, tx *sql.Tx, user entity.Users) error
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 }
 
 type userRepository struct {
@@ -47,6 +53,7 @@ func NewUserRepository() UserRepository {
 }
 
 // Register is a function to register a new user to the database
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (repository *userRepository) Register(user entity.Users) error {
 =======
@@ -68,6 +75,11 @@ func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user
 	var id int
 
 >>>>>>> Stashed changes
+=======
+func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user entity.Users) error {
+	var id int
+
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 	temp, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
 	user.Password = string(temp)
 
@@ -81,6 +93,7 @@ func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user
 
 	rows.Scan(&id)
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	_, err = database.Exec("INSERT INTO user_details (user_id, phone, gender, type_of_disability, birthdate) VALUES (?, ?, ?, ?, ?)", id, user.Phone, user.Gender, user.DisabilityType, user.Birthdate)
 =======
@@ -90,6 +103,9 @@ func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user
 	_, err = tx.ExecContext(ctx, "INSERT INTO user_details (user_id, phone, gender, type_of_disability, birthdate) VALUES (?, ?, ?, ?, ?)", id, user.Phone, user.Gender, user.DisabilityType, user.Birthdate)
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+	_, err = tx.ExecContext(ctx, "INSERT INTO user_details (user_id, phone, gender, type_of_disability, birthdate) VALUES (?, ?, ?, ?, ?)", id, user.Phone, user.Gender, user.DisabilityType, user.Birthdate)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return err
@@ -99,6 +115,7 @@ func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user
 }
 
 // Login is a function to login a user by email and password
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (repository *userRepository) Login(email string, password string) (entity.Users, error) {
 =======
@@ -140,6 +157,17 @@ func (repository *userRepository) Login(ctx context.Context, tx *sql.Tx, data mo
 	rows = tx.QueryRowContext(ctx, "SELECT gender, type_of_disability FROM user_details WHERE user_id = ?", user.Id)
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+func (repository *userRepository) Login(ctx context.Context, tx *sql.Tx, data model.GetUserLogin) (entity.Users, error) {
+
+	var user entity.Users
+
+	rows := tx.QueryRowContext(ctx, "SELECT id, name, username, email, password, role FROM users WHERE email = ?", data.Email)
+
+	rows.Scan(&user.Id, &user.Name, &user.Username, &user.Email, &user.Password, &user.Role)
+
+	rows = tx.QueryRowContext(ctx, "SELECT gender, type_of_disability FROM user_details WHERE user_id = ?", user.Id)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	rows.Scan(&user.Gender, &user.DisabilityType)
 
@@ -152,9 +180,29 @@ func (repository *userRepository) Login(ctx context.Context, tx *sql.Tx, data mo
 	return user, err
 }
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
+=======
+// UpdateRole is a function to update a user's role by database
+func (repository *userRepository) UpdateRole(ctx context.Context, tx *sql.Tx, id int) (entity.Users, error) {
+	var user entity.Users
+
+	_, err := tx.ExecContext(ctx, "UPDATE users SET role = ? WHERE id = ?", 1, id)
+
+	if err != nil {
+		return entity.Users{}, err
+	}
+
+	rows := tx.QueryRowContext(ctx, "SELECT users.id, users.name, users.username, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.address, user_details.birthdate, user_details.image, user_details.description FROM users INNER JOIN user_details ON user_details.user_id = users.id WHERE users.id = ?", id)
+
+	rows.Scan(&user.Id, &user.Name, &user.Username, &user.Role, &user.Phone, &user.Gender, &user.DisabilityType, &user.Address, &user.Birthdate, &user.Image, &user.Description)
+
+	return user, nil
+}
+
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 // GetUserByID is a function to get a user by id by database
-func (repository *userRepository) GetUserByID(id int) (entity.Users, error) {
+func (repository *userRepository) GetUserByID(ctx context.Context, tx *sql.Tx, id int) (entity.Users, error) {
 
 =======
 // UpdateRole is a function to update a user's role by database
@@ -162,6 +210,7 @@ func (repository *userRepository) UpdateRole(ctx context.Context, tx *sql.Tx, id
 >>>>>>> Stashed changes
 	var user entity.Users
 
+<<<<<<< HEAD
 	_, err := tx.ExecContext(ctx, "UPDATE users SET role = ? WHERE id = ?", 1, id)
 
 	if err != nil {
@@ -193,12 +242,16 @@ func (repository *userRepository) GetUserByID(ctx context.Context, tx *sql.Tx, i
 
 	rows := tx.QueryRowContext(ctx, "SELECT users.id, users.name, users.username, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.address, user_details.birthdate, user_details.image, user_details.description FROM users INNER JOIN user_details ON user_details.user_id = users.id WHERE users.id = ?", id)
 >>>>>>> Stashed changes
+=======
+	rows := tx.QueryRowContext(ctx, "SELECT users.id, users.name, users.username, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.address, user_details.birthdate, user_details.image, user_details.description FROM users INNER JOIN user_details ON user_details.user_id = users.id WHERE users.id = ?", id)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	rows.Scan(&user.Id, &user.Name, &user.Username, &user.Role, &user.Phone, &user.Gender, &user.DisabilityType, &user.Address, &user.Birthdate, &user.Image, &user.Description)
 	return user, nil
 }
 
 // GetUser is a function to get all users from the database
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (repository *userRepository) ListUser() ([]entity.Users, error) {
 	rows, err := repository.db.Query("SELECT users.id, users.name, users.username, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.address, user_details.birthdate, user_details.image, user_details.description FROM users INNER JOIN user_details ON user_details.user_id = users.id")
@@ -211,6 +264,10 @@ func (repository *userRepository) ListUser(ctx context.Context, tx *sql.Tx) ([]e
 	rows, err := tx.QueryContext(ctx, "SELECT users.id, users.name, users.username, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.address, user_details.birthdate, user_details.image, user_details.description FROM users INNER JOIN user_details ON user_details.user_id = users.id")
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+func (repository *userRepository) ListUser(ctx context.Context, tx *sql.Tx) ([]entity.Users, error) {
+	rows, err := tx.QueryContext(ctx, "SELECT users.id, users.name, users.username, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.address, user_details.birthdate, user_details.image, user_details.description FROM users INNER JOIN user_details ON user_details.user_id = users.id")
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return nil, err
@@ -233,6 +290,7 @@ func (repository *userRepository) ListUser(ctx context.Context, tx *sql.Tx) ([]e
 }
 
 // GetLastInsertUser is a function to get the last inserted user from the database
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 func (repository *userRepository) GetLastInsertUser() (entity.Users, error) {
 =======
@@ -262,6 +320,13 @@ func (repository *userRepository) GetLastInsertUser(ctx context.Context, tx *sql
 
 	rows := tx.QueryRowContext(ctx, "SELECT users.id, users.name, users.username, users.email, users.password, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.birthdate, users.email_verification, users.created_at, users.updated_at FROM users INNER JOIN user_details ON user_details.user_id = users.id WHERE users.id = (SELECT MAX(id) FROM users)")
 >>>>>>> Stashed changes
+=======
+func (repository *userRepository) GetLastInsertUser(ctx context.Context, tx *sql.Tx) (entity.Users, error) {
+
+	var user entity.Users
+
+	rows := tx.QueryRowContext(ctx, "SELECT users.id, users.name, users.username, users.email, users.password, users.role, user_details.phone, user_details.gender, user_details.type_of_disability, user_details.birthdate, users.email_verification, users.created_at, users.updated_at FROM users INNER JOIN user_details ON user_details.user_id = users.id WHERE users.id = (SELECT MAX(id) FROM users)")
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	rows.Scan(&user.Id, &user.Name, &user.Username, &user.Email, &user.Password, &user.Role, &user.Phone, &user.Gender, &user.DisabilityType, &user.Birthdate, &user.EmailVerification, &user.CreatedAt, &user.UpdatedAt)
 	return user, nil
@@ -273,6 +338,7 @@ func (repository *userRepository) Update(ctx context.Context, tx *sql.Tx, user e
 	_, err := tx.ExecContext(ctx, "UPDATE users SET name = ?, username = ?, role = ?, updated_at = ? WHERE id = ?", user.Name, user.Username, user.Role, user.UpdatedAt, user.Id)
 
 	if err != nil {
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 		panic(err)
 	}
@@ -298,6 +364,14 @@ func (repository *userRepository) Update(ctx context.Context, tx *sql.Tx, user e
 >>>>>>> Stashed changes
 
 	if err != nil {
+=======
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, "UPDATE user_details SET phone = ?, gender = ?, type_of_disability = ?, address = ?, birthdate = ?, image = ?, description = ? WHERE user_id = ?", user.Phone, user.Gender, user.DisabilityType, user.Address, user.Birthdate, user.Image, user.Description, user.Id)
+
+	if err != nil {
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 		return err
 	}
 
@@ -308,6 +382,7 @@ func (repository *userRepository) Update(ctx context.Context, tx *sql.Tx, user e
 func (repository *userRepository) Delete(ctx context.Context, tx *sql.Tx, id int) error {
 	var user entity.Users
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 	database, err := sql.Open("sqlite3", "./teenager.db")
 
@@ -325,6 +400,9 @@ func (repository *userRepository) Delete(ctx context.Context, tx *sql.Tx, id int
 	rows := tx.QueryRowContext(ctx, "SELECT name FROM users WHERE id = ?", id)
 >>>>>>> Stashed changes
 >>>>>>> Stashed changes
+=======
+	rows := tx.QueryRowContext(ctx, "SELECT name FROM users WHERE id = ?", id)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	rows.Scan(&user.Name)
 
@@ -338,6 +416,7 @@ func (repository *userRepository) Delete(ctx context.Context, tx *sql.Tx, id int
 		return err
 	}
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 	_, err = tx.ExecContext(ctx, "DELETE FROM user_details WHERE user_id = ?", id)
@@ -348,9 +427,12 @@ func (repository *userRepository) Delete(ctx context.Context, tx *sql.Tx, id int
 
 <<<<<<< Updated upstream
 	_, err = database.Exec("DELETE FROM user_details WHERE user_id = ?", id)
+=======
+	_, err = tx.ExecContext(ctx, "DELETE FROM user_details WHERE user_id = ?", id)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 =======

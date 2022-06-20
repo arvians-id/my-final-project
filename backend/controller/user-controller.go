@@ -34,7 +34,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("/users", controller.userRegister)
+		api.POST("/users", controller.UserRegister)
 		api.POST("/users/login", controller.userLogin)
 		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
 		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
@@ -48,7 +48,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 }
 
 //Function to register new user
-func (controller *UserController) userRegister(ctx *gin.Context) {
+func (controller *UserController) UserRegister(ctx *gin.Context) {
 	var user model.UserRegisterResponse
 
 	if err := ctx.BindJSON(&user); err != nil {
@@ -150,7 +150,7 @@ func (controller *UserController) userStatus(ctx *gin.Context) {
 <<<<<<< Updated upstream
 	id := tokenClaims["id"].(float64)
 
-	user, err := controller.UserService.GetUserbyID(int(id))
+	user, err := controller.UserService.GetUserbyID(ctx, int(id))
 
 	if err != nil {
 =======
@@ -433,6 +433,14 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 	},
 	)
 
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   500,
+			Status: "Internal Server Error",
+		})
+		return
+	}
+
 	iduser := tokenClaims["id"].(float64)
 	role := tokenClaims["role"].(string)
 	iduserint := int(iduser)
@@ -446,6 +454,7 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 		return
 	}
 
+<<<<<<< HEAD
 =======
 <<<<<<< Updated upstream
 >>>>>>> Stashed changes
@@ -500,6 +509,9 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 
 	responses, err := controller.UserService.UpdateUser(ctx, id, user)
 >>>>>>> Stashed changes
+=======
+	responses, err := controller.UserService.UpdateUser(ctx, id, user)
+>>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return
