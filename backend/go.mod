@@ -1,4 +1,4 @@
-module github.com/rg-km/final-project-engineering-12
+module github.com/rg-km/final-project-engineering-12/backend
 
 go 1.17
 
