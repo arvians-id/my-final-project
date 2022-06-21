@@ -38,10 +38,16 @@ func main() {
 	moduleArticlesService := service.NewModuleArticlesService(&moduleArticlesRepository, &courseRepository, database)
 	moduleArticlesController := controller.NewModuleArticlesController(&moduleArticlesService)
 
+	// Module Submission Setup
+	moduleSubmissionRepository := repository.NewModuleSubmissionsRepository()
+	moduleSubmissionService := service.NewModuleSubmissionsService(&moduleSubmissionRepository, &courseRepository, database)
+	moduleSubmissionController := controller.NewModuleSubmissionsController(&moduleSubmissionService)
+
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
 	moduleArticlesController.Route(router)
+	moduleSubmissionController.Route(router)
 
 	// Run
 	PORT := fmt.Sprintf(":%v", configuration.Get("APP_PORT"))

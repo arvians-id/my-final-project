@@ -624,7 +624,9 @@ Response:
 ------------------------------
 Request:
 - Method: ```POST```
-- Endpoint: ```/api/module_submissions```
+- Endpoint: ```/api/courses/{code}/submissions```
+- Query Param:
+  - code : ```string```
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
@@ -656,7 +658,10 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/module_submissions/{id}```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
 - Header:
     - Accept: ```application/json```
 
@@ -678,8 +683,11 @@ Response:
 ## Update Module_submissions
 ------------------------------
 Request:
-- Method: ```PUT```
-- Endpoint: ```/api/module_submissions/{id}```
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
@@ -711,7 +719,9 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/module_submissions```
+- Endpoint: ```/api/courses/{code}/submissions```
+- Query Param:
+  - code : ```string```
 - Header:
     - Accept: ```application/json```
 - Query Param:
@@ -739,7 +749,10 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/module_submissions/{id}```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
 - Header:
     - Accept: ```application/json```
 
@@ -748,6 +761,52 @@ Response:
     {
         "code" : "number",
         "status" : "string"
+    }
+```
+------------------------------
+## Next Module_submissions
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/next```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id": "integer", // primary key
+            "code_course": "string",
+        }
+    }
+```
+------------------------------
+## Previous Module_submissions
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/previous```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id": "integer", // primary key
+            "code_course": "string",
+        }
     }
 ```
 ## Module_articles

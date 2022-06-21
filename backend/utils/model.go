@@ -36,3 +36,20 @@ func ToModuleArticlesNextPreviousResponse(ModArs entity.NextPreviousModuleArticl
 		CodeCourse: ModArs.CodeCourse,
 	}
 }
+
+func ToModuleSubmissionsNextPreviousResponse(ModSubs entity.NextPreviousModuleSubmissions) model.GetNextPreviousSubmissionsResponse {
+	return model.GetNextPreviousSubmissionsResponse{
+		Id:         ModSubs.Id,
+		CodeCourse: ModSubs.CodeCourse,
+	}
+}
+
+func ToModuleSubmissionsResponse(modsub entity.ModuleSubmissions) model.GetModuleSubmissionsResponse {
+	return model.GetModuleSubmissionsResponse{
+		Id:          modsub.Id,
+		CourseId:    modsub.CourseId,
+		Name:        modsub.Name,
+		Description: modsub.Description,
+		Deadline:    modsub.Deadline,
+	}
+}
