@@ -76,21 +76,28 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 	var user model.GetUserLogin
 
 	if err := ctx.BindJSON(&user); err != nil {
-		return
+		ctx.IndentedJSON(http.StatusBadRequest, model.WebResponse{
+			Code:   400,
+			Status: "Bad Request",
+			Data:   "Please Check Your Input",
+		})
 	}
 
 	response, err := controller.UserService.UserLogin(ctx, user)
 
 	if err != nil {
-		return
+		ctx.IndentedJSON(http.StatusBadRequest, model.WebResponse{
+			Code:   400,
+			Status: "Bad Request",
+			Data:   "Please Check Your Input",
+		})
 	}
 
 	if response.Name == "" {
-		ctx.JSON(http.StatusNotFound, model.WebResponse{
-			Code:   404,
+		ctx.JSON(http.StatusBadRequest, model.WebResponse{
+			Code:   400,
 			Status: "User Not Found",
 		})
-		return
 	}
 
 	ctx.Header("Accept", "application/json")
@@ -152,7 +159,10 @@ func (controller *UserController) userStatus(ctx *gin.Context) {
 	user, err := controller.UserService.GetUserbyID(ctx, int(id))
 
 	if err != nil {
-		return
+		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: "Cannot get user",
+		})
 	}
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
