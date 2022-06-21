@@ -147,28 +147,11 @@ func (controller *UserController) userStatus(ctx *gin.Context) {
 		return
 	}
 
-<<<<<<< Updated upstream
 	id := tokenClaims["id"].(float64)
 
 	user, err := controller.UserService.GetUserbyID(ctx, int(id))
 
 	if err != nil {
-=======
-<<<<<<< Updated upstream
-	if ok := service.JWTAuthService().CheckToken(claims.Raw); ok != nil {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Please Login First",
-		})
-=======
-	id := tokenClaims["id"].(float64)
-
-	user, err := controller.UserService.GetUserbyID(ctx, int(id))
-
-	if err != nil {
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 		return
 	}
 
@@ -406,60 +389,6 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 		return
 	}
 
-<<<<<<< Updated upstream
-	token := ctx.GetHeader("Authorization")
-
-	if token == "" {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Please Login First",
-		})
-		return
-	}
-
-	if ok := service.JWTAuthService().CheckToken(token); ok != nil {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "Invalid Token",
-		})
-		return
-	}
-
-	tokenClaims := jwt.MapClaims{}
-	_, err = jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
-		return []byte("your secret api key"), nil
-	},
-	)
-
-	if err != nil {
-		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   500,
-			Status: "Internal Server Error",
-		})
-		return
-	}
-
-	iduser := tokenClaims["id"].(float64)
-	role := tokenClaims["role"].(string)
-	iduserint := int(iduser)
-
-	if iduserint != id && role != "1" {
-		ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-			Code:   401,
-			Status: "Unauthorized",
-			Data:   "You are not authorized to update this user",
-		})
-		return
-	}
-
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-	responses, err := controller.UserService.UpdateUser(id, user)
-=======
 	token := ctx.GetHeader("Authorization")
 
 	if token == "" {
@@ -508,10 +437,6 @@ func (controller *UserController) updateUser(ctx *gin.Context) {
 	}
 
 	responses, err := controller.UserService.UpdateUser(ctx, id, user)
->>>>>>> Stashed changes
-=======
-	responses, err := controller.UserService.UpdateUser(ctx, id, user)
->>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 
 	if err != nil {
 		return
