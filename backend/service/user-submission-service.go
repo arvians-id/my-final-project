@@ -11,7 +11,6 @@ import (
 )
 
 type UserSubmissionsService interface {
-	FindAll(ctx context.Context, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error)
 	SubmitFile(ctx context.Context, request model.CreateUserSubmissionsRequest) (model.GetUserSubmissionsResponse, error)
 	UpdateGrade(ctx context.Context, request model.UpdateUserGradeRequest) error
 	FindUserSubmissionById(ctx context.Context, id int, userId int, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error)
@@ -31,24 +30,6 @@ func NewUserSubmissionsService(userSubmissionRepository *repository.UserSubmissi
 		CourseRepository:            *courseRepository,
 		DB:                          db,
 	}
-}
-
-func (service *userSubmissionsService) FindAll(ctx context.Context, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error) {
-	tx, err := service.DB.Begin()
-	if err != nil {
-		return model.GetUserSubmissionsResponse{}, err
-	}
-	defer utils.CommitOrRollback(tx)
-
-	getUserSubmission := entity.UserSubmissions{
-		ModuleSubmissionId: moduleSubmissionsId,
-	}
-	userSubmission, err := service.UserSubmissionRepository.FindUserSubmissionById(ctx, tx, getUserSubmission)
-	if err != nil {
-		return model.GetUserSubmissionsResponse{}, err
-	}
-
-	return utils.ToUserSubmissionsResponse(userSubmission), nil
 }
 
 func (service *userSubmissionsService) FindUserSubmissionById(ctx context.Context, id int, userId int, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error) {

@@ -11,12 +11,12 @@ import (
 
 type ModuleSubmissionsService interface {
 	FindAll(ctx context.Context, code string) ([]model.GetModuleSubmissionsResponse, error)
-	FindByModId(ctx context.Context, code string, idArticle int) (model.GetModuleSubmissionsResponse, error)
+	FindByModId(ctx context.Context, code string, idSubmission int) (model.GetModuleSubmissionsResponse, error)
 	Create(ctx context.Context, request model.CreateModuleSubmissionsRequest, code string) (model.GetModuleSubmissionsResponse, error)
-	Update(ctx context.Context, request model.UpdateModuleSubmissionsRequest, code string, idArticle int) (model.GetModuleSubmissionsResponse, error)
-	Delete(ctx context.Context, code string, idArticle int) error
-	Next(ctx context.Context, code string, idArticle int) (model.GetNextPreviousSubmissionsResponse, error)
-	Previous(ctx context.Context, code string, idArticle int) (model.GetNextPreviousSubmissionsResponse, error)
+	Update(ctx context.Context, request model.UpdateModuleSubmissionsRequest, code string, idSubmission int) (model.GetModuleSubmissionsResponse, error)
+	Delete(ctx context.Context, code string, idSubmission int) error
+	Next(ctx context.Context, code string, idSubmission int) (model.GetNextPreviousSubmissionsResponse, error)
+	Previous(ctx context.Context, code string, idSubmission int) (model.GetNextPreviousSubmissionsResponse, error)
 }
 
 type moduleSubmissionsService struct {
@@ -58,7 +58,7 @@ func (service *moduleSubmissionsService) FindAll(ctx context.Context, code strin
 	return modsubResponses, nil
 }
 
-func (service *moduleSubmissionsService) FindByModId(ctx context.Context, code string, idArticle int) (model.GetModuleSubmissionsResponse, error) {
+func (service *moduleSubmissionsService) FindByModId(ctx context.Context, code string, idSubmission int) (model.GetModuleSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetModuleSubmissionsResponse{}, err
@@ -70,7 +70,7 @@ func (service *moduleSubmissionsService) FindByModId(ctx context.Context, code s
 		return model.GetModuleSubmissionsResponse{}, err
 	}
 
-	modsub, err := service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idArticle)
+	modsub, err := service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return model.GetModuleSubmissionsResponse{}, err
 	}
@@ -105,7 +105,7 @@ func (service *moduleSubmissionsService) Create(ctx context.Context, request mod
 	return utils.ToModuleSubmissionsResponse(modsub), nil
 }
 
-func (service *moduleSubmissionsService) Update(ctx context.Context, request model.UpdateModuleSubmissionsRequest, code string, idArticle int) (model.GetModuleSubmissionsResponse, error) {
+func (service *moduleSubmissionsService) Update(ctx context.Context, request model.UpdateModuleSubmissionsRequest, code string, idSubmission int) (model.GetModuleSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetModuleSubmissionsResponse{}, err
@@ -117,7 +117,7 @@ func (service *moduleSubmissionsService) Update(ctx context.Context, request mod
 		return model.GetModuleSubmissionsResponse{}, err
 	}
 
-	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idArticle)
+	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return model.GetModuleSubmissionsResponse{}, err
 	}
@@ -129,7 +129,7 @@ func (service *moduleSubmissionsService) Update(ctx context.Context, request mod
 		Deadline:    utils.ParseTime(request.Deadline),
 	}
 
-	modsub, err := service.ModuleSubmissionsRepository.Update(ctx, tx, newModsub, idArticle)
+	modsub, err := service.ModuleSubmissionsRepository.Update(ctx, tx, newModsub, idSubmission)
 	if err != nil {
 		return model.GetModuleSubmissionsResponse{}, err
 	}
@@ -137,7 +137,7 @@ func (service *moduleSubmissionsService) Update(ctx context.Context, request mod
 	return utils.ToModuleSubmissionsResponse(modsub), nil
 }
 
-func (service *moduleSubmissionsService) Delete(ctx context.Context, code string, idArticle int) error {
+func (service *moduleSubmissionsService) Delete(ctx context.Context, code string, idSubmission int) error {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return err
@@ -149,12 +149,12 @@ func (service *moduleSubmissionsService) Delete(ctx context.Context, code string
 		return err
 	}
 
-	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idArticle)
+	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return err
 	}
 
-	err = service.ModuleSubmissionsRepository.Delete(ctx, tx, idArticle)
+	err = service.ModuleSubmissionsRepository.Delete(ctx, tx, idSubmission)
 	if err != nil {
 		return err
 	}
@@ -162,7 +162,7 @@ func (service *moduleSubmissionsService) Delete(ctx context.Context, code string
 	return nil
 }
 
-func (service *moduleSubmissionsService) Next(ctx context.Context, code string, idArticle int) (model.GetNextPreviousSubmissionsResponse, error) {
+func (service *moduleSubmissionsService) Next(ctx context.Context, code string, idSubmission int) (model.GetNextPreviousSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetNextPreviousSubmissionsResponse{}, err
@@ -174,12 +174,12 @@ func (service *moduleSubmissionsService) Next(ctx context.Context, code string, 
 		return model.GetNextPreviousSubmissionsResponse{}, err
 	}
 
-	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idArticle)
+	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return model.GetNextPreviousSubmissionsResponse{}, err
 	}
 
-	next, err := service.ModuleSubmissionsRepository.Next(ctx, tx, course.Id, idArticle)
+	next, err := service.ModuleSubmissionsRepository.Next(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return model.GetNextPreviousSubmissionsResponse{}, err
 	}
@@ -187,7 +187,7 @@ func (service *moduleSubmissionsService) Next(ctx context.Context, code string, 
 	return utils.ToModuleSubmissionsNextPreviousResponse(next), nil
 }
 
-func (service *moduleSubmissionsService) Previous(ctx context.Context, code string, idArticle int) (model.GetNextPreviousSubmissionsResponse, error) {
+func (service *moduleSubmissionsService) Previous(ctx context.Context, code string, idSubmission int) (model.GetNextPreviousSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetNextPreviousSubmissionsResponse{}, err
@@ -199,12 +199,12 @@ func (service *moduleSubmissionsService) Previous(ctx context.Context, code stri
 		return model.GetNextPreviousSubmissionsResponse{}, err
 	}
 
-	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idArticle)
+	_, err = service.ModuleSubmissionsRepository.FindByModId(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return model.GetNextPreviousSubmissionsResponse{}, err
 	}
 
-	previous, err := service.ModuleSubmissionsRepository.Previous(ctx, tx, course.Id, idArticle)
+	previous, err := service.ModuleSubmissionsRepository.Previous(ctx, tx, course.Id, idSubmission)
 	if err != nil {
 		return model.GetNextPreviousSubmissionsResponse{}, err
 	}

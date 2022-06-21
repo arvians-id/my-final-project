@@ -21,47 +21,18 @@ func NewUserSubmissionsController(userSubmissionService *service.UserSubmissions
 }
 
 func (controller *UserSubmissionsController) Route(router *gin.Engine) *gin.Engine {
-	authorized := router.Group("/api/courses/:code/submissions/:articleId")
+	authorized := router.Group("/api/courses/:code/submissions/:submissionId")
 	{
-		authorized.GET("/user-submit", controller.FindAll)
+		authorized.GET("/user-submit/:userSubmissionId", controller.FindUserSubmissionById)
 		authorized.POST("/user-submit", controller.Create)
 		authorized.PATCH("/user-submit/:userSubmissionId", controller.UpdateGrade)
-		authorized.GET("/user-submit/:userSubmissionId", controller.FindUserSubmissionById)
 	}
 
 	return router
 }
 
-func (controller *UserSubmissionsController) FindAll(ctx *gin.Context) {
-	moduleSubmissionId, err := strconv.Atoi(ctx.Param("articleId"))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   http.StatusInternalServerError,
-			Status: err.Error(),
-			Data:   nil,
-		})
-		return
-	}
-
-	Modsubs, err := controller.UserSubmissionsService.FindAll(ctx.Request.Context(), moduleSubmissionId)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   http.StatusInternalServerError,
-			Status: err.Error(),
-			Data:   nil,
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, model.WebResponse{
-		Code:   http.StatusOK,
-		Status: "OK",
-		Data:   Modsubs,
-	})
-}
-
 func (controller *UserSubmissionsController) FindUserSubmissionById(ctx *gin.Context) {
-	moduleSubmissionId, err := strconv.Atoi(ctx.Param("articleId"))
+	moduleSubmissionId, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -93,7 +64,7 @@ func (controller *UserSubmissionsController) FindUserSubmissionById(ctx *gin.Con
 
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
-		Status: "user submission successfully updated",
+		Status: "OK",
 		Data:   UserSubmission,
 	})
 }
@@ -109,7 +80,7 @@ func (controller *UserSubmissionsController) Create(ctx *gin.Context) {
 		return
 	}
 
-	submissionId, err := strconv.Atoi(ctx.Param("articleId"))
+	submissionId, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
