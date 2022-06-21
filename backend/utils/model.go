@@ -19,3 +19,20 @@ func ToCourseResponse(course entity.Courses) model.GetCourseResponse {
 		IsActive:    course.IsActive,
 	}
 }
+
+func ToModuleArticlesResponse(ModArs entity.ModuleArticles) model.GetModuleArticlesResponse {
+	return model.GetModuleArticlesResponse{
+		Id:       ModArs.Id,
+		CourseId: ModArs.CourseId,
+		Name:     ModArs.Name,
+		Content:  ModArs.Content,
+		Estimate: ModArs.Estimate,
+	}
+}
+
+func ToModuleArticlesNextPreviousResponse(ModArs entity.NextPreviousModuleArticles) model.GetNextPreviousArticlesResponse {
+	return model.GetNextPreviousArticlesResponse{
+		Id:         ModArs.Id,
+		CodeCourse: ModArs.CodeCourse,
+	}
+}
