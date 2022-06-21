@@ -29,9 +29,14 @@ export default function Navbar() {
                                 <MenuButton as={Button} p={3} variant='ghost' rightIcon={<ChevronDownIcon />}>
                                     <HStack>
                                         <Avatar name='Irfan Kurniawan' src='https://bit.ly/dan-abramov' mr={2} w={8} h={8} />
-                                        <Box as='span' fontWeight='semibold'>
-                                            Irfan Kurniawan
-                                        </Box>
+                                        <Stack>
+                                            <Text as='span' fontSize="md" fontWeight='semibold'>
+                                                Irfan Kurniawan
+                                            </Text>
+                                            <Text as='span' fontSize="sm" align="left" fontWeight='semibold' color="grey">
+                                                Siswa
+                                            </Text>
+                                        </Stack>
                                     </HStack>
                                 </MenuButton>
                                 <MenuList>
