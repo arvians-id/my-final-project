@@ -6,6 +6,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"	
 )
 
 type QuestionController struct {
@@ -21,11 +22,11 @@ func NewQuestionController(questionService *service.QuestionService) *QuestionCo
 func (controller *QuestionController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api")
 	{
-		authorized.GET("/questions/all", controller.FindAll)
-		authorized.POST("/questions/create", controller.Create)
-		authorized.PUT("/questions/update/:questionId", controller.Update)
-		authorized.DELETE("/questions/:questionId", controller.Delete)
-		authorized.GET("/questions/by-user/:userId", controller.FindByUserId)
+		authorized.GET("/questions/all", middleware.UserHandler(controller.FindAll))
+		authorized.POST("/questions/create", middleware.UserHandler(controller.Create))
+		authorized.PUT("/questions/update/:questionId", middleware.UserHandler(controller.Update))
+		authorized.DELETE("/questions/:questionId", middleware.UserHandler(controller.Delete))
+		authorized.GET("/questions/by-user/:userId", middleware.UserHandler(controller.FindByUserId))
 	}
 
 	return router

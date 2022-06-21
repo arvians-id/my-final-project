@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { API_CHECK_STATUS } from './api/auth';
 import Main from './Main';
+import Course from './pages/Course';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -49,6 +50,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/home" element={<Home />} />
+                    <Route path="/course" element={<Course />} />
                     <Route path="/" element={<Login />} />
                 </Routes>
             )}
