@@ -9,12 +9,12 @@ import (
 
 type ModuleSubmissionsRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx, idCourse int) ([]entity.ModuleSubmissions, error)
-	FindByModId(ctx context.Context, tx *sql.Tx, idCourse int, idArticle int) (entity.ModuleSubmissions, error)
+	FindByModId(ctx context.Context, tx *sql.Tx, idCourse int, idSubmission int) (entity.ModuleSubmissions, error)
 	Create(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions) (entity.ModuleSubmissions, error)
-	Update(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions, idArticle int) (entity.ModuleSubmissions, error)
-	Delete(ctx context.Context, tx *sql.Tx, IdArticle int) error
-	Next(ctx context.Context, tx *sql.Tx, idCourse int, idArticle int) (entity.NextPreviousModuleSubmissions, error)
-	Previous(ctx context.Context, tx *sql.Tx, idCourse int, idArticle int) (entity.NextPreviousModuleSubmissions, error)
+	Update(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions, idSubmission int) (entity.ModuleSubmissions, error)
+	Delete(ctx context.Context, tx *sql.Tx, idSubmission int) error
+	Next(ctx context.Context, tx *sql.Tx, idCourse int, idSubmission int) (entity.NextPreviousModuleSubmissions, error)
+	Previous(ctx context.Context, tx *sql.Tx, idCourse int, idSubmission int) (entity.NextPreviousModuleSubmissions, error)
 }
 
 type moduleSubmissionsRepository struct {
@@ -57,9 +57,9 @@ func (repository *moduleSubmissionsRepository) FindAll(ctx context.Context, tx *
 	return modsubs, nil
 }
 
-func (repository *moduleSubmissionsRepository) FindByModId(ctx context.Context, tx *sql.Tx, idCourse int, idArticle int) (entity.ModuleSubmissions, error) {
+func (repository *moduleSubmissionsRepository) FindByModId(ctx context.Context, tx *sql.Tx, idCourse int, idSubmission int) (entity.ModuleSubmissions, error) {
 	query := `SELECT * FROM module_submissions WHERE course_id = ? AND id = ?`
-	queryContext, err := tx.QueryContext(ctx, query, idCourse, idArticle)
+	queryContext, err := tx.QueryContext(ctx, query, idCourse, idSubmission)
 	if err != nil {
 		return entity.ModuleSubmissions{}, err
 	}
@@ -112,7 +112,7 @@ func (repository *moduleSubmissionsRepository) Create(ctx context.Context, tx *s
 	return modsub, nil
 }
 
-func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions, idArticle int) (entity.ModuleSubmissions, error) {
+func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *sql.Tx, modsub entity.ModuleSubmissions, idSubmission int) (entity.ModuleSubmissions, error) {
 	query := `UPDATE module_submissions SET name = ?, description = ?, deadline = ? WHERE id = ?`
 	_, err := tx.ExecContext(
 		ctx,
@@ -120,7 +120,7 @@ func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *s
 		modsub.Name,
 		modsub.Description,
 		modsub.Deadline,
-		idArticle,
+		idSubmission,
 	)
 	if err != nil {
 		return entity.ModuleSubmissions{}, err
@@ -129,9 +129,9 @@ func (repository *moduleSubmissionsRepository) Update(ctx context.Context, tx *s
 	return modsub, nil
 }
 
-func (repository *moduleSubmissionsRepository) Delete(ctx context.Context, tx *sql.Tx, idArticle int) error {
+func (repository *moduleSubmissionsRepository) Delete(ctx context.Context, tx *sql.Tx, idSubmission int) error {
 	query := "DELETE FROM module_submissions WHERE id = ?"
-	_, err := tx.ExecContext(ctx, query, idArticle)
+	_, err := tx.ExecContext(ctx, query, idSubmission)
 	if err != nil {
 		return err
 	}
@@ -139,7 +139,7 @@ func (repository *moduleSubmissionsRepository) Delete(ctx context.Context, tx *s
 	return nil
 }
 
-func (repository *moduleSubmissionsRepository) Next(ctx context.Context, tx *sql.Tx, idCourse int, idArticle int) (entity.NextPreviousModuleSubmissions, error) {
+func (repository *moduleSubmissionsRepository) Next(ctx context.Context, tx *sql.Tx, idCourse int, idSubmission int) (entity.NextPreviousModuleSubmissions, error) {
 	query := `SELECT 
 				ma.id,
 				c.code_course
@@ -147,7 +147,7 @@ func (repository *moduleSubmissionsRepository) Next(ctx context.Context, tx *sql
 			  LEFT JOIN courses c ON c.id = ma.course_id 
 			  WHERE ma.id > ? AND ma.course_id = ?
 			  LIMIT 1`
-	queryContext, err := tx.QueryContext(ctx, query, idArticle, idCourse)
+	queryContext, err := tx.QueryContext(ctx, query, idSubmission, idCourse)
 	if err != nil {
 		return entity.NextPreviousModuleSubmissions{}, err
 	}
@@ -174,7 +174,7 @@ func (repository *moduleSubmissionsRepository) Next(ctx context.Context, tx *sql
 	return ModSub, errors.New("submission not found")
 }
 
-func (repository *moduleSubmissionsRepository) Previous(ctx context.Context, tx *sql.Tx, idCourse int, idArticle int) (entity.NextPreviousModuleSubmissions, error) {
+func (repository *moduleSubmissionsRepository) Previous(ctx context.Context, tx *sql.Tx, idCourse int, idSubmission int) (entity.NextPreviousModuleSubmissions, error) {
 	query := `SELECT 
 				ma.id,
 				c.code_course
@@ -183,7 +183,7 @@ func (repository *moduleSubmissionsRepository) Previous(ctx context.Context, tx 
 			  WHERE ma.id < ? AND ma.course_id = ?
 			  ORDER BY ma.id DESC
 			  LIMIT 1`
-	queryContext, err := tx.QueryContext(ctx, query, idArticle, idCourse)
+	queryContext, err := tx.QueryContext(ctx, query, idSubmission, idCourse)
 	if err != nil {
 		return entity.NextPreviousModuleSubmissions{}, err
 	}

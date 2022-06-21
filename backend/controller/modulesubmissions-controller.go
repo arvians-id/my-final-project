@@ -22,12 +22,12 @@ func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.En
 	authorized := router.Group("/api/courses/:code")
 	{
 		authorized.GET("/submissions", controller.FindAll)
-		authorized.GET("/submissions/:articleId", controller.FindByCode)
+		authorized.GET("/submissions/:submissionId", controller.FindByCode)
 		authorized.POST("/submissions", controller.Create)
-		authorized.PATCH("/submissions/:articleId", controller.Update)
-		authorized.DELETE("/submissions/:articleId", controller.Delete)
-		authorized.GET("/submissions/:articleId/next", controller.Next)
-		authorized.GET("/submissions/:articleId/previous", controller.Previous)
+		authorized.PATCH("/submissions/:submissionId", controller.Update)
+		authorized.DELETE("/submissions/:submissionId", controller.Delete)
+		authorized.GET("/submissions/:submissionId/next", controller.Next)
+		authorized.GET("/submissions/:submissionId/previous", controller.Previous)
 	}
 
 	return router
@@ -54,7 +54,7 @@ func (controller *ModuleSubmissionsController) FindAll(ctx *gin.Context) {
 
 func (controller *ModuleSubmissionsController) FindByCode(ctx *gin.Context) {
 	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -63,7 +63,7 @@ func (controller *ModuleSubmissionsController) FindByCode(ctx *gin.Context) {
 		})
 		return
 	}
-	Modsubs, err := controller.ModuleSubmissionsService.FindByModId(ctx.Request.Context(), code, idArticle)
+	Modsubs, err := controller.ModuleSubmissionsService.FindByModId(ctx.Request.Context(), code, idSubmission)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -123,7 +123,7 @@ func (controller *ModuleSubmissionsController) Update(ctx *gin.Context) {
 	}
 
 	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -133,7 +133,7 @@ func (controller *ModuleSubmissionsController) Update(ctx *gin.Context) {
 		return
 	}
 
-	Modsubs, err := controller.ModuleSubmissionsService.Update(ctx, request, code, idArticle)
+	Modsubs, err := controller.ModuleSubmissionsService.Update(ctx, request, code, idSubmission)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -152,7 +152,7 @@ func (controller *ModuleSubmissionsController) Update(ctx *gin.Context) {
 
 func (controller *ModuleSubmissionsController) Delete(ctx *gin.Context) {
 	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -162,7 +162,7 @@ func (controller *ModuleSubmissionsController) Delete(ctx *gin.Context) {
 		return
 	}
 
-	err = controller.ModuleSubmissionsService.Delete(ctx.Request.Context(), code, idArticle)
+	err = controller.ModuleSubmissionsService.Delete(ctx.Request.Context(), code, idSubmission)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -181,7 +181,7 @@ func (controller *ModuleSubmissionsController) Delete(ctx *gin.Context) {
 
 func (controller *ModuleSubmissionsController) Next(ctx *gin.Context) {
 	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -191,7 +191,7 @@ func (controller *ModuleSubmissionsController) Next(ctx *gin.Context) {
 		return
 	}
 
-	nextModule, err := controller.ModuleSubmissionsService.Next(ctx.Request.Context(), code, idArticle)
+	nextModule, err := controller.ModuleSubmissionsService.Next(ctx.Request.Context(), code, idSubmission)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -210,7 +210,7 @@ func (controller *ModuleSubmissionsController) Next(ctx *gin.Context) {
 
 func (controller *ModuleSubmissionsController) Previous(ctx *gin.Context) {
 	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -220,7 +220,7 @@ func (controller *ModuleSubmissionsController) Previous(ctx *gin.Context) {
 		return
 	}
 
-	previousModule, err := controller.ModuleSubmissionsService.Previous(ctx.Request.Context(), code, idArticle)
+	previousModule, err := controller.ModuleSubmissionsService.Previous(ctx.Request.Context(), code, idSubmission)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
