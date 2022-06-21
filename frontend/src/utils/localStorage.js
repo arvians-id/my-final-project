@@ -4,7 +4,7 @@ export const setLocal = (key, value) => {
 
 export const getLocal = (key, fallback) => {
   const result = localStorage.getItem(key);
-  if (result) {
+  if (result && result !== "undefined") {
     return JSON.parse(result);
   } else {
     return fallback ?? false;

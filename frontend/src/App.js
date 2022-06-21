@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import useStore from './provider/zustand/store';
-import { localClearToken, localLoadToken } from './utils/token';
+import { adapterUserToFE } from './utils/adapterToFE'
 
 function App() {
     const user = useStore((state) => state.user);
@@ -18,7 +18,7 @@ function App() {
         const res = await API_CHECK_STATUS();
         // kalo oke, berarti set user di zustand
         if (res.status === 200) {
-            setUser(res.data.data);
+            setUser(adapterUserToFE(res.data.data));
         }
 
         setIsReady(true);
