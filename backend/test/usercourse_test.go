@@ -1,10 +1,7 @@
 package test_test
 
 import (
-	"bytes"
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
+	"database/sql"
 
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo"
@@ -12,66 +9,71 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/controller"
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
+	"github.com/rg-km/final-project-engineering-12/backend/repository"
+	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
 )
 
 var _ = Describe("Test", func() {
-	var usercoursecreate model.CreateUserCourseRequest
-	var usercoursecontroller controller.UserCourseController
-	var usercourse entity.UserCourse
-	var ctx *gin.Context
+	var (
+		usercourseRepository repository.UserCourseRepository
+		database             *sql.DB
+		err                  error
+		ctx                  *gin.Context
+	)
 
-	usercoursecreate = model.CreateUserCourseRequest{
+	BeforeEach(func() {
+		database, err = sql.Open("sqlite3", "../teenager.db")
+
+		if err != nil {
+			panic(err)
+		}
+
+		userCourseRepository := repository.NewUserCourseRepository()
+		userCourseService := service.NewUserCourseService(&userCourseRepository, database)
+		controller.NewUserCourseController(&userCourseService)
+	})
+
+	usercoursecreate := model.CreateUserCourseRequest{
 		UserId:   5,
 		CourseId: 3,
 	}
 
-	usercourse = entity.UserCourse{
+	usercourse := entity.UserCourse{
 		UserId:   5,
 		CourseId: 3,
 	}
-
-	jsonByte, _ := json.Marshal(usercoursecreate)
-	ctx = &gin.Context{}
-	ctx.Request = &http.Request{
-		Body: ioutil.NopCloser(bytes.NewBuffer(jsonByte)),
-	}
+	tx, _ := database.Begin()
 
 	Describe("usercase_test", func() {
-
 		When("usercourse create", func() {
 			It("should create a new usercourse", func() {
-				responses, err := usercoursecontroller.UserCourseService.Create(ctx, usercoursecreate)
+
+				responses, err := usercourseRepository.Create(ctx, tx, usercourse)
 				Expect(err).To(BeNil())
-				Expect(responses).To(Equal(usercourse))
+				Expect(responses).To(Equal(usercoursecreate))
 				Expect(usercourse.UserId).To(Equal(5))
 				Expect(usercourse.CourseId).To(Equal(3))
 			})
-		})
 
-		When("usercourse findbyuserid", func() {
 			It("Should get a usercourse by userid", func() {
-				responses, err := usercoursecontroller.UserCourseService.FindByUserId(ctx, utils.ToString(usercoursecreate.UserId))
+				responses, err := usercourseRepository.FindByUserId(ctx, tx, utils.ToString(usercourse.UserId))
 				Expect(err).To(BeNil())
-				Expect(responses).To(Equal(usercourse))
+				Expect(responses).To(Equal(usercoursecreate))
 				Expect(usercourse.UserId).To(Equal(5))
 				Expect(usercourse.CourseId).To(Equal(3))
 			})
-		})
 
-		When("usercourse list", func() {
 			It("Should get a list of usercourse", func() {
-				responses, err := usercoursecontroller.UserCourseService.FindAll(ctx)
+				responses, err := usercourseRepository.FindAll(ctx, tx)
 				Expect(err).To(BeNil())
-				Expect(responses).To(Equal(usercourse))
+				Expect(responses).To(Equal(usercoursecreate))
 				Expect(usercourse.UserId).To(Equal(5))
 				Expect(usercourse.CourseId).To(Equal(3))
 			})
-		})
 
-		When("usercourse delete", func() {
 			It("Should delete a usercourse", func() {
-				err := usercoursecontroller.UserCourseService.Delete(ctx, usercoursecreate.UserId, usercoursecreate.CourseId)
+				err := usercourseRepository.Delete(ctx, tx, usercourse.UserId, usercourse.CourseId)
 				Expect(err).To(BeNil())
 			})
 		})
