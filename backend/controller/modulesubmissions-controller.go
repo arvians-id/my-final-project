@@ -26,8 +26,6 @@ func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.En
 		authorized.POST("/submissions", controller.Create)
 		authorized.PATCH("/submissions/:articleId", controller.Update)
 		authorized.DELETE("/submissions/:articleId", controller.Delete)
-		authorized.GET("/submissions/:articleId/next", controller.Next)
-		authorized.GET("/submissions/:articleId/previous", controller.Previous)
 	}
 
 	return router
@@ -176,63 +174,5 @@ func (controller *ModuleSubmissionsController) Delete(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "module submission successfully deleted",
 		Data:   nil,
-	})
-}
-
-func (controller *ModuleSubmissionsController) Next(ctx *gin.Context) {
-	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   http.StatusInternalServerError,
-			Status: err.Error(),
-			Data:   nil,
-		})
-		return
-	}
-
-	nextModule, err := controller.ModuleSubmissionsService.Next(ctx.Request.Context(), code, idArticle)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   http.StatusInternalServerError,
-			Status: err.Error(),
-			Data:   nil,
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, model.WebResponse{
-		Code:   http.StatusOK,
-		Status: "OK",
-		Data:   nextModule,
-	})
-}
-
-func (controller *ModuleSubmissionsController) Previous(ctx *gin.Context) {
-	code := ctx.Param("code")
-	idArticle, err := strconv.Atoi(ctx.Param("articleId"))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   http.StatusInternalServerError,
-			Status: err.Error(),
-			Data:   nil,
-		})
-		return
-	}
-
-	previousModule, err := controller.ModuleSubmissionsService.Previous(ctx.Request.Context(), code, idArticle)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
-			Code:   http.StatusInternalServerError,
-			Status: err.Error(),
-			Data:   nil,
-		})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, model.WebResponse{
-		Code:   http.StatusOK,
-		Status: "OK",
-		Data:   previousModule,
 	})
 }

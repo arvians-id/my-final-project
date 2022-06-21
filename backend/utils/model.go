@@ -53,3 +53,13 @@ func ToModuleSubmissionsResponse(modsub entity.ModuleSubmissions) model.GetModul
 		Deadline:    modsub.Deadline,
 	}
 }
+
+func ToUserSubmissionsResponse(userSubmission entity.UserSubmissions) model.GetUserSubmissionsResponse {
+	return model.GetUserSubmissionsResponse{
+		Id:                 userSubmission.Id,
+		UserId:             userSubmission.UserId,
+		ModuleSubmissionId: userSubmission.ModuleSubmissionId,
+		File:               userSubmission.File,
+		Grade:              userSubmission.Grade,
+	}
+}
