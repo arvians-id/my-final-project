@@ -63,3 +63,34 @@ func ToUserSubmissionsResponse(userSubmission entity.UserSubmissions) model.GetU
 		Grade:              userSubmission.Grade,
 	}
 }
+
+func ToUserCourseResponse(usercourse entity.UserCourse) model.GetUserCourseResponse {
+	return model.GetUserCourseResponse{
+		UserId:   usercourse.UserId,
+		CourseId: usercourse.CourseId,
+	}
+}
+
+func ToQuestionResponse(question entity.Questions) model.GetQuestionResponse {
+	return model.GetQuestionResponse{
+		Id:          question.Id,
+		ModuleId:    question.ModuleId,
+		UserId:      question.UserId,
+		Title:       question.Title,
+		Tags:        question.Tags,
+		Description: question.Description,
+		CreatedAt:   question.CreatedAt,
+		UpdatedAt:   question.UpdatedAt,
+	}
+}
+
+func ToAnswerResponse(answer entity.Answers) model.GetAnswerResponse {
+	return model.GetAnswerResponse{
+		Id:          answer.Id,
+		QuestionId:  answer.QuestionId,
+		UserId:      answer.UserId,
+		Description: answer.Description,
+		CreatedAt:   answer.CreatedAt,
+		UpdatedAt:   answer.UpdatedAt,
+	}
+}

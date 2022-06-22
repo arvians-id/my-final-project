@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
@@ -27,7 +28,7 @@ func (controller *UserSubmissionsController) Route(router *gin.Engine) *gin.Engi
 	authorized := router.Group("/api/courses/:code/submissions/:submissionId")
 	{
 		authorized.GET("/user-submit/:userSubmissionId", controller.FindUserSubmissionById)
-		authorized.POST("/user-submit", controller.Create)
+		authorized.POST("/user-submit", middleware.UserHandler(controller.Create))
 		authorized.PATCH("/user-submit/:userSubmissionId", controller.UpdateGrade)
 		authorized.POST("/user-submit/:userSubmissionId/download", controller.Download)
 	}
@@ -117,7 +118,17 @@ func (controller *UserSubmissionsController) Create(ctx *gin.Context) {
 	}
 
 	var request model.CreateUserSubmissionsRequest
-	request.UserId = 2
+	idUser, exists := ctx.Get("id_user")
+	if !exists {
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   http.StatusNotFound,
+			Status: "user not found",
+			Data:   nil,
+		})
+		return
+	}
+
+	request.UserId = int(idUser.(float64))
 	request.ModuleSubmissionId = submissionId
 	request.File = file.Filename
 

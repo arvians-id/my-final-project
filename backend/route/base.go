@@ -1,6 +1,7 @@
 package route
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
@@ -14,6 +15,16 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	router := gin.Default()
 	database := config.NewSQLite(configuration)
 
+	// setup gin cors
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
+		AllowHeaders: []string{"Authorization", "Content-Type"},
+		// ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		// MaxAge: 12 * time.Hour,
+	}))
+
 	// Setup Proxies (optional)
 	// You can comment this section
 	err := router.SetTrustedProxies([]string{configuration.Get("APP_URL")})
@@ -22,8 +33,8 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	}
 
 	// User Setup
-	userRepository := repository.NewUserRepository(database)
-	userService := service.NewUserService(&userRepository)
+	userRepository := repository.NewUserRepository()
+	userService := service.NewUserService(&userRepository, database)
 	userController := controller.NewUserController(&userService)
 
 	// Course Setup
@@ -46,12 +57,30 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	userSubmissionService := service.NewUserSubmissionsService(&userSubmissionRepository, &moduleSubmissionRepository, &courseRepository, database)
 	userSubmissionController := controller.NewUserSubmissionsController(&userSubmissionService)
 
+	// UserCourse Setup
+	userCourseRepository := repository.NewUserCourseRepository()
+	userCourseService := service.NewUserCourseService(&userCourseRepository, database)
+	userCourseController := controller.NewUserCourseController(&userCourseService)
+
+	// Question Setup
+	questionRepository := repository.NewQuestionRepository()
+	questionService := service.NewQuestionService(&questionRepository, database)
+	questionController := controller.NewQuestionController(&questionService)
+
+	// Answer Setup
+	answerRepository := repository.NewAnswerRepository()
+	answerService := service.NewAnswerService(&answerRepository, &questionRepository, database)
+	answerController := controller.NewAnswerController(&answerService)
+
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
 	moduleArticlesController.Route(router)
 	moduleSubmissionController.Route(router)
 	userSubmissionController.Route(router)
+	userCourseController.Route(router)
+	questionController.Route(router)
+	answerController.Route(router)
 
 	return router
 }

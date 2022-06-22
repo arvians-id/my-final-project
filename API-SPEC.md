@@ -6,17 +6,16 @@ Request:
     - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- Users:                            Line 19
-- User_course:                      Line 170
-- User_details:                     Line 286
-- Courses:                          Line 442
-- Modules:                          Line 620
-- Module_submission:                Line 764
-- Module_articles:                  Line 896
-- Answers:                          Line 1016
-- Question:                         Line 1150
+- [Users](#-users)                               (9/9) 100%
+- [User_course](#-user-course)                   (4/4) 100%
+- [Courses](#-courses)                           (6/6) 100%
+- [User_submissions](#-user-submissions)         (4/4) 100%
+- [Module_submissions](#-module-submissions)     (7/7) 100%
+- [Module_articles](#-module-articles)           (7/7) 100%
+- [Answers](#-answers)                           (5/5) 100%
+- [Questions](#-questions)                       (5/5) 100%
 
-## Users
+## users
 ------------------------------
 ## Create Users
 ------------------------------
@@ -29,12 +28,15 @@ Request:
 - Body:
 ``` json
     {
-        "name" : "string",
-        "username" : "string", // unique
-        "email" : "string", // unique
-        "password" : "string",
-        "role" : "integer", // enum(1,2)
-        "email_verified_at" : "timestamp", // timestamp
+        "name": "string",
+        "username": "string",
+        "email": "string",
+        "password": "string",
+        "role": "integer", // enum (1, 2)
+        "phone": "string",
+        "gender": "integer", // enum (1, 2)
+        "type_of_disability": "integer", // enum (0, 1, 2)
+        "birthdate": "date"
     }
 ```
 Response:
@@ -43,15 +45,19 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
-            "role" : "integer", // enum(1,2)
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "email": "string", // unique
+            "password": "string",
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "integer", // enum (1, 2)
+            "type_of_disability": "integer", // enum (0, 1, 2)
+            "birthdate": "string",
+            "email_verification": "timestamp",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         }
     }
 ```
@@ -63,22 +69,25 @@ Request:
 - Endpoint: ```/api/users/{id}```
 - Header:
     - Accept: ```application/json```  
-
+- Variable:
+    - id: ```integer```
 Response:
 ``` json
     {
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
-            "role" : "integer", // enum(1,2)
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "integer", // enum (1, 2)
+            "type_of_disability": "integer", // enum (0, 1, 2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
         }
     }
 ```
@@ -91,16 +100,54 @@ Request:
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
+- Variable:
+    - id: ```integer```
 - Body:
 ``` json
     {
-        "name" : "string",
-        "username" : "string", // unique
-        "email" : "string", // unique
-        "password" : "string",
-        "role" : "integer", // enum(1,2)
+        "name": "string",
+        "username": "string", // unique
+        "role": "integer", // enum (1, 2)
+        "phone": "string",
+        "gender": "integer", // enum (1, 2)
+        "type_of_disability": "integer", // enum (0, 1, 2)
+        "address": "string",
+        "birthdate": "string",
+        "image": "string",
+        "description": "string"
     }
 ```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "string", // enum (1, 2)
+            "type_of_disability": "integer", // enum(0, 1, 2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
+        }
+    }
+```
+------------------------------
+## Update Users Role
+------------------------------
+Request:
+- Method: ```PUT```
+- Endpoint: ```/api/users/roleupdate/{id}```
+- Header:
+    - Content-Type: ```application/json```
+    - Accept: ```application/json```
+- Variable:
+    - id: ```integer```
 Response:
 ``` json
     {
@@ -110,12 +157,14 @@ Response:
             "id" : "integer", // primary key
             "name" : "string",
             "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
             "role" : "integer", // enum(1,2)
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability": "integer", // enum(0,1,2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
         }
     }
 ```
@@ -130,7 +179,6 @@ Request:
 - Query Param:
     - size : ```number```
     - page : ```number```
-
 Response:
 ``` json
     {
@@ -138,28 +186,31 @@ Response:
         "status" : "string",
         "data" : [
             {
-                "id" : "integer", // primary key
-                "name" : "string",
-                "username" : "string", // unique
-                "email" : "string", // unique
-                "password" : "string",
-                "role" : "integer", // enum(1,2)
-                "email_verified_at" : "timestamp", // timestamp
-                "created_at" : "timestamp", // timestamp
-                "updated_at" : "timestamp" // timestamp
+                "id": "integer", // primary
+                "name": "string",
+                "username": "string", // unique
+                "role": "integer", // enum(1, 2)
+                "phone": "string",
+                "gender": "integer", // enum(1, 2)
+                "type_of_disability": "integer", // enum(0, 1, 2)
+                "address": "string",
+                "birthdate": "string",
+                "image": "string",
+                "description": "string"
             },
         ]
     }
 ```
 ------------------------------
-Delete Users
+## Delete Users
 ------------------------------
 Request:
 - Method: ```DELETE```
 - Endpoint: ```/api/users/{id}```
 - Header:
     - Accept: ```application/json```
-
+- Variable:
+  - id: ```integer```
 Response:
 ``` json
     {
@@ -167,7 +218,7 @@ Response:
         "status" : "string"
     }
 ```
-## User_course
+## User course
 ------------------------------
 ## Create User_course
 ------------------------------
@@ -283,7 +334,7 @@ Response:
         "status" : "string"
     }
 ```
-## User_details
+## User details
 ------------------------------
 ## Create User_details
 ------------------------------
@@ -618,7 +669,7 @@ Response:
     }
 ```
 
-## Module_submissions
+## Module submissions
 ------------------------------
 ## Create Module_submissions
 ------------------------------
@@ -809,7 +860,7 @@ Response:
         }
     }
 ```
-## Module_articles
+## Module articles
 ------------------------------
 ## Create Module_articles
 ------------------------------
@@ -995,7 +1046,7 @@ Response:
         }
     }
 ```
-## User_Submissions
+## User Submissions
 ------------------------------
 ## Submit File
 ------------------------------
