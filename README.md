@@ -6,13 +6,7 @@
   3. Umbu Theofilus Dendimara - Backend Developer - BE2144668 ([Rendydinar](https://github.com/Rendydinar))
   4. Widdy Arfiansyah - Backend Developer - BE2108902 ([arvians-id](https://github.com/arvians-id))
   5. Muhammad Abid Fajar - Backend Developer - BE2219863 ([abid313](https://github.com/abid313))
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
-=======
->>>>>>> Stashed changes
-  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
+  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.comReezyx)) 
 
 # API Specification
 
