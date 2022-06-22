@@ -10,11 +10,11 @@ SUMMARY:
 - User_course:                      Line 170
 - User_details:                     Line 286
 - Courses:                          Line 442
-- Modules:                          Line 594
-- Module_submission:                Line 738
-- Module_articles:                  Line 870
-- Answers:                          Line 990
-- Question:                         Line 1124
+- Modules:                          Line 620
+- Module_submission:                Line 764
+- Module_articles:                  Line 896
+- Answers:                          Line 1016
+- Question:                         Line 1150
 
 ## Users
 ------------------------------
