@@ -21,9 +21,9 @@ func NewCourseController(courseService *service.CourseService) *CourseController
 func (controller *CourseController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api/courses")
 	{
-		authorized.GET("/", controller.FindAll)
+		authorized.GET("", controller.FindAll)
 		authorized.GET("/:code", controller.FindById)
-		authorized.POST("/", controller.Create)
+		authorized.POST("", controller.Create)
 		authorized.PATCH("/:code", controller.Update)
 		authorized.DELETE("/:code", controller.Delete)
 		authorized.PATCH("/:code/status", controller.ChangeStatus)
