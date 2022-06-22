@@ -5,69 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/controller/answer-controller.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/controller/question-controller.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/controller/usercourse-controller.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/model/answer-model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/model/question-model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/model/usercourse-model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/repository/answer-repository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/repository/question-repository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/repository/usercourse-repository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/service/answer-service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/service/question-service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/service/usercourse-service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/test/unit/test_suite_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/test/unit/user_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/test/unit/usercourse_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/CourseCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/DiscussionCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/SubmissionCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/layout/MainAppLayout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/constant/route.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/image/Teenager.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/DashboardDataPengguna.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/DashboardDataSiswa.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Discussion.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/HomeNonSiswa.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Profile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Submission.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/utils/adapterToFE.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/utils/reqex.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/API-SPEC.md" beforeDir="false" afterPath="$PROJECT_DIR$/API-SPEC.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/controller/user-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/user-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/controller/user-submission-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/user-submission-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/entity/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/entity/users.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/middleware/middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/middleware/middleware.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/model/user-model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/user-model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/model/web-response.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/web-response.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/repository/user-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/user-repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/route/base.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/route/base.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/user-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/user-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/.prettierrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.prettierrc.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/Main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/Main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/axiosWithToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/axiosWithToken.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/constant/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/constant/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Course.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Home.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Register.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/utils/localStorage.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/utils/localStorage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
