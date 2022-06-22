@@ -120,7 +120,7 @@ export default function Register() {
           title: 'Error Login.',
           description: res.message,
           status: 'error',
-          duration: 9000,
+          duration: 3000,
           isClosable: true,
         });
       }
@@ -133,7 +133,7 @@ export default function Register() {
       title: 'Berhasil Mendaftar Akun.',
       description: 'Anda akan diahrakan kehalaman login dalam 3 detik',
       status: 'success',
-      duration: 9000,
+      duration: 3000,
       isClosable: false,
     });
     setTimeout(() => {
