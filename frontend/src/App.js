@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import Login from "./pages/Login";
-
-function App() {
-  return (
-    <Login />
-  );
-=======
 import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { API_CHECK_STATUS } from './api/auth';
@@ -98,7 +90,6 @@ function App() {
             )}
         </>
     );
->>>>>>> 28ee5ed6f3b932b186ee81144b50e15402a23589
 }
 
 export default App;
