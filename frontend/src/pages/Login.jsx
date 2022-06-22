@@ -12,6 +12,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { API_LOGIN } from '../api/auth';
 import useStore from '../provider/zustand/store';
+import { adapterUserToFE } from '../utils/adapterToFE';
 import { localSaveToken } from '../utils/token';
 
 export default function Login() {
@@ -43,16 +44,16 @@ export default function Login() {
           ...loginForm,
           loading: false
       })
-      if(res.status === 200) {
+      if(res.status === 200 && res.data) {
           localSaveToken(res.data.token)
-          setUser(res.data.data)
+          setUser(adapterUserToFE(res.data.data));
           clearLoginForm();
           navigate('/')
       } else {
           toast({
               position: 'bottom',
               title: 'Error Login.',
-              description: res.message,
+              description: "Password atau Email tidak ditemukan",
               status: 'error',
               duration: 9000,
               isClosable: true,

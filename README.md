@@ -6,7 +6,7 @@
   3. Umbu Theofilus Dendimara - Backend Developer - BE2144668 ([Rendydinar](https://github.com/Rendydinar))
   4. Widdy Arfiansyah - Backend Developer - BE2108902 ([arvians-id](https://github.com/arvians-id))
   5. Muhammad Abid Fajar - Backend Developer - BE2219863 ([abid313](https://github.com/abid313))
-  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.comReezyx)) 
+  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
 
 # API Specification
 
@@ -16,14 +16,14 @@ Request:
     - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- [Users](#users)
-- [User_course](#user-course)
-- [Courses](#courses)
-- [Modules](#modules)
-- [Module_submissions](#module-submissions)
-- [Module_articles](#module-articles)
-- [Answers](#answers)
-- [Questions](#questions)
+- [Users](#users)                               (9/9) 100%
+- [User_course](#user-course)                   (4/4) 100%
+- [Courses](#courses)                           (5/5) 100%
+- [Modules](#modules)                           (5/5) 100% 
+- [Module_submissions](#module-submissions)     (5/5) 100%
+- [Module_articles](#module-articles)           (5/5) 100%
+- [Answers](#answers)                           (5/5) 100%
+- [Questions](#questions)                       (5/5) 100%
 
 ## users
 ------------------------------
@@ -231,11 +231,6 @@ Response:
     }
 ```
 ------------------------------
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 ## Update Users Role [x]
 ------------------------------
 Request:
@@ -267,10 +262,6 @@ Response:
     }
 ```
 ------------------------------
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> 6ca9fa7d7d3ad5fb18980dbb0f7d514ea1b3a885
 ## List Users [x]
 ------------------------------
 Request:
@@ -329,6 +320,8 @@ Request:
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
+    - Authorization: ```{token} ```
+
 - Body:
 ``` json
     {
@@ -355,34 +348,8 @@ Request:
 - Endpoint: ```/api/user_course/{user_id}/{course_id}```
 - Header:
     - Accept: ```application/json```
+    - Authorization: ```{token} ```
 
-Response:
-``` json
-    {
-        "code" : "number",
-        "status" : "string",
-        "data" : {
-            "user_id" : "integer", // foreign key1
-            "course_id" : "integer" // foreign key2
-        }
-    }
-```
-------------------------------
-## Update User_course
-------------------------------
-Request:
-- Method: ```PUT```
-- Endpoint: ```/api/user_course/{user_id}/{course_id}```
-- Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
-- Body:
-``` json
-    {
-        "user_id" : "integer", // foreign key1
-        "course_id" : "integer" // foreign key2
-    }
-```
 Response:
 ``` json
     {
@@ -405,6 +372,7 @@ Request:
 - Query Param:
     - size : ```number```
     - page : ```number```
+    - Authorization: ```{token} ```
 
 Response:
 ``` json
@@ -427,6 +395,7 @@ Request:
 - Endpoint: ```/api/user_course/{user_id}/{course_id}```
 - Header:
     - Accept: ```application/json```
+    - Authorization: ```{token} ```
 
 Response:
 ``` json
@@ -1262,9 +1231,4 @@ Response:
         "code" : "number",
         "status" : "string"
     }
-<<<<<<< Updated upstream
 ```
-=======
-```
->>>>>>> Stashed changes
->>>>>>> Stashed changes
