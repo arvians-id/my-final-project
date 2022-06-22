@@ -35,7 +35,7 @@ func (controller *UserCourseController) Route(router *gin.Engine) *gin.Engine {
 	api := router.Group("/api")
 	{
 		api.POST("/usercourse", middleware.AdminHandler(controller.usercourseCreate))
-		api.GET("/usercourse/:id", middleware.UserHandler(controller.getUserCourseByUserId))
+		api.GET("/usercourse/:id/:course", middleware.UserHandler(controller.getUserCourseByUserCourse))
 		api.GET("/usercourse", middleware.AdminHandler(controller.listUserCourse))
 		api.DELETE("/usercourse/:userid/:courseid", middleware.AdminHandler(controller.deleteUserCourse))
 	}
@@ -65,14 +65,18 @@ func (controller *UserCourseController) usercourseCreate(ctx *gin.Context) {
 	})
 }
 
-func (controller *UserCourseController) getUserCourseByUserId(ctx *gin.Context) {
+func (controller *UserCourseController) getUserCourseByUserCourse(ctx *gin.Context) {
 	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return
+	}
+	course, err := strconv.Atoi(ctx.Param("course"))
 
 	if err != nil {
 		return
 	}
 
-	response, err := controller.UserCourseService.FindByUserId(ctx, utils.ToString(id))
+	response, err := controller.UserCourseService.FindByUserCourse(ctx, utils.ToString(id), utils.ToString(course))
 
 	if err != nil {
 		return
@@ -134,7 +138,7 @@ func (controller *UserCourseController) getUserCourseByUserId(ctx *gin.Context) 
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
-		Status: "Get User By User Id Successfull",
+		Status: "Get User Course Successfull",
 		Data:   response,
 	})
 }
