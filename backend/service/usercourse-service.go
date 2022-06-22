@@ -76,6 +76,16 @@ func (service *usercourseService) Create(ctx context.Context, request model.Crea
 		CourseId: request.CourseId,
 	}
 
+	array, err := service.UserCourseRepository.FindAll(ctx, tx)
+	if err != nil {
+		return model.GetUserCourseResponse{}, err
+	}
+	for _, usercourse := range array {
+		if usercourse.UserId == usercourses.UserId && usercourse.CourseId == usercourses.CourseId {
+			return model.GetUserCourseResponse{}, err
+		}
+	}
+
 	usercourse, err := service.UserCourseRepository.Create(ctx, tx, usercourses)
 	if err != nil {
 		return model.GetUserCourseResponse{}, err
