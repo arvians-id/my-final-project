@@ -38,6 +38,7 @@ var _ = Describe("Test", func() {
 	Describe("User Login Register", func() {
 		When("Data is Correct", func() {
 			It("Should return list User", func() {
+
 				userLoginResponse, err := userController.UserService.ListUser(ctx)
 
 				Expect(err).To(BeNil())
