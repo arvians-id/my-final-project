@@ -16,14 +16,14 @@ Request:
   - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- [Users](#-users)                               (9/9) 100%
-- [User_course](#-user-course)                   (4/4) 100%
-- [Courses](#-courses)                           (6/6) 100%
-- [User_submissions](#-user-submissions)         (4/4) 100%
-- [Module_submissions](#-module-submissions)     (7/7) 100%
-- [Module_articles](#-module-articles)           (7/7) 100%
-- [Answers](#-answers)                           (5/5) 100%
-- [Questions](#-questions)                       (5/5) 100%
+- [Users](#users)                               (9/9) 100%
+- [User_course](#user-course)                   (4/4) 100%
+- [Courses](#courses)                           (6/6) 100%
+- [User_submissions](#user-submissions)         (4/4) 100%
+- [Module_submissions](#module-submissions)     (7/7) 100%
+- [Module_articles](#module-articles)           (7/7) 100%
+- [Answers](#answers)                           (5/5) 100%
+- [Questions](#questions)                       (5/5) 100%
 
 ## users
 ------------------------------
