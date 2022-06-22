@@ -1,36 +1,33 @@
 import React from 'react';
-import { Box, Flex, VStack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Select, NumberInput, InputGroup, InputLeftAddon } from '@chakra-ui/react';
+import { Box, Flex, VStack, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Button, Select, NumberInput, InputGroup, InputLeftAddon, Heading } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 export default function Register() {
   return (
     <Flex minHeight="100vh" width="full" flexDirection="row">
-      <Box width="40%" height="100vh" bg="red.100" display="flex" alignItems="center" position="sticky" top="0" left="0" overflowY="auto">
+      <Box width="40%" height="100vh" bg="#6A67CE" display="flex" alignItems="center" position="sticky" top="0" left="0" overflowY="auto">
         <Box m={10} width="100%">
-          <Box as='h1' fontSize='4xl' fontWeight='bold' mb={3}>
-            TEENAGER
+          <Box as="h1" fontSize="6xl" fontWeight="bold" mb={3} color="#EEF3D2">
+            Teenager
           </Box>
-          <Box as='span' fontSize='m'>
-            TEmpat mENgajar dan berbAGi kecERdasan
+          <Box as="span" fontSize="lg" color="#EEF3D2">
+            Tempat mengajar dan berbagi kecerdasan
           </Box>
-          <Box as='p' fontSize='m' color="grey">
-
-          </Box>
+          <Box as="p" fontSize="m" color="grey"></Box>
         </Box>
       </Box>
       <Box width="60%" minheight="100%" display="flex" alignItems="center">
         <Box m={10} width="100%">
-          <Box as="h1" fontSize="2xl" fontWeight="bold" mb={3}>
-            <h1>Register Akun</h1>
+          <Box textAlign="center" as="h1" fontSize="2xl" fontWeight="bold" mb={3}>
+            <Heading as="h2" size="2xl">
+              Register Akun
+            </Heading>
           </Box>
           <Box as="span" fontSize="m" color="grey">
             Silahkan Masukkan Data Diri Anda
           </Box>
           <Box maxWidth="80%" m={5}>
-            <VStack
-              spacing={4}
-              align='stretch'
-            >
+            <VStack spacing={4} align="stretch">
               <Box>
                 <FormLabel htmlFor="first-name" fontWeight="bold">
                   First Name
@@ -96,14 +93,8 @@ export default function Register() {
               </Box>
               <Box>
                 <VStack spacing={3} mt={5}>
-                  <Button colorScheme="red" width="full" p={5}>
-                    Daftar Sekarang
-                  </Button>
-                  <Box as='p' fontSize='m' color="grey" textAlign="center">
-                    Atau Anda Sudah Memiliki Akun
-                  </Box>
-                  <Button as={Link} to="/login" colorScheme="red" variant="outline" width="full" p={5}>
-                    Login Sekarang
+                  <Button as={Link} to="/login" colorScheme="blue" variant="outline" width="150px" p={5}>
+                    Login
                   </Button>
                 </VStack>
               </Box>

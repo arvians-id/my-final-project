@@ -7,3 +7,8 @@ func TimeNow() time.Time {
 	timeNow, _ := time.Parse(format, time.Now().Format(format))
 	return timeNow
 }
+
+func ParseTime(times time.Time) time.Time {
+	timeNow, _ := time.Parse(time.RFC3339, times.Format(time.RFC3339))
+	return timeNow
+}

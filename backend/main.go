@@ -34,12 +34,30 @@ func main() {
 	courseService := service.NewCourseService(&courseRepository, database)
 	courseController := controller.NewCourseController(&courseService)
 
+	// Module Articles Setup
+	moduleArticlesRepository := repository.NewModuleArticlesRepository()
+	moduleArticlesService := service.NewModuleArticlesService(&moduleArticlesRepository, &courseRepository, database)
+	moduleArticlesController := controller.NewModuleArticlesController(&moduleArticlesService)
+
+	// Module Submission Setup
+	moduleSubmissionRepository := repository.NewModuleSubmissionsRepository()
+	moduleSubmissionService := service.NewModuleSubmissionsService(&moduleSubmissionRepository, &courseRepository, database)
+	moduleSubmissionController := controller.NewModuleSubmissionsController(&moduleSubmissionService)
+
+	// User Submission Setup
+	userSubmissionRepository := repository.NewUserSubmissionsRepository()
+	userSubmissionService := service.NewUserSubmissionsService(&userSubmissionRepository, &moduleSubmissionRepository, &courseRepository, database)
+	userSubmissionController := controller.NewUserSubmissionsController(&userSubmissionService)
+
 	// Routing
 	userController.Route(router)
 	courseController.Route(router)
+	moduleArticlesController.Route(router)
+	moduleSubmissionController.Route(router)
+	userSubmissionController.Route(router)
 
 	// Run
-	PORT := fmt.Sprintf(":%v", configuration.Get("PORT"))
+	PORT := fmt.Sprintf(":%v", configuration.Get("APP_PORT"))
 	teenager(PORT)
 
 	err = router.Run(PORT)
