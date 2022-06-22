@@ -10,7 +10,7 @@ import (
 
 type UserCourseRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.UserCourse, error)
-	FindByUserId(ctx context.Context, tx *sql.Tx, id string) (entity.UserCourse, error)
+	FindByUserCourse(ctx context.Context, tx *sql.Tx, id string, course string) (entity.UserCourse, error)
 	Create(ctx context.Context, tx *sql.Tx, usercourses entity.UserCourse) (entity.UserCourse, error)
 	Delete(ctx context.Context, tx *sql.Tx, code1 int, code2 int) error
 }
@@ -52,9 +52,9 @@ func (repository *usercourseRepository) FindAll(ctx context.Context, tx *sql.Tx)
 	return usercourses, nil
 }
 
-func (repository *usercourseRepository) FindByUserId(ctx context.Context, tx *sql.Tx, id string) (entity.UserCourse, error) {
-	query := `SELECT * FROM user_course WHERE user_id = ?`
-	queryContext, err := tx.QueryContext(ctx, query, id)
+func (repository *usercourseRepository) FindByUserCourse(ctx context.Context, tx *sql.Tx, id string, course string) (entity.UserCourse, error) {
+	query := `SELECT * FROM user_course WHERE user_id = ? AND course_id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, id, course)
 	if err != nil {
 		return entity.UserCourse{}, err
 	}
