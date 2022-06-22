@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -53,15 +52,7 @@ func UserHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			return
 		}
 
-		if tokenClaims["role"] != "1" || tokenClaims["role"] != "2" {
-			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
-				Code:   401,
-				Status: "Unauthorized",
-			})
-		}
-
-		context := context.WithValue(ctx.Request.Context(), "user", tokenClaims["id"])
-		gin.Default().ServeHTTP(ctx.Writer, ctx.Request.WithContext(context))
+		ctx.Set("claims", tokenClaims)
 		handler(ctx)
 	}
 }
@@ -117,8 +108,7 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			return
 		}
 
-		context := context.WithValue(ctx.Request.Context(), "user", tokenClaims["id"])
-		gin.Default().ServeHTTP(ctx.Writer, ctx.Request.WithContext(context))
+		ctx.Set("claims", tokenClaims)
 		handler(ctx)
 	}
 }
