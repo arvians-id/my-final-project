@@ -153,7 +153,7 @@ export default function Home() {
                                     templateColumns="repeat(4, 1fr)"
                                     gap={6}
                                 >
-                                    {courseList.map((course, index) => {
+                                    {/* {courseList.map((course, index) => {
                                         return (
                                             <CourseCard
                                                 key={index}
@@ -167,7 +167,7 @@ export default function Home() {
                                                 }
                                             />
                                         );
-                                    })}
+                                    })} */}
                                 </Grid>
                             </Box>
                             <Flex
