@@ -11,7 +11,8 @@ type UserSubmissionsRepository interface {
 	SubmitFile(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
 	UpdateFile(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
 	UpdateGrade(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) error
-	FindUserSubmissionById(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
+	FindUserSubmissionByOther(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
+	FindUserSubmissionById(ctx context.Context, tx *sql.Tx, id int) (entity.UserSubmissions, error)
 }
 
 type userSubmissionsRepository struct {
@@ -74,9 +75,41 @@ func (repository *userSubmissionsRepository) UpdateGrade(ctx context.Context, tx
 	return nil
 }
 
-func (repository *userSubmissionsRepository) FindUserSubmissionById(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error) {
+func (repository *userSubmissionsRepository) FindUserSubmissionByOther(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error) {
 	query := `SELECT * FROM user_submissions WHERE user_id = ? AND module_submission_id = ?`
 	queryContext, err := tx.QueryContext(ctx, query, userSubmission.UserId, userSubmission.ModuleSubmissionId)
+	if err != nil {
+		return entity.UserSubmissions{}, err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	var modsub entity.UserSubmissions
+	if queryContext.Next() {
+		err := queryContext.Scan(
+			&modsub.Id,
+			&modsub.UserId,
+			&modsub.ModuleSubmissionId,
+			&modsub.File,
+			&modsub.Grade,
+		)
+		if err != nil {
+			return entity.UserSubmissions{}, err
+		}
+
+		return modsub, nil
+	}
+
+	return modsub, errors.New("user submission not found")
+}
+
+func (repository *userSubmissionsRepository) FindUserSubmissionById(ctx context.Context, tx *sql.Tx, id int) (entity.UserSubmissions, error) {
+	query := `SELECT * FROM user_submissions WHERE id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, id)
 	if err != nil {
 		return entity.UserSubmissions{}, err
 	}

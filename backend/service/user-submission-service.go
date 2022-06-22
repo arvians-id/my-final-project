@@ -13,7 +13,8 @@ import (
 type UserSubmissionsService interface {
 	SubmitFile(ctx context.Context, request model.CreateUserSubmissionsRequest) (model.GetUserSubmissionsResponse, error)
 	UpdateGrade(ctx context.Context, request model.UpdateUserGradeRequest) error
-	FindUserSubmissionById(ctx context.Context, id int, userId int, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error)
+	FindUserSubmissionByOther(ctx context.Context, userId int, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error)
+	FindUserSubmissionById(ctx context.Context, id int) (model.GetUserSubmissionsResponse, error)
 }
 
 type userSubmissionsService struct {
@@ -32,7 +33,7 @@ func NewUserSubmissionsService(userSubmissionRepository *repository.UserSubmissi
 	}
 }
 
-func (service *userSubmissionsService) FindUserSubmissionById(ctx context.Context, id int, userId int, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error) {
+func (service *userSubmissionsService) FindUserSubmissionByOther(ctx context.Context, userId int, moduleSubmissionsId int) (model.GetUserSubmissionsResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetUserSubmissionsResponse{}, err
@@ -40,11 +41,25 @@ func (service *userSubmissionsService) FindUserSubmissionById(ctx context.Contex
 	defer utils.CommitOrRollback(tx)
 
 	getUserSubmission := entity.UserSubmissions{
-		Id:                 id,
 		UserId:             userId,
 		ModuleSubmissionId: moduleSubmissionsId,
 	}
-	userSubmission, err := service.UserSubmissionRepository.FindUserSubmissionById(ctx, tx, getUserSubmission)
+	userSubmission, err := service.UserSubmissionRepository.FindUserSubmissionByOther(ctx, tx, getUserSubmission)
+	if err != nil {
+		return model.GetUserSubmissionsResponse{}, err
+	}
+
+	return utils.ToUserSubmissionsResponse(userSubmission), nil
+}
+
+func (service *userSubmissionsService) FindUserSubmissionById(ctx context.Context, id int) (model.GetUserSubmissionsResponse, error) {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return model.GetUserSubmissionsResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	userSubmission, err := service.UserSubmissionRepository.FindUserSubmissionById(ctx, tx, id)
 	if err != nil {
 		return model.GetUserSubmissionsResponse{}, err
 	}
@@ -65,7 +80,7 @@ func (service *userSubmissionsService) SubmitFile(ctx context.Context, request m
 		File:               request.File,
 	}
 
-	before, err := service.UserSubmissionRepository.FindUserSubmissionById(ctx, tx, newSubmit)
+	before, err := service.UserSubmissionRepository.FindUserSubmissionByOther(ctx, tx, newSubmit)
 	if err != nil {
 		userSubmission, err := service.UserSubmissionRepository.SubmitFile(ctx, tx, newSubmit)
 		if err != nil {
@@ -102,6 +117,11 @@ func (service *userSubmissionsService) UpdateGrade(ctx context.Context, request 
 	newUpdate := entity.UserSubmissions{
 		Id:    request.Id,
 		Grade: &request.Grade,
+	}
+
+	_, err = service.UserSubmissionRepository.FindUserSubmissionById(ctx, tx, request.Id)
+	if err != nil {
+		return err
 	}
 
 	err = service.UserSubmissionRepository.UpdateGrade(ctx, tx, newUpdate)
