@@ -52,7 +52,7 @@ func UserHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("claims", tokenClaims)
+		ctx.Set("id_user", tokenClaims["id"])
 		handler(ctx)
 	}
 }
@@ -108,7 +108,7 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("claims", tokenClaims)
+		ctx.Set("id_user", tokenClaims["id"])
 		handler(ctx)
 	}
 }
