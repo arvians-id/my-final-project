@@ -995,6 +995,106 @@ Response:
         }
     }
 ```
+## User_Submissions
+------------------------------
+## Submit File
+------------------------------
+Request:
+- Method: ```POST```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Content-Type: ```multipart/form-data```
+- Body:
+``` json
+    {
+        "file" : "string",
+    }
+```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "module_submission_id" : "integer", //foreign key2
+            "file" : "string"
+        }
+    }
+```
+------------------------------
+## Update Grade
+------------------------------
+Request:
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit/:userSubmissionId```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+  - userSubmissionId : ```number```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+- Body:
+``` json
+    {
+        "grade" : "integer",
+    }
+```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : null
+    }
+```
+------------------------------
+## Get User Submission
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit/:userSubmissionId```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+  - userSubmissionId : ```number```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "module_submission_id" : "integer", //foreign key2
+            "file" : "string",
+            "grade" : "integer"
+        }
+    }
+```
+------------------------------
+## Download User Submission
+------------------------------
+Request:
+- Method: ```POST```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit/:userSubmissionId/download```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+  - userSubmissionId : ```number```
+- Header:
+  - Content-Type: ```{mimetype}```
+  - Content-Disposition: ```{attachment; filename=file}```
+
 ## Answers
 ------------------------------
 ## Create Answers
