@@ -71,6 +71,24 @@ func ToUserCourseResponse(usercourse entity.UserCourse) model.GetUserCourseRespo
 	}
 }
 
+func ToStudentCourseResponse(usercourse entity.StudentCourse) model.GetStudentCourseResponse {
+	return model.GetStudentCourseResponse{
+		IdCourse:    usercourse.IdCourse,
+		CourseName:  usercourse.CourseName,
+		CourseCode:  usercourse.CourseCode,
+		CourseClass: usercourse.CourseClass,
+	}
+}
+
+func ToUserTeacherCourseResponse(usercourse entity.UserTeacherCourse) model.GetUserTeacherCourseResponse {
+	return model.GetUserTeacherCourseResponse{
+		IdUser:       usercourse.IdUser,
+		UserName:     usercourse.UserName,
+		UserUsername: usercourse.UserUsername,
+		UserEmail:    usercourse.UserEmail,
+	}
+}
+
 func ToQuestionResponse(question entity.Questions) model.GetQuestionResponse {
 	return model.GetQuestionResponse{
 		Id:          question.Id,
@@ -92,5 +110,25 @@ func ToAnswerResponse(answer entity.Answers) model.GetAnswerResponse {
 		Description: answer.Description,
 		CreatedAt:   answer.CreatedAt,
 		UpdatedAt:   answer.UpdatedAt,
+	}
+}
+
+func ToStudentSubmissionsResponse(submission entity.StudentSubmissions) model.GetStudentSubmissionsResponse {
+	return model.GetStudentSubmissionsResponse{
+		IdModuleSubmission:   submission.IdModuleSubmission,
+		NameCourse:           submission.CourseName,
+		NameModuleSubmission: submission.ModuleSubmissionName,
+		Grade:                submission.Grade,
+		File:                 submission.File,
+	}
+}
+
+func ToTeacherSubmissionsResponse(submission entity.TeacherSubmissions) model.GetTeacherSubmissionsResponse {
+	return model.GetTeacherSubmissionsResponse{
+		IdUserSubmission:     submission.IdUserSubmission,
+		UserName:             submission.UserName,
+		ModuleSubmissionName: submission.ModuleSubmissionName,
+		Grade:                submission.Grade,
+		File:                 submission.File,
 	}
 }

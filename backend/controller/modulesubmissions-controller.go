@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
@@ -10,24 +11,27 @@ import (
 
 type ModuleSubmissionsController struct {
 	ModuleSubmissionsService service.ModuleSubmissionsService
+	UserCourseService        service.UserCourseService
 }
 
-func NewModuleSubmissionsController(moduleSubmissionsService *service.ModuleSubmissionsService) *ModuleSubmissionsController {
+func NewModuleSubmissionsController(moduleSubmissionsService *service.ModuleSubmissionsService, userCourseService *service.UserCourseService) *ModuleSubmissionsController {
 	return &ModuleSubmissionsController{
 		ModuleSubmissionsService: *moduleSubmissionsService,
+		UserCourseService:        *userCourseService,
 	}
 }
 
 func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api/courses/:code")
 	{
-		authorized.GET("/submissions", controller.FindAll)
-		authorized.GET("/submissions/:submissionId", controller.FindByCode)
-		authorized.POST("/submissions", controller.Create)
-		authorized.PATCH("/submissions/:submissionId", controller.Update)
-		authorized.DELETE("/submissions/:submissionId", controller.Delete)
-		authorized.GET("/submissions/:submissionId/next", controller.Next)
-		authorized.GET("/submissions/:submissionId/previous", controller.Previous)
+		authorized.GET("/submissions", middleware.UserHandler(controller.FindAll))
+		authorized.GET("/submissions/:submissionId", middleware.UserHandler(controller.FindByCode))
+		authorized.POST("/submissions", middleware.AdminHandler(controller.Create))
+		authorized.PATCH("/submissions/:submissionId", middleware.AdminHandler(controller.Update))
+		authorized.DELETE("/submissions/:submissionId", middleware.AdminHandler(controller.Delete))
+		authorized.GET("/submissions/:submissionId/next", middleware.UserHandler(controller.Next))
+		authorized.GET("/submissions/:submissionId/previous", middleware.UserHandler(controller.Previous))
+		authorized.GET("/submissions/:submissionId/get", middleware.AdminHandler(controller.TeacherSubmission))
 	}
 
 	return router
@@ -234,5 +238,34 @@ func (controller *ModuleSubmissionsController) Previous(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "OK",
 		Data:   previousModule,
+	})
+}
+
+func (controller *ModuleSubmissionsController) TeacherSubmission(ctx *gin.Context) {
+	code := ctx.Param("code")
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	teacherSubmissions, err := controller.UserCourseService.FindAllTeacherSubmissions(ctx.Request.Context(), code, idSubmission)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   teacherSubmissions,
 	})
 }

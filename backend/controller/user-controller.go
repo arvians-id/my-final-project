@@ -13,12 +13,14 @@ import (
 )
 
 type UserController struct {
-	UserService service.UserServiceImplement
+	UserService       service.UserServiceImplement
+	UserCourseService service.UserCourseService
 }
 
-func NewUserController(userService *service.UserServiceImplement) UserController {
+func NewUserController(userService *service.UserServiceImplement, userCourseService *service.UserCourseService) UserController {
 	return UserController{
-		UserService: *userService,
+		UserService:       *userService,
+		UserCourseService: *userCourseService,
 	}
 }
 
@@ -43,6 +45,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 		api.GET("/users", middleware.AdminHandler(controller.listUser))
 		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))
 		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
+		api.GET("/users/submissions", middleware.UserHandler(controller.StudentSubmission))
 	}
 	return router
 }
@@ -486,5 +489,47 @@ func (controller *UserController) deleteUser(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, gin.H{
 		"code":   200,
 		"Status": "Delete User Successfull",
+	})
+}
+func (controller *UserController) StudentSubmission(ctx *gin.Context) {
+	limit := -1
+	if ctx.Query("limit") != "" {
+		limits, err := strconv.Atoi(ctx.Query("limit"))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+				Code:   http.StatusInternalServerError,
+				Status: err.Error(),
+				Data:   nil,
+			})
+			return
+		}
+		limit = limits
+	}
+
+	idUser, exists := ctx.Get("id_user")
+	if !exists {
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   http.StatusNotFound,
+			Status: "user not found",
+			Data:   nil,
+		})
+		return
+	}
+
+	id := int(idUser.(float64))
+	studentSubmissions, err := controller.UserCourseService.FindAllStudentSubmissions(ctx, id, limit)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   studentSubmissions,
 	})
 }

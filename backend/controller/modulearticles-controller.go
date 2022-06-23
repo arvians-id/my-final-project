@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
@@ -21,13 +22,13 @@ func NewModuleArticlesController(moduleArticlesService *service.ModuleArticlesSe
 func (controller *ModuleArticlesController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api/courses/:code")
 	{
-		authorized.GET("/articles", controller.FindAll)
-		authorized.GET("/articles/:articleId", controller.FindByCode)
-		authorized.POST("/articles", controller.Create)
-		authorized.PATCH("/articles/:articleId", controller.Update)
-		authorized.DELETE("/articles/:articleId", controller.Delete)
-		authorized.GET("/articles/:articleId/next", controller.Next)
-		authorized.GET("/articles/:articleId/previous", controller.Previous)
+		authorized.GET("/articles", middleware.UserHandler(controller.FindAll))
+		authorized.GET("/articles/:articleId", middleware.UserHandler(controller.FindByCode))
+		authorized.POST("/articles", middleware.AdminHandler(controller.Create))
+		authorized.PATCH("/articles/:articleId", middleware.AdminHandler(controller.Update))
+		authorized.DELETE("/articles/:articleId", middleware.AdminHandler(controller.Delete))
+		authorized.GET("/articles/:articleId/next", middleware.UserHandler(controller.Next))
+		authorized.GET("/articles/:articleId/previous", middleware.UserHandler(controller.Previous))
 	}
 
 	return router
