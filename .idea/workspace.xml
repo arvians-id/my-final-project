@@ -6,11 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/API-SPEC.md" beforeDir="false" afterPath="$PROJECT_DIR$/API-SPEC.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/controller/course-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/course-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/route/base.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/route/base.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/usercourse-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/usercourse-service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controller/modulearticles-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/modulearticles-controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controller/modulesubmissions-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/modulesubmissions-controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controller/user-submission-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/user-submission-controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/middleware/middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/middleware/middleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

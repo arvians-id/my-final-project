@@ -27,10 +27,10 @@ func NewUserSubmissionsController(userSubmissionService *service.UserSubmissions
 func (controller *UserSubmissionsController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api/courses/:code/submissions/:submissionId")
 	{
-		authorized.GET("/user-submit/:userSubmissionId", controller.FindUserSubmissionById)
+		authorized.GET("/user-submit/:userSubmissionId", middleware.UserHandler(controller.FindUserSubmissionById))
 		authorized.POST("/user-submit", middleware.UserHandler(controller.Create))
-		authorized.PATCH("/user-submit/:userSubmissionId", controller.UpdateGrade)
-		authorized.POST("/user-submit/:userSubmissionId/download", controller.Download)
+		authorized.PATCH("/user-submit/:userSubmissionId", middleware.AdminHandler(controller.UpdateGrade))
+		authorized.POST("/user-submit/:userSubmissionId/download", middleware.UserHandler(controller.Download))
 	}
 
 	return router

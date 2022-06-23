@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
@@ -23,14 +24,14 @@ func NewModuleSubmissionsController(moduleSubmissionsService *service.ModuleSubm
 func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api/courses/:code")
 	{
-		authorized.GET("/submissions", controller.FindAll)
-		authorized.GET("/submissions/:submissionId", controller.FindByCode)
-		authorized.POST("/submissions", controller.Create)
-		authorized.PATCH("/submissions/:submissionId", controller.Update)
-		authorized.DELETE("/submissions/:submissionId", controller.Delete)
-		authorized.GET("/submissions/:submissionId/next", controller.Next)
-		authorized.GET("/submissions/:submissionId/previous", controller.Previous)
-		authorized.GET("/submissions/:submissionId/get", controller.TeacherSubmission)
+		authorized.GET("/submissions", middleware.UserHandler(controller.FindAll))
+		authorized.GET("/submissions/:submissionId", middleware.UserHandler(controller.FindByCode))
+		authorized.POST("/submissions", middleware.AdminHandler(controller.Create))
+		authorized.PATCH("/submissions/:submissionId", middleware.AdminHandler(controller.Update))
+		authorized.DELETE("/submissions/:submissionId", middleware.AdminHandler(controller.Delete))
+		authorized.GET("/submissions/:submissionId/next", middleware.UserHandler(controller.Next))
+		authorized.GET("/submissions/:submissionId/previous", middleware.UserHandler(controller.Previous))
+		authorized.GET("/submissions/:submissionId/get", middleware.AdminHandler(controller.TeacherSubmission))
 	}
 
 	return router

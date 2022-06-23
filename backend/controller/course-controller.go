@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
@@ -23,13 +24,13 @@ func NewCourseController(courseService *service.CourseService, userCourseService
 func (controller *CourseController) Route(router *gin.Engine) *gin.Engine {
 	authorized := router.Group("/api/courses")
 	{
-		authorized.GET("", controller.FindAll)
-		authorized.GET("/:code", controller.FindById)
-		authorized.GET("/:code/users", controller.FindAllUserByCourseId)
-		authorized.POST("", controller.Create)
-		authorized.PATCH("/:code", controller.Update)
-		authorized.DELETE("/:code", controller.Delete)
-		authorized.PATCH("/:code/status", controller.ChangeStatus)
+		authorized.GET("", middleware.AdminHandler(controller.FindAll))
+		authorized.GET("/:code", middleware.UserHandler(controller.FindById))
+		authorized.GET("/:code/users", middleware.AdminHandler(controller.FindAllUserByCourseId))
+		authorized.POST("", middleware.AdminHandler(controller.Create))
+		authorized.PATCH("/:code", middleware.AdminHandler(controller.Update))
+		authorized.DELETE("/:code", middleware.AdminHandler(controller.Delete))
+		authorized.PATCH("/:code/status", middleware.AdminHandler(controller.ChangeStatus))
 	}
 
 	return router
