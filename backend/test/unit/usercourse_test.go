@@ -14,7 +14,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 )
 
-var _ = Describe("Test", func() {
+var _ = Describe("User Course API", func() {
 	var server *gin.Engine
 
 	BeforeEach(func() {
