@@ -1,48 +1,74 @@
 package unit_test
 
 import (
-	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
-	"github.com/rg-km/final-project-engineering-12/backend/entity"
+	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/repository"
+	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 )
 
 var _ = Describe("User Course API", func() {
-	var server *gin.Engine
-	var tokenJWT string
+	var (
+		server   *gin.Engine
+		tokenJWT string
+		ctx      *gin.Context
+	)
 
 	BeforeEach(func() {
 		configuration := config.New("../../.env.test")
 
-		database, err := setup.SuiteSetup(configuration)
+		db, err := setup.SuiteSetup(configuration)
 		if err != nil {
 			panic(err)
 		}
 
 		router := setup.ModuleSetup(configuration)
+		database := db
 		server = router
 
 		// User Authentication
 		// Create user
 		tx, _ := database.Begin()
 		userRepository := repository.NewUserRepository()
-		_ = userRepository.Register(context.Background(), tx, entity.Users{
-			Email:    "test@gmail.com",
-			Password: "Test123",
+		userService := service.NewUserService(&userRepository, database)
+
+		_, err = userService.RegisterUser(ctx, model.UserRegisterResponse{
+			Id:                9,
+			Name:              "test",
+			Username:          "test",
+			Email:             "test123@gmail.com",
+			Password:          "Test123",
+			Role:              1,
+			Phone:             "081234567890",
+			Gender:            1,
+			DisabilityType:    1,
+			Birthdate:         "2001-01-01",
+			EmailVerification: time.Now(),
+			Created_at:        time.Now(),
+			Updated_at:        time.Now(),
 		})
-		_ = tx.Commit()
+		if err != nil {
+			panic(err)
+		}
+		err = tx.Commit()
+		if err != nil {
+			panic(err)
+		}
+
 		// Login user
-		requestBody := strings.NewReader(`{"email": "test@gmail.com","password": "Test123"}`)
+		requestBody := strings.NewReader(`{"email": "test123@gmail.com","password": "Test123"}`)
 		request := httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
 		request.Header.Add("Content-Type", "application/json")
 
@@ -56,7 +82,11 @@ var _ = Describe("User Course API", func() {
 		_ = json.Unmarshal(body, &responseBody)
 
 		tokenJWT = responseBody["token"]
-
+		if tokenJWT == "" {
+			panic("Token is empty")
+		} else {
+			fmt.Println("Token: ", tokenJWT)
+		}
 	})
 
 	AfterEach(func() {
