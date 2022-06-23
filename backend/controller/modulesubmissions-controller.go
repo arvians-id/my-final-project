@@ -10,11 +10,13 @@ import (
 
 type ModuleSubmissionsController struct {
 	ModuleSubmissionsService service.ModuleSubmissionsService
+	UserCourseService        service.UserCourseService
 }
 
-func NewModuleSubmissionsController(moduleSubmissionsService *service.ModuleSubmissionsService) *ModuleSubmissionsController {
+func NewModuleSubmissionsController(moduleSubmissionsService *service.ModuleSubmissionsService, userCourseService *service.UserCourseService) *ModuleSubmissionsController {
 	return &ModuleSubmissionsController{
 		ModuleSubmissionsService: *moduleSubmissionsService,
+		UserCourseService:        *userCourseService,
 	}
 }
 
@@ -28,6 +30,7 @@ func (controller *ModuleSubmissionsController) Route(router *gin.Engine) *gin.En
 		authorized.DELETE("/submissions/:submissionId", controller.Delete)
 		authorized.GET("/submissions/:submissionId/next", controller.Next)
 		authorized.GET("/submissions/:submissionId/previous", controller.Previous)
+		authorized.GET("/submissions/:submissionId/get", controller.TeacherSubmission)
 	}
 
 	return router
@@ -234,5 +237,34 @@ func (controller *ModuleSubmissionsController) Previous(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "OK",
 		Data:   previousModule,
+	})
+}
+
+func (controller *ModuleSubmissionsController) TeacherSubmission(ctx *gin.Context) {
+	code := ctx.Param("code")
+	idSubmission, err := strconv.Atoi(ctx.Param("submissionId"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	teacherSubmissions, err := controller.UserCourseService.FindAllTeacherSubmissions(ctx.Request.Context(), code, idSubmission)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   teacherSubmissions,
 	})
 }

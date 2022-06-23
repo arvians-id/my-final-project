@@ -16,14 +16,16 @@ Request:
   - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- [Users](#users)                               (9/9) 100%
+- [Users](#users)                               (10/10) 100%
 - [User_course](#user-course)                   (4/4) 100%
 - [Courses](#courses)                           (6/6) 100%
 - [User_submissions](#user-submissions)         (4/4) 100%
-- [Module_submissions](#module-submissions)     (7/7) 100%
+- [Module_submissions](#module-submissions)     (8/8) 100%
 - [Module_articles](#module-articles)           (7/7) 100%
 - [Answers](#answers)                           (5/5) 100%
 - [Questions](#questions)                       (5/5) 100%
+
+Total : 49
 
 ## users
 ------------------------------
@@ -226,6 +228,27 @@ Request:
     {
         "code" : "number",
         "status" : "string"
+    }
+```
+------------------------------
+## List User Submission
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/users/submissions```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - limit : ```number``` ```optional``` ```default = all list```
+
+Response:
+``` json
+    {
+        "id_module_submission": "integer",
+        "name_course": "string",
+        "name_module_submission": "string",
+        "grade": "integer",
+        "file": "string"
     }
 ```
 ## User course
@@ -832,7 +855,7 @@ Request:
 - Endpoint: ```/api/courses/{code}/submissions/{submissionId}/next```
 - Query Param:
   - code : ```string```
-  - articleId : ```number```
+  - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
 
@@ -855,7 +878,7 @@ Request:
 - Endpoint: ```/api/courses/{code}/submissions/{submissionId}/previous```
 - Query Param:
   - code : ```string```
-  - articleId : ```number```
+  - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
 
@@ -867,6 +890,31 @@ Response:
         "data": {
             "id": "integer", // primary key
             "code_course": "string",
+        }
+    }
+```
+------------------------------
+## List User Module_submissions In Teacher
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/get```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id_user_submission": "integer", // primary key
+            "user_name": "string",
+            "module_submission_name": "string",
+            "file": "string"
         }
     }
 ```

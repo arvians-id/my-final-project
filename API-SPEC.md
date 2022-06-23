@@ -843,7 +843,7 @@ Request:
 - Endpoint: ```/api/courses/{code}/submissions/{submissionId}/next```
 - Query Param:
   - code : ```string```
-  - articleId : ```number```
+  - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
 
@@ -866,7 +866,7 @@ Request:
 - Endpoint: ```/api/courses/{code}/submissions/{submissionId}/previous```
 - Query Param:
   - code : ```string```
-  - articleId : ```number```
+  - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
 
@@ -878,6 +878,31 @@ Response:
         "data": {
             "id": "integer", // primary key
             "code_course": "string",
+        }
+    }
+```
+------------------------------
+## List User Module_submissions In Teacher
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/get```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id_user_submission": "integer", // primary key
+            "user_name": "string",
+            "module_submission_name": "string",
+            "file": "string"
         }
     }
 ```
