@@ -2,8 +2,8 @@ package unit_test
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -20,6 +20,7 @@ var _ = Describe("User Course API", func() {
 	var (
 		server *gin.Engine
 		token  string
+		ok     bool
 	)
 
 	BeforeEach(func() {
@@ -33,43 +34,27 @@ var _ = Describe("User Course API", func() {
 		router := setup.ModuleSetup(configuration)
 		server = router
 
-		var user = []model.UserRegisterResponse{{
-			Name:           "usertest",
-			Username:       "user",
-			Email:          "user@gmail.com",
-			Password:       "usertest",
-			Role:           2,
-			Phone:          "8131313131313",
-			Gender:         2,
+		var user = model.UserRegisterResponse{
+
+			Name:           "akuntest",
+			Username:       "akuntest",
+			Email:          "akuntest@gmail.com",
+			Password:       "123456ll",
+			Role:           1,
+			Phone:          "085156789011",
+			Gender:         1,
 			DisabilityType: 1,
-			Birthdate:      "2002-04-04",
-		},
-			{
-				Name:           "useradmin",
-				Username:       "admin",
-				Email:          "admin@gmail.com",
-				Password:       "useradmin",
-				Role:           1,
-				Phone:          "8121212121212",
-				Gender:         2,
-				DisabilityType: 1,
-				Birthdate:      "2002-04-01",
-			},
+			Birthdate:      "2002-04-01",
 		}
 
-		login := []model.GetUserLogin{
-			{
-				Email:    "user@gmail.com",
-				Password: "usertest",
-			},
-			{
-				Email:    "admin@gmail.com",
-				Password: "useradmin",
-			},
+		login := model.GetUserLogin{
+
+			Email:    "akuntest@gmail.com",
+			Password: "123456ll",
 		}
 
 		// Register User
-		userData, _ := json.Marshal(user[1])
+		userData, _ := json.Marshal(user)
 		requestBody := strings.NewReader(string(userData))
 		request := httptest.NewRequest(http.MethodPost, "/api/users", requestBody)
 		request.Header.Add("Content-Type", "application/json")
@@ -78,7 +63,7 @@ var _ = Describe("User Course API", func() {
 		server.ServeHTTP(writer, request)
 
 		//Login User
-		userLogin, _ := json.Marshal(login[1])
+		userLogin, _ := json.Marshal(login)
 		requestBodyLogin := strings.NewReader(string(userLogin))
 		requestLogin := httptest.NewRequest(http.MethodPost, "/api/users/login", requestBodyLogin)
 		request.Header.Add("Content-Type", "application/json")
@@ -92,13 +77,12 @@ var _ = Describe("User Course API", func() {
 		var responseBodyLogin map[string]interface{}
 		_ = json.Unmarshal(bodyLogin, &responseBodyLogin)
 
-		token = responseBodyLogin["token"].(string)
-		if token == "" {
-			panic("Token is empty")
+		token, ok = responseBodyLogin["token"].(string)
+		if !ok {
+			panic("Can't get token")
 		} else {
-			fmt.Println("Token: ", token)
+			log.Println("Token: ", token)
 		}
-
 	})
 
 	AfterEach(func() {
