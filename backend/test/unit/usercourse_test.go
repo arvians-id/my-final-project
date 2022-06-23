@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -77,10 +77,9 @@ var _ = Describe("User Course API", func() {
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
 
-				Body, err := ioutil.ReadAll(writer.Body)
-				if err != nil {
-					panic(err)
-				}
+				response := writer.Result()
+
+				Body, _ := io.ReadAll(response.Body)
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(Body, &responseBody)
 
