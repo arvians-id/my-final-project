@@ -1,49 +1,99 @@
 package unit_test
 
 import (
-	"database/sql"
-
+	"encoding/json"
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
-	. "github.com/onsi/ginkgo"
-	. "github.com/onsi/gomega"
-	"github.com/rg-km/final-project-engineering-12/backend/controller"
-	"github.com/rg-km/final-project-engineering-12/backend/repository"
-	"github.com/rg-km/final-project-engineering-12/backend/service"
+	. "github.com/onsi/ginkgo/v2"
+	"github.com/rg-km/final-project-engineering-12/backend/config"
+	"github.com/rg-km/final-project-engineering-12/backend/model"
+	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
+	"io"
+	"log"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 )
 
 var _ = Describe("Test", func() {
 
 	var (
-		userController controller.UserController
-		userService    service.UserServiceImplement
-		userRepository repository.UserRepository
-		database       *sql.DB
-		err            error
-		ctx            *gin.Context
+		server *gin.Engine
+		token  string
+		ok     bool
 	)
 
 	BeforeEach(func() {
-		database, err = sql.Open("sqlite3", "../teenager.db")
+		configuration := config.New("../../.env.test")
 
+		_, err := setup.SuiteSetup(configuration)
 		if err != nil {
 			panic(err)
 		}
 
-		userRepository = repository.NewUserRepository()
-		userService = service.NewUserService(&userRepository, database)
-		userController = controller.NewUserController(&userService)
+		router := setup.ModuleSetup(configuration)
+		server = router
+
+		var user = model.UserRegisterResponse{
+			Name:           "akuntest",
+			Username:       "akuntest",
+			Email:          "akuntest@gmail.com",
+			Password:       "123456ll",
+			Role:           1,
+			Phone:          "085156789011",
+			Gender:         1,
+			DisabilityType: 1,
+			Birthdate:      "2002-04-01",
+		}
+
+		login := model.GetUserLogin{
+			Email:    "akuntest@gmail.com",
+			Password: "123456ll",
+		}
+
+		// Register User
+		userData, _ := json.Marshal(user)
+		requestBody := strings.NewReader(string(userData))
+		request := httptest.NewRequest(http.MethodPost, "/api/users", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+
+		writer := httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		//Login User
+		userData, _ = json.Marshal(login)
+		requestBody = strings.NewReader(string(userData))
+		request = httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+
+		writer = httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		responseLogin := writer.Result()
+
+		body, _ := io.ReadAll(responseLogin.Body)
+		var responseBodyLogin map[string]interface{}
+		_ = json.Unmarshal(body, &responseBodyLogin)
+
+		log.Println(responseBodyLogin["status"])
+		token, ok = responseBodyLogin["token"].(string)
+		if !ok {
+			panic("Can't get token")
+		} else {
+			log.Println("Token: ", token)
+		}
 	})
 
-	Describe("User Login Register", func() {
-		When("Data is Correct", func() {
-			It("Should return list User", func() {
+	AfterEach(func() {
+		configuration := config.New("../../.env.test")
+		db, err := setup.SuiteSetup(configuration)
+		if err != nil {
+			panic(err)
+		}
+		defer db.Close()
 
-				userLoginResponse, err := userController.UserService.ListUser(ctx)
-
-				Expect(err).To(BeNil())
-				Expect(userLoginResponse).To(HaveLen(2))
-			})
-		})
+		err = setup.TearDownTest(db)
+		if err != nil {
+			panic(err)
+		}
 	})
 })

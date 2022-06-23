@@ -6,8 +6,10 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
+	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -15,7 +17,11 @@ import (
 
 var _ = Describe("Courses API", func() {
 
-	var server *gin.Engine
+	var (
+		server *gin.Engine
+		token  string
+		ok     bool
+	)
 
 	BeforeEach(func() {
 		configuration := config.New("../../.env.test")
@@ -27,6 +33,55 @@ var _ = Describe("Courses API", func() {
 
 		router := setup.ModuleSetup(configuration)
 		server = router
+
+		var user = model.UserRegisterResponse{
+			Name:           "akuntest",
+			Username:       "akuntest",
+			Email:          "akuntest@gmail.com",
+			Password:       "123456ll",
+			Role:           1,
+			Phone:          "085156789011",
+			Gender:         1,
+			DisabilityType: 1,
+			Birthdate:      "2002-04-01",
+		}
+
+		login := model.GetUserLogin{
+			Email:    "akuntest@gmail.com",
+			Password: "123456ll",
+		}
+
+		// Register User
+		userData, _ := json.Marshal(user)
+		requestBody := strings.NewReader(string(userData))
+		request := httptest.NewRequest(http.MethodPost, "/api/users", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+
+		writer := httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		//Login User
+		userData, _ = json.Marshal(login)
+		requestBody = strings.NewReader(string(userData))
+		request = httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+
+		writer = httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		responseLogin := writer.Result()
+
+		body, _ := io.ReadAll(responseLogin.Body)
+		var responseBodyLogin map[string]interface{}
+		_ = json.Unmarshal(body, &responseBodyLogin)
+
+		log.Println(responseBodyLogin["status"])
+		token, ok = responseBodyLogin["token"].(string)
+		if !ok {
+			panic("Can't get token")
+		} else {
+			log.Println("Token: ", token)
+		}
 	})
 
 	AfterEach(func() {
@@ -50,6 +105,7 @@ var _ = Describe("Courses API", func() {
 				requestBody := strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
 				request := httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
 
 				writer := httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -58,6 +114,7 @@ var _ = Describe("Courses API", func() {
 				requestBody = strings.NewReader(`{"name": "Rekayasa Perangkat Lunak","class": "RPL-1","tools": "XAMPP","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
 				request = httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -65,6 +122,7 @@ var _ = Describe("Courses API", func() {
 				// Find All Course
 				request = httptest.NewRequest(http.MethodGet, "/api/courses", nil)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -101,6 +159,7 @@ var _ = Describe("Courses API", func() {
 					requestBody := strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
 					request := httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
 					request.Header.Add("Content-Type", "application/json")
+					request.Header.Set("Authorization", token)
 
 					writer := httptest.NewRecorder()
 					server.ServeHTTP(writer, request)
@@ -131,6 +190,7 @@ var _ = Describe("Courses API", func() {
 				requestBody := strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
 				request := httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
 
 				writer := httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -145,6 +205,7 @@ var _ = Describe("Courses API", func() {
 				codeCourse := responseBody["data"].(map[string]interface{})["code_course"].(string)
 				request = httptest.NewRequest(http.MethodGet, "/api/courses/"+codeCourse, nil)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)

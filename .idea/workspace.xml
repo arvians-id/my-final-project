@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="" />
+    <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test/integration/courses_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/courses_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test/integration/usercourse_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/usercourse_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test/unit/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/unit/user_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test/unit/usercourse_test.go" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,14 +67,14 @@
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\laragon\www\final-project-engineering-12\backend\test\unit" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
+      <recent name="C:\laragon\www\final-project-engineering-12\backend\test\unit" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\testing" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend" />
       <recent name="C:\laragon\www\final-project-engineering-12\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)">
+  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)">
     <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
@@ -116,7 +123,7 @@
       <pattern value="^\QTestMainApi\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
       <root_directory value="$PROJECT_DIR$/backend" />
@@ -130,11 +137,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (4)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" />
-        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" />
       </list>
     </recent_temporary>
   </component>
