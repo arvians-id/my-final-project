@@ -94,3 +94,23 @@ func ToAnswerResponse(answer entity.Answers) model.GetAnswerResponse {
 		UpdatedAt:   answer.UpdatedAt,
 	}
 }
+
+func ToStudentSubmissionsResponse(submission entity.StudentSubmissions) model.GetStudentSubmissionsResponse {
+	return model.GetStudentSubmissionsResponse{
+		IdModuleSubmission:   submission.IdModuleSubmission,
+		NameCourse:           submission.CourseName,
+		NameModuleSubmission: submission.ModuleSubmissionName,
+		Grade:                submission.Grade,
+		File:                 submission.File,
+	}
+}
+
+func ToTeacherSubmissionsResponse(submission entity.TeacherSubmissions) model.GetTeacherSubmissionsResponse {
+	return model.GetTeacherSubmissionsResponse{
+		IdUserSubmission:     submission.IdUserSubmission,
+		UserName:             submission.UserName,
+		ModuleSubmissionName: submission.ModuleSubmissionName,
+		Grade:                submission.Grade,
+		File:                 submission.File,
+	}
+}

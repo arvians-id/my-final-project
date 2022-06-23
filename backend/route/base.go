@@ -32,11 +32,6 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 		panic(err)
 	}
 
-	// User Setup
-	userRepository := repository.NewUserRepository()
-	userService := service.NewUserService(&userRepository, database)
-	userController := controller.NewUserController(&userService)
-
 	// Course Setup
 	courseRepository := repository.NewCourseRepository()
 	courseService := service.NewCourseService(&courseRepository, database)
@@ -59,7 +54,7 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 
 	// UserCourse Setup
 	userCourseRepository := repository.NewUserCourseRepository()
-	userCourseService := service.NewUserCourseService(&userCourseRepository, database)
+	userCourseService := service.NewUserCourseService(&userCourseRepository, &courseRepository, &moduleSubmissionRepository, database)
 	userCourseController := controller.NewUserCourseController(&userCourseService)
 
 	// Question Setup
@@ -71,6 +66,11 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	answerRepository := repository.NewAnswerRepository()
 	answerService := service.NewAnswerService(&answerRepository, &questionRepository, database)
 	answerController := controller.NewAnswerController(&answerService)
+
+	// User Setup
+	userRepository := repository.NewUserRepository()
+	userService := service.NewUserService(&userRepository, database)
+	userController := controller.NewUserController(&userService, &userCourseService)
 
 	// Routing
 	userController.Route(router)

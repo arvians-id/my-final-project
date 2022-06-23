@@ -6,7 +6,7 @@ Request:
     - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- [Users](#users)                               (9/9) 100%
+- [Users](#users)                               (10/10) 100%
 - [User_course](#user-course)                   (4/4) 100%
 - [Courses](#courses)                           (6/6) 100%
 - [User_submissions](#user-submissions)         (4/4) 100%
@@ -216,6 +216,27 @@ Response:
     {
         "code" : "number",
         "status" : "string"
+    }
+```
+------------------------------
+## List User Submission
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/users/submissions```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - limit : ```number``` ```optional``` ```default = all list```
+  
+Response:
+``` json
+    {
+        "id_module_submission": "integer",
+        "name_course": "string",
+        "name_module_submission": "string",
+        "grade": "integer",
+        "file": "string"
     }
 ```
 ## User course
