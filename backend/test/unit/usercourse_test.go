@@ -3,7 +3,6 @@ package unit_test
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -53,10 +52,10 @@ var _ = Describe("User Course API", func() {
 		response := writer.Result()
 
 		body, _ := io.ReadAll(response.Body)
-		var responseBody map[string]interface{}
+		var responseBody map[string]string
 		_ = json.Unmarshal(body, &responseBody)
 
-		tokenJWT = responseBody["token"].(map[string]interface{})["access_token"].(string)
+		tokenJWT = responseBody["token"]
 
 	})
 
@@ -81,7 +80,7 @@ var _ = Describe("User Course API", func() {
 				requestBody := strings.NewReader(`{"user_id": 10,"course_id": 1}`)
 				request := httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
 				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
+				request.Header.Set("Authorization", tokenJWT)
 
 				writer := httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -90,7 +89,7 @@ var _ = Describe("User Course API", func() {
 				requestBody = strings.NewReader(`{"user_id": 10,"course_id": 2}`)
 				request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
 				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
+				request.Header.Set("Authorization", tokenJWT)
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -99,7 +98,7 @@ var _ = Describe("User Course API", func() {
 				requestBody = strings.NewReader(`{"user_id": 11,"course_id": 1}`)
 				request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
 				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
+				request.Header.Set("Authorization", tokenJWT)
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -107,7 +106,7 @@ var _ = Describe("User Course API", func() {
 				// find all user courses
 				request = httptest.NewRequest(http.MethodGet, "/api/usercourse", nil)
 				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
+				request.Header.Set("Authorization", tokenJWT)
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
