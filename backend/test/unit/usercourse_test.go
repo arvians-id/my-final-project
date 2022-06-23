@@ -3,7 +3,6 @@ package unit_test
 import (
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -20,7 +19,6 @@ var _ = Describe("User Course API", func() {
 	var (
 		server *gin.Engine
 		token  string
-		ok     bool
 	)
 
 	BeforeEach(func() {
@@ -47,7 +45,7 @@ var _ = Describe("User Course API", func() {
 			Birthdate:      "2002-04-01",
 		}
 
-		login := model.GetUserLogin{
+		login := &model.GetUserLogin{
 
 			Email:    "akuntest@gmail.com",
 			Password: "123456ll",
@@ -61,7 +59,6 @@ var _ = Describe("User Course API", func() {
 
 		writer := httptest.NewRecorder()
 		server.ServeHTTP(writer, request)
-
 		//Login User
 		userData, _ = json.Marshal(login)
 		requestBody = strings.NewReader(string(userData))
@@ -77,12 +74,7 @@ var _ = Describe("User Course API", func() {
 		var responseBodyLogin map[string]interface{}
 		_ = json.Unmarshal(body, &responseBodyLogin)
 
-		token, ok = responseBodyLogin["token"].(string)
-		if !ok {
-			panic("Can't get token")
-		} else {
-			log.Println("Token: ", token)
-		}
+		token, _ = responseBodyLogin["data"].(string)
 	})
 
 	AfterEach(func() {
@@ -118,7 +110,7 @@ var _ = Describe("User Course API", func() {
 				_ = json.Unmarshal(Body, &responseBody)
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
-				Expect(responseBody["status"]).To(Equal("course successfully created"))
+				Expect(responseBody["status"]).To(Equal("User Course Create Succesfully"))
 				Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(10))
 				Expect(responseBody["data"].(map[string]interface{})["course_id"]).To(Equal(1))
 			})
@@ -149,10 +141,10 @@ var _ = Describe("User Course API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(Body, &responseBody)
 
-				usercourse := responseBody["data"].(map[string]interface{})
-
-				Expect(usercourse["user_id"]).To(Equal(10))
-				Expect(usercourse["course_id"]).To(Equal(1))
+				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
+				Expect(responseBody["status"]).To(Equal("Get User Course Successfull"))
+				Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(10))
+				Expect(responseBody["data"].(map[string]interface{})["course_id"]).To(Equal(1))
 			})
 		})
 	})
@@ -182,7 +174,7 @@ var _ = Describe("User Course API", func() {
 				_ = json.Unmarshal(Body, &responseBody)
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
-				Expect(responseBody["status"]).To(Equal("OK"))
+				Expect(responseBody["status"]).To(Equal("Delete User Course Successfull"))
 			})
 		})
 	})
