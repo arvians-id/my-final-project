@@ -92,7 +92,7 @@ var _ = Describe("User Course API", func() {
 		var responseBodyLogin map[string]interface{}
 		_ = json.Unmarshal(bodyLogin, &responseBodyLogin)
 
-		token := responseBodyLogin["token"].(string)
+		token = responseBodyLogin["token"].(string)
 		if token == "" {
 			panic("Token is empty")
 		} else {
