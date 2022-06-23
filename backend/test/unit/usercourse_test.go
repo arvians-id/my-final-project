@@ -63,19 +63,19 @@ var _ = Describe("User Course API", func() {
 		server.ServeHTTP(writer, request)
 
 		//Login User
-		userLogin, _ := json.Marshal(login)
-		requestBodyLogin := strings.NewReader(string(userLogin))
-		requestLogin := httptest.NewRequest(http.MethodPost, "/api/users/login", requestBodyLogin)
+		userData, _ = json.Marshal(login)
+		requestBody = strings.NewReader(string(userData))
+		request = httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
 		request.Header.Add("Content-Type", "application/json")
 
-		writerLogin := httptest.NewRecorder()
-		server.ServeHTTP(writerLogin, requestLogin)
+		writer = httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
 
-		responseLogin := writerLogin.Result()
+		responseLogin := writer.Result()
 
-		bodyLogin, _ := io.ReadAll(responseLogin.Body)
+		body, _ := io.ReadAll(responseLogin.Body)
 		var responseBodyLogin map[string]interface{}
-		_ = json.Unmarshal(bodyLogin, &responseBodyLogin)
+		_ = json.Unmarshal(body, &responseBodyLogin)
 
 		token, ok = responseBodyLogin["token"].(string)
 		if !ok {
