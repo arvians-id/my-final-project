@@ -5,6 +5,20 @@ type UserCourse struct {
 	CourseId int
 }
 
+type StudentCourse struct {
+	IdCourse    int
+	CourseName  string
+	CourseCode  string
+	CourseClass string
+}
+
+type UserTeacherCourse struct {
+	IdUser       int
+	UserName     string
+	UserUsername string
+	UserEmail    string
+}
+
 type StudentSubmissions struct {
 	IdModuleSubmission   int
 	CourseName           string

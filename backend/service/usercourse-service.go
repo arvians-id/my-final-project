@@ -12,6 +12,8 @@ import (
 
 type UserCourseService interface {
 	FindAll(ctx context.Context) ([]model.GetUserCourseResponse, error)
+	FindAllCourseByUserId(ctx context.Context, userId int) ([]model.GetStudentCourseResponse, error)
+	FindAllUserByCourseId(ctx context.Context, courseId int) ([]model.GetUserTeacherCourseResponse, error)
 	FindByUserCourse(ctx context.Context, code1 string, code2 string) (model.GetUserCourseResponse, error)
 	Create(ctx context.Context, request model.CreateUserCourseRequest) (model.GetUserCourseResponse, error)
 	Delete(ctx context.Context, code1 int, code2 int) error
@@ -50,6 +52,46 @@ func (service *usercourseService) FindAll(ctx context.Context) ([]model.GetUserC
 	var usercourseResponses []model.GetUserCourseResponse
 	for _, usercourse := range courses {
 		usercourseResponses = append(usercourseResponses, utils.ToUserCourseResponse(usercourse))
+	}
+
+	return usercourseResponses, nil
+}
+
+func (service *usercourseService) FindAllCourseByUserId(ctx context.Context, courseId int) ([]model.GetStudentCourseResponse, error) {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return []model.GetStudentCourseResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	courses, err := service.UserCourseRepository.FindAllCourseByUserId(ctx, tx, courseId)
+	if err != nil {
+		return []model.GetStudentCourseResponse{}, err
+	}
+
+	var usercourseResponses []model.GetStudentCourseResponse
+	for _, usercourse := range courses {
+		usercourseResponses = append(usercourseResponses, utils.ToStudentCourseResponse(usercourse))
+	}
+
+	return usercourseResponses, nil
+}
+
+func (service *usercourseService) FindAllUserByCourseId(ctx context.Context, courseId int) ([]model.GetUserTeacherCourseResponse, error) {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return []model.GetUserTeacherCourseResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	courses, err := service.UserCourseRepository.FindAllUserByCourseId(ctx, tx, courseId)
+	if err != nil {
+		return []model.GetUserTeacherCourseResponse{}, err
+	}
+
+	var usercourseResponses []model.GetUserTeacherCourseResponse
+	for _, usercourse := range courses {
+		usercourseResponses = append(usercourseResponses, utils.ToUserTeacherCourseResponse(usercourse))
 	}
 
 	return usercourseResponses, nil

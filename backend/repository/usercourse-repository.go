@@ -10,6 +10,8 @@ import (
 
 type UserCourseRepository interface {
 	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.UserCourse, error)
+	FindAllCourseByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.StudentCourse, error)
+	FindAllUserByCourseId(ctx context.Context, tx *sql.Tx, courseId int) ([]entity.UserTeacherCourse, error)
 	FindByUserCourse(ctx context.Context, tx *sql.Tx, id string, course string) (entity.UserCourse, error)
 	Create(ctx context.Context, tx *sql.Tx, usercourses entity.UserCourse) (entity.UserCourse, error)
 	Delete(ctx context.Context, tx *sql.Tx, code1 int, code2 int) error
@@ -43,6 +45,74 @@ func (repository *usercourseRepository) FindAll(ctx context.Context, tx *sql.Tx)
 		err := queryContext.Scan(
 			&usercourse.UserId,
 			&usercourse.CourseId,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		usercourses = append(usercourses, usercourse)
+	}
+
+	return usercourses, nil
+}
+
+func (repository *usercourseRepository) FindAllCourseByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.StudentCourse, error) {
+	query := `SELECT c.id,c.name,c.code_course,c.class FROM user_course uc
+			  LEFT JOIN courses c on c.id = uc.course_id
+			  WHERE uc.user_id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, userId)
+	if err != nil {
+		return nil, err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	var usercourses []entity.StudentCourse
+	for queryContext.Next() {
+		var usercourse entity.StudentCourse
+		err := queryContext.Scan(
+			&usercourse.IdCourse,
+			&usercourse.CourseName,
+			&usercourse.CourseCode,
+			&usercourse.CourseClass,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		usercourses = append(usercourses, usercourse)
+	}
+
+	return usercourses, nil
+}
+
+func (repository *usercourseRepository) FindAllUserByCourseId(ctx context.Context, tx *sql.Tx, courseId int) ([]entity.UserTeacherCourse, error) {
+	query := `SELECT u.id,u.name,u.username,u.email FROM user_course uc
+			  LEFT JOIN users u on u.id = uc.user_id
+			  WHERE uc.course_id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, courseId)
+	if err != nil {
+		return nil, err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	var usercourses []entity.UserTeacherCourse
+	for queryContext.Next() {
+		var usercourse entity.UserTeacherCourse
+		err := queryContext.Scan(
+			&usercourse.IdUser,
+			&usercourse.UserName,
+			&usercourse.UserUsername,
+			&usercourse.UserEmail,
 		)
 		if err != nil {
 			return nil, err

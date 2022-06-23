@@ -85,16 +85,6 @@ func (controller *UserSubmissionsController) Create(ctx *gin.Context) {
 		return
 	}
 
-	//claim, _ := ctx.Get("user_id")
-	//if err != nil {
-	//	ctx.JSON(http.StatusBadRequest, model.WebResponse{
-	//		Code:   http.StatusBadRequest,
-	//		Status: err.Error(),
-	//		Data:   nil,
-	//	})
-	//	return
-	//}
-
 	ct := strings.Split(file.Filename, ".")
 	file.Filename = utils.RandomString(20) + "." + ct[len(ct)-1]
 	path, err := utils.GetPath("/assets/", file.Filename)

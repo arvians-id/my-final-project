@@ -7,7 +7,7 @@ Request:
 
 SUMMARY:
 - [Users](#users)                               (10/10) 100%
-- [User_course](#user-course)                   (4/4) 100%
+- [User_course](#user-course)                   (5/5) 100%
 - [Courses](#courses)                           (6/6) 100%
 - [User_submissions](#user-submissions)         (4/4) 100%
 - [Module_submissions](#module-submissions)     (7/7) 100%
@@ -245,7 +245,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```POST```
-- Endpoint: ```/api/user_course```
+- Endpoint: ```/api/usercourse```
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
@@ -272,7 +272,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/user_course/{user_id}/{course_id}```
+- Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
     - Accept: ```application/json```
 
@@ -292,7 +292,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```PUT```
-- Endpoint: ```/api/user_course/{user_id}/{course_id}```
+- Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
     - Content-Type: ```application/json```
     - Accept: ```application/json```
@@ -319,7 +319,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/user_course```
+- Endpoint: ```/api/usercourse```
 - Header:
     - Accept: ```application/json```
 - Query Param:
@@ -344,7 +344,7 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/user_course/{user_id}/{course_id}```
+- Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
     - Accept: ```application/json```
 
@@ -353,6 +353,28 @@ Response:
     {
         "code" : "number",
         "status" : "string"
+    }
+```
+------------------------------
+## Find All Course By User Logged In
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/usercourse/courses```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id_user": "integer", // Primary Key
+            "user_name": "string",
+            "user_username": "string",
+            "user_email": "string"
+        }
     }
 ```
 ## User details

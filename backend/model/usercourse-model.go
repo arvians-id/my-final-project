@@ -10,6 +10,20 @@ type CreateUserCourseRequest struct {
 	CourseId int `json:"course_id"`
 }
 
+type GetStudentCourseResponse struct {
+	IdCourse    int    `json:"id_course"`
+	CourseName  string `json:"course_name"`
+	CourseCode  string `json:"course_code"`
+	CourseClass string `json:"course_class"`
+}
+
+type GetUserTeacherCourseResponse struct {
+	IdUser       int    `json:"id_user"`
+	UserName     string `json:"user_name"`
+	UserUsername string `json:"user_username"`
+	UserEmail    string `json:"user_email"`
+}
+
 type GetStudentSubmissionsResponse struct {
 	IdModuleSubmission   int     `json:"id_module_submission"`
 	NameCourse           string  `json:"name_course"`
