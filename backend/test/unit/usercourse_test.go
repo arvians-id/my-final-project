@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
+	"github.com/rg-km/final-project-engineering-12/backend/controller"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/repository"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
@@ -43,21 +43,18 @@ var _ = Describe("User Course API", func() {
 		tx, _ := database.Begin()
 		userRepository := repository.NewUserRepository()
 		userService := service.NewUserService(&userRepository, database)
+		userController := controller.NewUserController(&userService)
 
-		_, err = userService.RegisterUser(ctx, model.UserRegisterResponse{
-			Id:                9,
-			Name:              "test",
-			Username:          "test",
-			Email:             "test123@gmail.com",
-			Password:          "Test123",
-			Role:              1,
-			Phone:             "081234567890",
-			Gender:            1,
-			DisabilityType:    1,
-			Birthdate:         "2001-01-01",
-			EmailVerification: time.Now(),
-			Created_at:        time.Now(),
-			Updated_at:        time.Now(),
+		_, err = userController.UserService.RegisterUser(ctx, model.UserRegisterResponse{
+			Name:           "test",
+			Username:       "test",
+			Email:          "test123@gmail.com",
+			Password:       "Test123",
+			Role:           1,
+			Phone:          "081234567890",
+			Gender:         1,
+			DisabilityType: 1,
+			Birthdate:      "2001-01-01",
 		})
 		if err != nil {
 			panic(err)
