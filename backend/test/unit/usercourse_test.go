@@ -12,10 +12,6 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
-	"github.com/rg-km/final-project-engineering-12/backend/controller"
-	"github.com/rg-km/final-project-engineering-12/backend/model"
-	"github.com/rg-km/final-project-engineering-12/backend/repository"
-	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 )
 
@@ -23,62 +19,45 @@ var _ = Describe("User Course API", func() {
 	var (
 		server   *gin.Engine
 		tokenJWT string
-		ctx      *gin.Context
 	)
 
 	BeforeEach(func() {
 		configuration := config.New("../../.env.test")
 
-		db, err := setup.SuiteSetup(configuration)
+		_, err := setup.SuiteSetup(configuration)
 		if err != nil {
 			panic(err)
 		}
 
 		router := setup.ModuleSetup(configuration)
-		database := db
 		server = router
 
 		// User Authentication
 		// Create user
-		tx, _ := database.Begin()
-		userRepository := repository.NewUserRepository()
-		userService := service.NewUserService(&userRepository, database)
-		userController := controller.NewUserController(&userService)
-
-		_, err = userController.UserService.RegisterUser(ctx, model.UserRegisterResponse{
-			Name:           "test",
-			Username:       "test",
-			Email:          "test123@gmail.com",
-			Password:       "Test123",
-			Role:           1,
-			Phone:          "081234567890",
-			Gender:         1,
-			DisabilityType: 1,
-			Birthdate:      "2001-01-01",
-		})
-		if err != nil {
-			panic(err)
-		}
-		err = tx.Commit()
-		if err != nil {
-			panic(err)
-		}
-
-		// Login user
-		requestBody := strings.NewReader(`{"email": "test123@gmail.com","password": "Test123"}`)
-		request := httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
+		userData, _ := json.Marshal(user[1])
+		requestBody := strings.NewReader(string(userData))
+		request := httptest.NewRequest(http.MethodPost, "/api/users", requestBody)
 		request.Header.Add("Content-Type", "application/json")
 
 		writer := httptest.NewRecorder()
 		server.ServeHTTP(writer, request)
 
-		response := writer.Result()
+		//Login User
+		userLogin, _ := json.Marshal(login[1])
+		requestBodyLogin := strings.NewReader(string(userLogin))
+		requestLogin := httptest.NewRequest(http.MethodPost, "/api/users/login", requestBodyLogin)
+		request.Header.Add("Content-Type", "application/json")
 
-		body, _ := io.ReadAll(response.Body)
-		var responseBody map[string]string
-		_ = json.Unmarshal(body, &responseBody)
+		writerLogin := httptest.NewRecorder()
+		server.ServeHTTP(writerLogin, requestLogin)
 
-		tokenJWT = responseBody["token"]
+		responseLogin := writerLogin.Result()
+
+		bodyLogin, _ := io.ReadAll(responseLogin.Body)
+		var responseBodyLogin map[string]interface{}
+		_ = json.Unmarshal(bodyLogin, &responseBodyLogin)
+
+		tokenJWT = responseBodyLogin["token"].(string)
 		if tokenJWT == "" {
 			panic("Token is empty")
 		} else {
