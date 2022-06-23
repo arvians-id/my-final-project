@@ -1,7 +1,9 @@
 package unit_test
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -11,22 +13,51 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
+	"github.com/rg-km/final-project-engineering-12/backend/entity"
+	"github.com/rg-km/final-project-engineering-12/backend/repository"
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 )
 
 var _ = Describe("User Course API", func() {
 	var server *gin.Engine
+	var tokenJWT string
 
 	BeforeEach(func() {
 		configuration := config.New("../../.env.test")
 
-		_, err := setup.SuiteSetup(configuration)
+		database, err := setup.SuiteSetup(configuration)
 		if err != nil {
 			panic(err)
 		}
 
 		router := setup.ModuleSetup(configuration)
 		server = router
+
+		// User Authentication
+		// Create user
+		tx, _ := database.Begin()
+		userRepository := repository.NewUserRepository()
+		_ = userRepository.Register(context.Background(), tx, entity.Users{
+			Email:    "test@gmail.com",
+			Password: "Test123",
+		})
+		_ = tx.Commit()
+		// Login user
+		requestBody := strings.NewReader(`{"email": "test@gmail.com","password": "Test123"}`)
+		request := httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+
+		writer := httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		response := writer.Result()
+
+		body, _ := io.ReadAll(response.Body)
+		var responseBody map[string]interface{}
+		_ = json.Unmarshal(body, &responseBody)
+
+		tokenJWT = responseBody["token"].(map[string]interface{})["access_token"].(string)
+
 	})
 
 	AfterEach(func() {
@@ -50,6 +81,7 @@ var _ = Describe("User Course API", func() {
 				requestBody := strings.NewReader(`{"user_id": 10,"course_id": 1}`)
 				request := httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
 
 				writer := httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -58,6 +90,7 @@ var _ = Describe("User Course API", func() {
 				requestBody = strings.NewReader(`{"user_id": 10,"course_id": 2}`)
 				request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -66,6 +99,7 @@ var _ = Describe("User Course API", func() {
 				requestBody = strings.NewReader(`{"user_id": 11,"course_id": 1}`)
 				request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
@@ -73,6 +107,7 @@ var _ = Describe("User Course API", func() {
 				// find all user courses
 				request = httptest.NewRequest(http.MethodGet, "/api/usercourse", nil)
 				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokenJWT))
 
 				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
