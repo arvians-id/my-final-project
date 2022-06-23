@@ -8,7 +8,7 @@ Request:
 SUMMARY:
 - [Users](#users)                               (10/10) 100%
 - [User_course](#user-course)                   (5/5) 100%
-- [Courses](#courses)                           (6/6) 100%
+- [Courses](#courses)                           (7/7) 100%
 - [User_submissions](#user-submissions)         (4/4) 100%
 - [Module_submissions](#module-submissions)     (7/7) 100%
 - [Module_articles](#module-articles)           (7/7) 100%
@@ -679,6 +679,8 @@ Request:
 - Endpoint: ```/api/courses/{code}```
 - Header:
     - Accept: ```application/json```
+- Query Param:
+  - code : ```string```
 
 Response:
 ``` json
@@ -696,6 +698,8 @@ Request:
 - Endpoint: ```/api/courses/{code}/status```
 - Header:
   - Accept: ```application/json```
+- Query Param:
+  - code : ```string```
 - Body:
 ``` json
     {
@@ -711,7 +715,30 @@ Response:
         "data" : null
     }
 ```
+------------------------------
+## List Users In Course Detail
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/users```
+- Query Param:
+  - code : ```string```
+- Header:
+  - Accept: ```application/json```
 
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id_user": "integer", // primary key
+            "user_name": "string",
+            "user_username": "string",
+            "user_email": "string"
+        }
+    }
+```
 ## Module submissions
 ------------------------------
 ## Create Module_submissions

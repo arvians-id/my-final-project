@@ -13,7 +13,7 @@ import (
 type UserCourseService interface {
 	FindAll(ctx context.Context) ([]model.GetUserCourseResponse, error)
 	FindAllCourseByUserId(ctx context.Context, userId int) ([]model.GetStudentCourseResponse, error)
-	FindAllUserByCourseId(ctx context.Context, courseId int) ([]model.GetUserTeacherCourseResponse, error)
+	FindAllUserByCourseId(ctx context.Context, codeCourse string) ([]model.GetUserTeacherCourseResponse, error)
 	FindByUserCourse(ctx context.Context, code1 string, code2 string) (model.GetUserCourseResponse, error)
 	Create(ctx context.Context, request model.CreateUserCourseRequest) (model.GetUserCourseResponse, error)
 	Delete(ctx context.Context, code1 int, code2 int) error
@@ -77,14 +77,19 @@ func (service *usercourseService) FindAllCourseByUserId(ctx context.Context, cou
 	return usercourseResponses, nil
 }
 
-func (service *usercourseService) FindAllUserByCourseId(ctx context.Context, courseId int) ([]model.GetUserTeacherCourseResponse, error) {
+func (service *usercourseService) FindAllUserByCourseId(ctx context.Context, codeCourse string) ([]model.GetUserTeacherCourseResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return []model.GetUserTeacherCourseResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	courses, err := service.UserCourseRepository.FindAllUserByCourseId(ctx, tx, courseId)
+	course, err := service.CourseRepository.FindByCode(ctx, tx, codeCourse)
+	if err != nil {
+		return []model.GetUserTeacherCourseResponse{}, err
+	}
+
+	courses, err := service.UserCourseRepository.FindAllUserByCourseId(ctx, tx, course.Id)
 	if err != nil {
 		return []model.GetUserTeacherCourseResponse{}, err
 	}

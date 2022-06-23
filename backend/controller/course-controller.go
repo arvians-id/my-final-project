@@ -9,12 +9,14 @@ import (
 )
 
 type CourseController struct {
-	CourseService service.CourseService
+	CourseService     service.CourseService
+	UserCourseService service.UserCourseService
 }
 
-func NewCourseController(courseService *service.CourseService) *CourseController {
+func NewCourseController(courseService *service.CourseService, userCourseService *service.UserCourseService) *CourseController {
 	return &CourseController{
-		CourseService: *courseService,
+		CourseService:     *courseService,
+		UserCourseService: *userCourseService,
 	}
 }
 
@@ -23,6 +25,7 @@ func (controller *CourseController) Route(router *gin.Engine) *gin.Engine {
 	{
 		authorized.GET("", controller.FindAll)
 		authorized.GET("/:code", controller.FindById)
+		authorized.GET("/:code/users", controller.FindAllUserByCourseId)
 		authorized.POST("", controller.Create)
 		authorized.PATCH("/:code", controller.Update)
 		authorized.DELETE("/:code", controller.Delete)
@@ -123,6 +126,25 @@ func (controller *CourseController) Create(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "course successfully created",
 		Data:   course,
+	})
+}
+
+func (controller *CourseController) FindAllUserByCourseId(ctx *gin.Context) {
+	code := ctx.Param("code")
+	responses, err := controller.UserCourseService.FindAllUserByCourseId(ctx, code)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   responses,
 	})
 }
 
