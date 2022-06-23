@@ -15,17 +15,23 @@ type UserCourseService interface {
 	FindByUserCourse(ctx context.Context, code1 string, code2 string) (model.GetUserCourseResponse, error)
 	Create(ctx context.Context, request model.CreateUserCourseRequest) (model.GetUserCourseResponse, error)
 	Delete(ctx context.Context, code1 int, code2 int) error
+	FindAllStudentSubmissions(ctx context.Context, userId int, limit int) ([]model.GetStudentSubmissionsResponse, error)
+	FindAllTeacherSubmissions(ctx context.Context, codeCourse string, moduleSubmissionId int) ([]model.GetTeacherSubmissionsResponse, error)
 }
 
 type usercourseService struct {
-	UserCourseRepository repository.UserCourseRepository
-	DB                   *sql.DB
+	UserCourseRepository       repository.UserCourseRepository
+	CourseRepository           repository.CourseRepository
+	ModuleSubmissionRepository repository.ModuleSubmissionsRepository
+	DB                         *sql.DB
 }
 
-func NewUserCourseService(usercourseRepository *repository.UserCourseRepository, db *sql.DB) UserCourseService {
+func NewUserCourseService(usercourseRepository *repository.UserCourseRepository, courseRepository *repository.CourseRepository, moduleSubmissionRepository *repository.ModuleSubmissionsRepository, db *sql.DB) UserCourseService {
 	return &usercourseService{
-		UserCourseRepository: *usercourseRepository,
-		DB:                   db,
+		UserCourseRepository:       *usercourseRepository,
+		CourseRepository:           *courseRepository,
+		ModuleSubmissionRepository: *moduleSubmissionRepository,
+		DB:                         db,
 	}
 }
 
@@ -112,4 +118,55 @@ func (service *usercourseService) Delete(ctx context.Context, code1 int, code2 i
 	}
 
 	return nil
+}
+
+func (service *usercourseService) FindAllStudentSubmissions(ctx context.Context, userId int, limit int) ([]model.GetStudentSubmissionsResponse, error) {
+
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	studentSubmissions, err := service.UserCourseRepository.FindAllStudentSubmissions(ctx, tx, userId, limit)
+	if err != nil {
+		return nil, err
+	}
+
+	var studentSubmissionsResponses []model.GetStudentSubmissionsResponse
+	for _, studentSubmission := range studentSubmissions {
+		studentSubmissionsResponses = append(studentSubmissionsResponses, utils.ToStudentSubmissionsResponse(studentSubmission))
+	}
+
+	return studentSubmissionsResponses, nil
+}
+
+func (service *usercourseService) FindAllTeacherSubmissions(ctx context.Context, codeCourse string, moduleSubmissionId int) ([]model.GetTeacherSubmissionsResponse, error) {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	course, err := service.CourseRepository.FindByCode(ctx, tx, codeCourse)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = service.ModuleSubmissionRepository.FindByModId(ctx, tx, course.Id, moduleSubmissionId)
+	if err != nil {
+		return nil, err
+	}
+
+	teacherSubmissions, err := service.UserCourseRepository.FindAllTeacherSubmissions(ctx, tx, course.Id, moduleSubmissionId)
+	if err != nil {
+		return nil, err
+	}
+
+	var teacherSubmissionsResponses []model.GetTeacherSubmissionsResponse
+	for _, studentSubmission := range teacherSubmissions {
+		teacherSubmissionsResponses = append(teacherSubmissionsResponses, utils.ToTeacherSubmissionsResponse(studentSubmission))
+	}
+
+	return teacherSubmissionsResponses, nil
 }

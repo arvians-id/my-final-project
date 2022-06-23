@@ -13,6 +13,8 @@ type UserCourseRepository interface {
 	FindByUserCourse(ctx context.Context, tx *sql.Tx, id string, course string) (entity.UserCourse, error)
 	Create(ctx context.Context, tx *sql.Tx, usercourses entity.UserCourse) (entity.UserCourse, error)
 	Delete(ctx context.Context, tx *sql.Tx, code1 int, code2 int) error
+	FindAllStudentSubmissions(ctx context.Context, tx *sql.Tx, userId int, limit int) ([]entity.StudentSubmissions, error)
+	FindAllTeacherSubmissions(ctx context.Context, tx *sql.Tx, courseId int, moduleSubmissionId int) ([]entity.TeacherSubmissions, error)
 }
 
 type usercourseRepository struct {
@@ -98,4 +100,81 @@ func (repository *usercourseRepository) Delete(ctx context.Context, tx *sql.Tx, 
 	}
 
 	return nil
+}
+
+func (repository *usercourseRepository) FindAllStudentSubmissions(ctx context.Context, tx *sql.Tx, userId int, limit int) ([]entity.StudentSubmissions, error) {
+	query := `SELECT ms.id,c.name,ms.name,us.grade,us.file FROM user_course uc
+			  LEFT JOIN courses c on c.id = uc.course_id
+			  LEFT JOIN module_submissions ms on c.id = ms.course_id
+			  LEFT JOIN user_submissions us on ms.id = us.module_submission_id
+			  WHERE uc.user_id = ?
+			  ORDER BY us.file ASC
+			  LIMIT ?`
+	queryContext, err := tx.QueryContext(ctx, query, userId, limit)
+	if err != nil {
+		return nil, err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	var studentSubmissions []entity.StudentSubmissions
+	for queryContext.Next() {
+		var studentSubmission entity.StudentSubmissions
+		err := queryContext.Scan(
+			&studentSubmission.IdModuleSubmission,
+			&studentSubmission.CourseName,
+			&studentSubmission.ModuleSubmissionName,
+			&studentSubmission.Grade,
+			&studentSubmission.File,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		studentSubmissions = append(studentSubmissions, studentSubmission)
+	}
+
+	return studentSubmissions, nil
+}
+
+func (repository *usercourseRepository) FindAllTeacherSubmissions(ctx context.Context, tx *sql.Tx, courseId int, moduleSubmissionId int) ([]entity.TeacherSubmissions, error) {
+	query := `SELECT us.id,u.name,ms.name,us.grade,us.file FROM user_course uc
+			  LEFT JOIN users u on u.id = uc.user_id
+			  LEFT JOIN courses c on c.id = uc.course_id
+			  LEFT JOIN module_submissions ms on c.id = ms.course_id
+			  LEFT JOIN user_submissions us on u.id = us.user_id
+			  WHERE c.id = ? AND ms.id = ?`
+	queryContext, err := tx.QueryContext(ctx, query, courseId, moduleSubmissionId)
+	if err != nil {
+		return nil, err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	var teacherSubmissions []entity.TeacherSubmissions
+	for queryContext.Next() {
+		var studentSubmission entity.TeacherSubmissions
+		err := queryContext.Scan(
+			&studentSubmission.IdUserSubmission,
+			&studentSubmission.UserName,
+			&studentSubmission.ModuleSubmissionName,
+			&studentSubmission.Grade,
+			&studentSubmission.File,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		teacherSubmissions = append(teacherSubmissions, studentSubmission)
+	}
+
+	return teacherSubmissions, nil
 }
