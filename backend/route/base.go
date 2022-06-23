@@ -59,7 +59,7 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 
 	// UserCourse Setup
 	userCourseRepository := repository.NewUserCourseRepository()
-	userCourseService := service.NewUserCourseService(&userCourseRepository, database)
+	userCourseService := service.NewUserCourseService(&userCourseRepository, &courseRepository, &moduleSubmissionRepository, database)
 	userCourseController := controller.NewUserCourseController(&userCourseService)
 
 	// Question Setup
