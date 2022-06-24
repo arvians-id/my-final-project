@@ -237,7 +237,7 @@ var _ = Describe("Courses API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				// Find Course By Code
+				// Update Course By Code
 				requestBody = strings.NewReader(`{"name": "Matematika","class": "IPA-3","tools": "Pensil","about": "Belajar aljabar","description": "Siswa mampu membuat rumus sendiri"}`)
 				codeCourse := responseBody["data"].(map[string]interface{})["code_course"].(string)
 				request = httptest.NewRequest(http.MethodPatch, "/api/courses/"+codeCourse, requestBody)
@@ -284,7 +284,7 @@ var _ = Describe("Courses API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				// Find Course By Code
+				// Delete Course By Code
 				codeCourse := responseBody["data"].(map[string]interface{})["code_course"].(string)
 				request = httptest.NewRequest(http.MethodDelete, "/api/courses/"+codeCourse, nil)
 				request.Header.Add("Content-Type", "application/json")
@@ -323,7 +323,7 @@ var _ = Describe("Courses API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				// Find Course By Code
+				// Update Course By Code
 				codeCourse := responseBody["data"].(map[string]interface{})["code_course"].(string)
 				requestBody = strings.NewReader(`{"is_active": false}`)
 				request = httptest.NewRequest(http.MethodPatch, "/api/courses/"+codeCourse+"/status", requestBody)
