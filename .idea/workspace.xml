@@ -8,9 +8,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/courses_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/courses_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/usercourse_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/usercourse_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/unit/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/unit/user_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/unit/usercourse_test.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +36,9 @@
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/backend/test/integration/courses_test.go" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -58,7 +58,7 @@
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/backend/test/integration" />
+    <property name="last_opened_file_path" value="E:/Data Widdy/backend/backend" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -74,7 +74,7 @@
       <recent name="C:\laragon\www\final-project-engineering-12\docs" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)">
+  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)">
     <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
@@ -111,7 +111,7 @@
       <pattern value="^\QTestMainApi\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (4)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
       <root_directory value="$PROJECT_DIR$/backend" />
@@ -123,7 +123,7 @@
       <pattern value="^\QTestMainApi\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
       <root_directory value="$PROJECT_DIR$/backend" />
@@ -137,11 +137,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" />
-        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)" />
-        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (4)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" />
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" />
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" />
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)" />
       </list>
     </recent_temporary>
   </component>
