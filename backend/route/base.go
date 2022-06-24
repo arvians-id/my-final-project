@@ -59,6 +59,8 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	moduleSubmissionController := controller.NewModuleSubmissionsController(&moduleSubmissionService, &userCourseService)
 	// ---  Course Setup
 	courseController := controller.NewCourseController(&courseService, &userCourseService)
+	// ---  User Setup
+	userRepository := repository.NewUserRepository()
 
 	// Question Setup
 	questionRepository := repository.NewQuestionRepository()
@@ -70,12 +72,11 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	answerService := service.NewAnswerService(&answerRepository, &questionRepository, database)
 	answerController := controller.NewAnswerController(&answerService)
 
-	// Email Verification Setup :=
+	// Email Verification Setup
 	emailVerificationRepository := repository.NewEmailVerificationRepository()
-	emailVerificationService := service.NewEmailService()
+	emailVerificationService := service.NewEmailService(&emailVerificationRepository, &userRepository, database)
 
 	// User Setup
-	userRepository := repository.NewUserRepository()
 	userService := service.NewUserService(&userRepository, database, &emailVerificationRepository)
 	userController := controller.NewUserController(&userService, &userCourseService, &emailVerificationService)
 

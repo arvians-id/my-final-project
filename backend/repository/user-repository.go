@@ -3,7 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
@@ -19,6 +21,8 @@ type UserRepository interface {
 	GetLastInsertUser(ctx context.Context, tx *sql.Tx) (entity.Users, error)
 	Delete(ctx context.Context, tx *sql.Tx, id int) error
 	Update(ctx context.Context, tx *sql.Tx, user entity.Users) error
+	CheckUserByEmail(ctx context.Context, tx *sql.Tx, email string) error
+	UpdateVerifiedAt(ctx context.Context, tx *sql.Tx, timeVerifiedAt time.Time, email string) error
 }
 
 type userRepository struct {
@@ -177,6 +181,36 @@ func (repository *userRepository) Delete(ctx context.Context, tx *sql.Tx, id int
 
 	_, err = tx.ExecContext(ctx, "DELETE FROM user_details WHERE user_id = ?", id)
 
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (repository *userRepository) CheckUserByEmail(ctx context.Context, tx *sql.Tx, email string) error {
+	query := "SELECT * FROM users WHERE email = ?"
+	queryContext, err := tx.QueryContext(ctx, query, email)
+	if err != nil {
+		return err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	if queryContext.Next() {
+		return nil
+	}
+
+	return errors.New("the user with the email was not found")
+}
+
+func (repository *userRepository) UpdateVerifiedAt(ctx context.Context, tx *sql.Tx, timeVerifiedAt time.Time, email string) error {
+	query := "UPDATE users SET email_verification = ? WHERE email = ?"
+	_, err := tx.ExecContext(ctx, query, timeVerifiedAt, email)
 	if err != nil {
 		return err
 	}

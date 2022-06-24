@@ -22,12 +22,13 @@ func NewEmailVerificationRepository() EmailVerificationRepository {
 	return &emailVerificationRepository{}
 }
 
-func (repository *emailVerificationRepository) FindByEmailAndSignature(ctx context.Context, tx *sql.Tx, verif entity.EmailVerification) (entity.EmailVerification, error) {
+func (repository *emailVerificationRepository) FindByEmailAndSignature(ctx context.Context, tx *sql.Tx, verification entity.EmailVerification) (entity.EmailVerification, error) {
 	query := "SELECT * FROM email_verifications WHERE email = ? AND signature = ?"
-	rows, err := tx.QueryContext(ctx, query, verif.Email, verif.Signature)
+	rows, err := tx.QueryContext(ctx, query, verification.Email, verification.Signature)
 	if err != nil {
 		return entity.EmailVerification{}, err
 	}
+
 	defer func(rows *sql.Rows) {
 		err := rows.Close()
 		if err != nil {
@@ -37,7 +38,7 @@ func (repository *emailVerificationRepository) FindByEmailAndSignature(ctx conte
 
 	var userRequest entity.EmailVerification
 	if rows.Next() {
-		err := rows.Scan(&userRequest.Email, &userRequest.Signature, &userRequest.Expired)
+		err := rows.Scan(&userRequest.Id, &userRequest.Email, &userRequest.Signature, &userRequest.Expired)
 		if err != nil {
 			return entity.EmailVerification{}, err
 		}
@@ -63,7 +64,7 @@ func (repository *emailVerificationRepository) FindByEmail(ctx context.Context, 
 
 	var userRequest entity.EmailVerification
 	if rows.Next() {
-		err := rows.Scan(&userRequest.Email, &userRequest.Signature, &userRequest.Expired)
+		err := rows.Scan(&userRequest.Id, &userRequest.Email, &userRequest.Signature, &userRequest.Expired)
 		if err != nil {
 			return entity.EmailVerification{}, err
 		}

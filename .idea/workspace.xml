@@ -5,21 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/entity/email_verifications.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/repository/email-verifications-repository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/service/email-service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/ERD 06-24-2022.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/model/email-verification-model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.env.test" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env.test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/API-SPEC.md" beforeDir="false" afterPath="$PROJECT_DIR$/API-SPEC.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/controller/user-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/user-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/entity/email_verifications.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/entity/email_verifications.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/model/user-model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/user-model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/repository/email-verifications-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/email-verifications-repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/repository/user-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/user-repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/route/base.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/route/base.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/email-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/email-service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service/user-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/user-service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/ERD 21-06-2022.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/ERD 06-24-2022.png" beforeDir="false" afterPath="$PROJECT_DIR$/docs/ERD 06-24-2022.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,11 +80,11 @@
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\final-project-engineering-12\docs" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\unit" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\testing" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend" />
-      <recent name="C:\laragon\www\final-project-engineering-12\docs" />
     </key>
   </component>
   <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)">

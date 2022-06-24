@@ -6,7 +6,7 @@ Request:
     - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- [Users](#users)                               (10/10) 100%
+- [Users](#users)                               (11/11) 100%
 - [User_course](#user-course)                   (5/5) 100%
 - [Courses](#courses)                           (7/7) 100%
 - [User_submissions](#user-submissions)         (4/4) 100%
@@ -237,6 +237,26 @@ Response:
         "name_module_submission": "string",
         "grade": "integer",
         "file": "string"
+    }
+```
+------------------------------
+## Verify Email User
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/users/verify?email=&signature=```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - signature : ```string``` ```required```
+  - email : ```string``` ```required```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : null
     }
 ```
 ## User course

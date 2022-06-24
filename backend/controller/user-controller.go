@@ -51,6 +51,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))
 		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
 		api.GET("/users/submissions", middleware.UserHandler(controller.StudentSubmission))
+		api.GET("/users/verify", controller.VerifyEmail)
 	}
 	return router
 }
@@ -75,7 +76,7 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 	}
 
 	// Send email to user
-	message := fmt.Sprintf("visite this link to verification your email : http://localhost:8080/verification?signature=%v", signatureString)
+	message := fmt.Sprintf("visite this link to verification your email : http://localhost:8080/verification?email=%v&signature=%v", user.Email, signatureString)
 	err = controller.EmailService.SendEmailWithText(user.Email, message)
 	if err != nil {
 		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
@@ -513,6 +514,7 @@ func (controller *UserController) deleteUser(ctx *gin.Context) {
 		"Status": "Delete User Successfull",
 	})
 }
+
 func (controller *UserController) StudentSubmission(ctx *gin.Context) {
 	limit := -1
 	if ctx.Query("limit") != "" {
@@ -553,5 +555,29 @@ func (controller *UserController) StudentSubmission(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "OK",
 		Data:   studentSubmissions,
+	})
+}
+
+func (controller *UserController) VerifyEmail(ctx *gin.Context) {
+	var request model.GetEmailVerificationRequest
+	signature := ctx.Query("signature")
+	email := ctx.Query("email")
+
+	request.Email = email
+	request.Signature = signature
+	err := controller.EmailService.VerifyEmail(ctx, request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "email successfully verified",
+		Data:   nil,
 	})
 }
