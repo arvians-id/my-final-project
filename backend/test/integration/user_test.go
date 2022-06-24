@@ -225,4 +225,61 @@ var _ = Describe("User Course API", func() {
 			})
 		})
 	})
+	Describe("Get user status murid", func() {
+		When("Data is empty", func() {
+			It("Should return data", func() {
+				// Register User
+				userData, _ := json.Marshal(user[1])
+				requestBody := strings.NewReader(string(userData))
+				request := httptest.NewRequest(http.MethodPost, "/api/users", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				//Login User
+				userData, _ = json.Marshal(login[1])
+				requestBody = strings.NewReader(string(userData))
+				request = httptest.NewRequest(http.MethodPost, "/api/users/login", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				responseLogin := writer.Result()
+
+				body, _ := io.ReadAll(responseLogin.Body)
+				var responseBodyLogin map[string]interface{}
+				_ = json.Unmarshal(body, &responseBodyLogin)
+
+				token, ok = responseBodyLogin["token"].(string)
+				if !ok {
+					panic("Can't get token")
+				} else {
+					log.Println("Token: ", token)
+				}
+
+				Expect(int(responseBodyLogin["code"].(float64))).To(Equal(http.StatusOK))
+				Expect(responseBodyLogin["status"]).To(Equal("Login Successfull"))
+				Expect(responseBodyLogin["token"]).To(Equal(token))
+
+				// Get user status murid
+				request = httptest.NewRequest(http.MethodGet, "/api/userstatus", nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				responseGetUserStatus := writer.Result()
+
+				body, _ = io.ReadAll(responseGetUserStatus.Body)
+				var responseBodyGetUserStatus map[string]interface{}
+				_ = json.Unmarshal(body, &responseBodyGetUserStatus)
+
+				Expect(int(responseBodyGetUserStatus["code"].(float64))).To(Equal(http.StatusOK))
+				Expect(responseBodyGetUserStatus["status"]).To(Equal("User Already Logged In"))
+			})
+		})
+	})
 })
