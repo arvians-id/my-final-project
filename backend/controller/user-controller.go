@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"crypto/md5"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -15,12 +18,14 @@ import (
 type UserController struct {
 	UserService       service.UserServiceImplement
 	UserCourseService service.UserCourseService
+	EmailService      service.EmailService
 }
 
-func NewUserController(userService *service.UserServiceImplement, userCourseService *service.UserCourseService) UserController {
+func NewUserController(userService *service.UserServiceImplement, userCourseService *service.UserCourseService, emailService *service.EmailService) UserController {
 	return UserController{
 		UserService:       *userService,
 		UserCourseService: *userCourseService,
+		EmailService:      *emailService,
 	}
 }
 
@@ -58,9 +63,26 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 		return
 	}
 
-	responses, err := controller.UserService.RegisterUser(ctx, user)
+	// Data email verification
+	timestamp := time.Now().Add(1 * time.Hour).Unix()
+	timestampString := strconv.Itoa(int(timestamp))
+	signature := md5.Sum([]byte(user.Email + timestampString))
+	signatureString := fmt.Sprintf("%x", signature)
 
+	responses, err := controller.UserService.RegisterUser(ctx, user, signatureString, int(timestamp))
 	if err != nil {
+		return
+	}
+
+	// Send email to user
+	message := fmt.Sprintf("visite this link to verification your email : http://localhost:8080/verification?signature=%v", signatureString)
+	err = controller.EmailService.SendEmailWithText(user.Email, message)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   400,
+			Status: err.Error(),
+			Data:   nil,
+		})
 		return
 	}
 
@@ -69,7 +91,7 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusCreated, model.WebResponse{
 		Code:   201,
-		Status: "User Register Succesfully",
+		Status: "User Register Succesfully, Check your email",
 		Data:   responses,
 	})
 }

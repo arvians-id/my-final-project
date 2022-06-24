@@ -13,7 +13,7 @@ import (
 )
 
 type UserService interface {
-	RegisterUser(ctx context.Context, user model.UserRegisterResponse) (model.UserRegisterResponse, error)
+	RegisterUser(ctx context.Context, user model.UserRegisterResponse, signature string, expired int) (model.UserRegisterResponse, error)
 	UserLogin(ctx context.Context, user model.GetUserLogin) (model.UserLoginResponse, error)
 	UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error)
 	ListUser(ctx context.Context) ([]model.UserDetailResponse, error)
@@ -23,19 +23,21 @@ type UserService interface {
 }
 
 type UserServiceImplement struct {
-	userRepository repository.UserRepository
-	DB             *sql.DB
+	userRepository    repository.UserRepository
+	emailVerification repository.EmailVerificationRepository
+	DB                *sql.DB
 }
 
-func NewUserService(userRepository *repository.UserRepository, db *sql.DB) UserServiceImplement {
+func NewUserService(userRepository *repository.UserRepository, db *sql.DB, emailVerification *repository.EmailVerificationRepository) UserServiceImplement {
 	return UserServiceImplement{
-		userRepository: *userRepository,
-		DB:             db,
+		userRepository:    *userRepository,
+		emailVerification: *emailVerification,
+		DB:                db,
 	}
 }
 
 // RegisterUser is used to register new user
-func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.UserRegisterResponse) (model.UserRegisterResponse, error) {
+func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.UserRegisterResponse, signature string, expired int) (model.UserRegisterResponse, error) {
 	var response model.UserRegisterResponse
 
 	tx, err := service.DB.Begin()
@@ -65,7 +67,6 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 	})
 
 	temp, err := service.userRepository.GetLastInsertUser(ctx, tx)
-
 	if err != nil {
 		return model.UserRegisterResponse{}, err
 	}
@@ -84,6 +85,31 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 		EmailVerification: temp.EmailVerification,
 		Created_at:        temp.CreatedAt,
 		Updated_at:        temp.UpdatedAt,
+	}
+
+	// Send Email Verification
+	// Check If email is exists in table email verifications
+	rows, err := service.emailVerification.FindByEmail(ctx, tx, user.Email)
+	if err != nil {
+		return model.UserRegisterResponse{}, err
+	}
+	// Create new signature if not exist
+	emailVerification := entity.EmailVerification{
+		Email:     user.Email,
+		Signature: signature,
+		Expired:   expired,
+	}
+	if rows.Email == "" {
+		_, err = service.emailVerification.Create(ctx, tx, emailVerification)
+		if err != nil {
+			return model.UserRegisterResponse{}, err
+		}
+	} else {
+		// Update token if email is exist
+		_, err = service.emailVerification.Update(ctx, tx, emailVerification)
+		if err != nil {
+			return model.UserRegisterResponse{}, err
+		}
 	}
 
 	return response, nil

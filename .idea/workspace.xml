@@ -5,9 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/entity/email_verifications.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/repository/email-verifications-repository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/service/email-service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docs/ERD 06-24-2022.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/courses_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/courses_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.env" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.env.test" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.env.test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controller/user-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/user-controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/backend/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/route/base.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/route/base.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/user-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/user-service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/ERD 21-06-2022.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,12 +70,13 @@
     <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.watchers.conflict.with.on.save.actions.check.performed" value="true" />
-    <property name="last_opened_file_path" value="E:/Data Widdy/backend/backend" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\final-project-engineering-12\docs" />
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
     </key>
     <key name="MoveFile.RECENT_KEYS">

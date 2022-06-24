@@ -70,10 +70,14 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 	answerService := service.NewAnswerService(&answerRepository, &questionRepository, database)
 	answerController := controller.NewAnswerController(&answerService)
 
+	// Email Verification Setup :=
+	emailVerificationRepository := repository.NewEmailVerificationRepository()
+	emailVerificationService := service.NewEmailService()
+
 	// User Setup
 	userRepository := repository.NewUserRepository()
-	userService := service.NewUserService(&userRepository, database)
-	userController := controller.NewUserController(&userService, &userCourseService)
+	userService := service.NewUserService(&userRepository, database, &emailVerificationRepository)
+	userController := controller.NewUserController(&userService, &userCourseService, &emailVerificationService)
 
 	// Routing
 	userController.Route(router)
