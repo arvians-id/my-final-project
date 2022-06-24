@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e7b72752-493e-4ea4-95c1-996f1676a23d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/test/integration/module_articles_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/test/integration/module_submissions_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/courses_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/courses_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
