@@ -91,6 +91,29 @@ var _ = Describe("Question API", func() {
 		} else {
 			log.Println("Token: ", token)
 		}
+
+		questionData, _ := json.Marshal(createquestion)
+		requestBody = strings.NewReader(string(questionData))
+		request = httptest.NewRequest(http.MethodPost, "/api/questions/create", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+		request.Header.Set("Authorization", token)
+
+		writer = httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		response := writer.Result()
+
+		body, _ = io.ReadAll(response.Body)
+		var responseBody map[string]interface{}
+		_ = json.Unmarshal(body, &responseBody)
+
+		Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
+		Expect(responseBody["status"]).To(Equal("question successfully created"))
+		Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(1)))
+		Expect(responseBody["data"].(map[string]interface{})["module_id"]).To(Equal(float64(1)))
+		Expect(responseBody["data"].(map[string]interface{})["title"]).To(Equal("Algoritma Naive Bayes"))
+		Expect(responseBody["data"].(map[string]interface{})["tags"]).To(Equal("#NaiveBayes"))
+		Expect(responseBody["data"].(map[string]interface{})["description"]).To(Equal("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
 	})
 
 	AfterEach(func() {
@@ -106,53 +129,15 @@ var _ = Describe("Question API", func() {
 			panic(err)
 		}
 	})
-
-	Describe("Create Question", func() {
-		When("Question is empty", func() {
-			It("Should return data", func() {
-				questionData, _ := json.Marshal(createquestion)
-				requestBody := strings.NewReader(string(questionData))
-				request := httptest.NewRequest(http.MethodPost, "/api/questions/create", requestBody)
-				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", token)
-
-				writer := httptest.NewRecorder()
-				server.ServeHTTP(writer, request)
-
-				response := writer.Result()
-
-				body, _ := io.ReadAll(response.Body)
-				var responseBody map[string]interface{}
-				_ = json.Unmarshal(body, &responseBody)
-
-				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
-				Expect(responseBody["status"]).To(Equal("question successfully created"))
-				Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(1)))
-				Expect(responseBody["data"].(map[string]interface{})["module_id"]).To(Equal(float64(1)))
-				Expect(responseBody["data"].(map[string]interface{})["title"]).To(Equal("Algoritma Naive Bayes"))
-				Expect(responseBody["data"].(map[string]interface{})["tags"]).To(Equal("#NaiveBayes"))
-				Expect(responseBody["data"].(map[string]interface{})["description"]).To(Equal("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
-			})
-		})
-	})
 	Describe("Create Question and Get All", func() {
 		When("Question is empty", func() {
 			It("Should return data", func() {
-				questionData, _ := json.Marshal(createquestion)
-				requestBody := strings.NewReader(string(questionData))
-				request := httptest.NewRequest(http.MethodPost, "/api/questions/create", requestBody)
+				// Get All Question
+				request := httptest.NewRequest(http.MethodGet, "/api/questions/all", nil)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 
 				writer := httptest.NewRecorder()
-				server.ServeHTTP(writer, request)
-
-				// Get All Question
-				request = httptest.NewRequest(http.MethodGet, "/api/questions/all", nil)
-				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", token)
-
-				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
 
 				response := writer.Result()
@@ -169,21 +154,12 @@ var _ = Describe("Question API", func() {
 	Describe("Create Question and Get by user id", func() {
 		When("Question is empty", func() {
 			It("Should return data", func() {
-				questionData, _ := json.Marshal(createquestion)
-				requestBody := strings.NewReader(string(questionData))
-				request := httptest.NewRequest(http.MethodPost, "/api/questions/create", requestBody)
+				// Get All Question
+				request := httptest.NewRequest(http.MethodGet, "/api/questions/by-user/1", nil)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 
 				writer := httptest.NewRecorder()
-				server.ServeHTTP(writer, request)
-
-				// Get All Question
-				request = httptest.NewRequest(http.MethodGet, "/api/questions/by-user/1", nil)
-				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", token)
-
-				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
 
 				response := writer.Result()
@@ -199,32 +175,22 @@ var _ = Describe("Question API", func() {
 	})
 	Describe("Update Question", func() {
 		When("Question is empty", func() {
-			It("Should return error because user id is not match", func() {
+			It("Should return error", func() {
 				var updatequestion = model.UpdateQuestionRequest{
 					UserId:      1,
 					Title:       "Algoritma Naive Bayes",
-					ModuleId:    2,
+					ModuleId:    1,
 					Tags:        "#NaiveBayes",
 					Description: "labore et dolore magna aliqua.",
 				}
-
-				questionData, _ := json.Marshal(createquestion)
+				// Update Question
+				questionData, _ := json.Marshal(updatequestion)
 				requestBody := strings.NewReader(string(questionData))
-				request := httptest.NewRequest(http.MethodPost, "/api/questions/create", requestBody)
+				request := httptest.NewRequest(http.MethodPut, "/api/questions/update/1", requestBody)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 
 				writer := httptest.NewRecorder()
-				server.ServeHTTP(writer, request)
-
-				// Update Question
-				questionData, _ = json.Marshal(updatequestion)
-				requestBody = strings.NewReader(string(questionData))
-				request = httptest.NewRequest(http.MethodPut, "/api/questions/update/1", requestBody)
-				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", token)
-
-				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
 
 				response := writer.Result()
@@ -239,22 +205,13 @@ var _ = Describe("Question API", func() {
 	})
 	Describe("Delete Question", func() {
 		When("Question is empty", func() {
-			It("Should return error because user id is not match", func() {
-				questionData, _ := json.Marshal(createquestion)
-				requestBody := strings.NewReader(string(questionData))
-				request := httptest.NewRequest(http.MethodPost, "/api/questions/create", requestBody)
+			It("Should return error", func() {
+				// Delete Question
+				request := httptest.NewRequest(http.MethodDelete, "/api/questions/1", nil)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 
 				writer := httptest.NewRecorder()
-				server.ServeHTTP(writer, request)
-
-				// Delete Question
-				request = httptest.NewRequest(http.MethodDelete, "/api/questions/1", nil)
-				request.Header.Add("Content-Type", "application/json")
-				request.Header.Set("Authorization", token)
-
-				writer = httptest.NewRecorder()
 				server.ServeHTTP(writer, request)
 
 				response := writer.Result()
