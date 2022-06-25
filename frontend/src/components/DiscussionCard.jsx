@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Stack, Text, Spacer } from '@chakra-ui/react';
+import { Box, Flex, Stack, Text, Spacer, Button } from '@chakra-ui/react';
 
 export default function DiscussionCard({
   question,
@@ -25,6 +25,7 @@ export default function DiscussionCard({
           </Stack>
         </Flex>
         <Spacer />
+        <Button>Lihat Jawaban</Button>
       </Flex>
     </Box>
   );
