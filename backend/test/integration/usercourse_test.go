@@ -2,6 +2,7 @@ package integration
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -21,6 +22,7 @@ var _ = Describe("User Course API", func() {
 		server *gin.Engine
 		token  string
 		ok     bool
+		idUser int
 	)
 
 	BeforeEach(func() {
@@ -59,6 +61,14 @@ var _ = Describe("User Course API", func() {
 
 		writer := httptest.NewRecorder()
 		server.ServeHTTP(writer, request)
+
+		responseRegister := writer.Result()
+
+		bodyRegister, _ := io.ReadAll(responseRegister.Body)
+		var responseBodyRegister map[string]interface{}
+		_ = json.Unmarshal(bodyRegister, &responseBodyRegister)
+
+		idUser = int(responseBodyRegister["data"].(map[string]interface{})["id"].(float64))
 
 		//Login User
 		userData, _ = json.Marshal(login)
@@ -186,6 +196,62 @@ var _ = Describe("User Course API", func() {
 				_ = json.Unmarshal(Body, &responseBody)
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
+			})
+		})
+	})
+
+	Describe("Find All Course By User Logged In", func() {
+		When("Data is exists", func() {
+			It("should return all course when user is logged in", func() {
+				// Create Course
+				requestBody := strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
+				request := httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				Body, _ := io.ReadAll(response.Body)
+				var responseBody map[string]interface{}
+				_ = json.Unmarshal(Body, &responseBody)
+
+				// Create User Course
+				courseId := int(responseBody["data"].(map[string]interface{})["id"].(float64))
+				bodyCourse := fmt.Sprintf(`{"user_id": %v,"course_id": %v}`, idUser, courseId)
+				requestBody = strings.NewReader(bodyCourse)
+				request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				// Find All Course By User Logged In
+				request = httptest.NewRequest(http.MethodGet, "/api/usercourse/courses", nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response = writer.Result()
+
+				Body, _ = io.ReadAll(response.Body)
+				var responseBody1 map[string]interface{}
+				_ = json.Unmarshal(Body, &responseBody1)
+
+				items := responseBody1["data"].([]interface{})
+				itemResponse := items[0].(map[string]interface{})
+
+				Expect(int(responseBody1["code"].(float64))).To(Equal(http.StatusOK))
+				Expect(responseBody1["status"]).To(Equal("Get All User Course Successfull"))
+				Expect(int(itemResponse["id_course"].(float64))).To(Equal(int(responseBody["data"].(map[string]interface{})["id"].(float64))))
+				Expect(itemResponse["course_name"]).To(Equal(responseBody["data"].(map[string]interface{})["name"]))
+				Expect(itemResponse["course_code"]).To(Equal(responseBody["data"].(map[string]interface{})["code_course"]))
+				Expect(itemResponse["course_class"]).To(Equal(responseBody["data"].(map[string]interface{})["class"]))
 			})
 		})
 	})

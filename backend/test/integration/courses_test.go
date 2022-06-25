@@ -2,6 +2,7 @@ package integration
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -17,8 +18,12 @@ import (
 var _ = Describe("Courses API", func() {
 
 	var (
-		server *gin.Engine
-		token  string
+		server       *gin.Engine
+		token        string
+		idUser       int
+		nameUser     string
+		usernameUser string
+		emailUser    string
 	)
 
 	BeforeEach(func() {
@@ -57,6 +62,17 @@ var _ = Describe("Courses API", func() {
 
 		writer := httptest.NewRecorder()
 		server.ServeHTTP(writer, request)
+
+		responseRegister := writer.Result()
+
+		bodyRegister, _ := io.ReadAll(responseRegister.Body)
+		var responseBodyRegister map[string]interface{}
+		_ = json.Unmarshal(bodyRegister, &responseBodyRegister)
+
+		idUser = int(responseBodyRegister["data"].(map[string]interface{})["id"].(float64))
+		nameUser = responseBodyRegister["data"].(map[string]interface{})["name"].(string)
+		usernameUser = responseBodyRegister["data"].(map[string]interface{})["username"].(string)
+		emailUser = responseBodyRegister["data"].(map[string]interface{})["email"].(string)
 
 		//Login User
 		userData, _ = json.Marshal(login)
@@ -341,6 +357,63 @@ var _ = Describe("Courses API", func() {
 
 				Expect(int(responseBody1["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody1["status"]).To(Equal("course successfully updated"))
+			})
+		})
+	})
+
+	Describe("Find All User By Code Course", func() {
+		When("the data is exists", func() {
+			It("should return successfully show all user's submissions response", func() {
+				// Create Course
+				requestBody := strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
+				request := httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				body, _ := io.ReadAll(response.Body)
+				var responseBody map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody)
+
+				// Create User Course
+				idCourse := int(responseBody["data"].(map[string]interface{})["id"].(float64))
+				bodyUserCourse := fmt.Sprintf(`{"user_id": %v,"course_id": %v}`, idUser, idCourse)
+				requestBody = strings.NewReader(bodyUserCourse)
+				request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				// Find All User By Code Course
+				codeCourse := responseBody["data"].(map[string]interface{})["code_course"].(string)
+				request = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/courses/%v/users", codeCourse), nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response = writer.Result()
+
+				body, _ = io.ReadAll(response.Body)
+				var responseBody1 map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody1)
+
+				items := responseBody1["data"].([]interface{})
+				itemResponse := items[0].(map[string]interface{})
+
+				Expect(int(responseBody1["code"].(float64))).To(Equal(http.StatusOK))
+				Expect(responseBody1["status"]).To(Equal("OK"))
+				Expect(int(itemResponse["id_user"].(float64))).To(Equal(idUser))
+				Expect(itemResponse["user_name"]).To(Equal(nameUser))
+				Expect(itemResponse["user_username"]).To(Equal(usernameUser))
+				Expect(itemResponse["user_email"]).To(Equal(emailUser))
 			})
 		})
 	})
