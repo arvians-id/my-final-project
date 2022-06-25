@@ -31,6 +31,28 @@ func UserHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			return
 		}
 
+		tokenClaims := jwt.MapClaims{}
+		tkn, err := jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
+			return []byte("your secret api key"), nil
+		},
+		)
+		if err != nil {
+			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+				Code:   401,
+				Status: "Cannot parse token",
+			})
+			return
+		}
+
+		if !tkn.Valid {
+			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+				Code:   401,
+				Status: "Invalid token",
+			})
+			return
+		}
+
+		ctx.Set("id_user", tokenClaims["id"])
 		handler(ctx)
 	}
 }
@@ -42,7 +64,6 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
 				Status: "Token is required",
-				Data:   "",
 			})
 			return
 		}
@@ -59,7 +80,7 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 		}
 
 		tokenClaims := jwt.MapClaims{}
-		_, err = jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
+		tkn, err := jwt.ParseWithClaims(token, tokenClaims, func(token *jwt.Token) (interface{}, error) {
 			return []byte("your secret api key"), nil
 		},
 		)
@@ -67,7 +88,14 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
 				Status: "Cannot parse token",
-				Data:   "",
+			})
+			return
+		}
+
+		if !tkn.Valid {
+			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
+				Code:   401,
+				Status: "Invalid token",
 			})
 			return
 		}
@@ -76,11 +104,11 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
 				Status: "You are not admin",
-				Data:   "",
 			})
 			return
 		}
 
+		ctx.Set("id_user", tokenClaims["id"])
 		handler(ctx)
 	}
 }

@@ -2,47 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/rg-km/final-project-engineering-12/backend/config"
-
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/rg-km/final-project-engineering-12/backend/controller"
-	"github.com/rg-km/final-project-engineering-12/backend/repository"
-	"github.com/rg-km/final-project-engineering-12/backend/service"
+	"github.com/rg-km/final-project-engineering-12/backend/config"
+	"github.com/rg-km/final-project-engineering-12/backend/route"
 )
 
 func main() {
-	// Configuration
 	configuration := config.New()
-	router := gin.Default()
-	database := config.NewSQLite(configuration)
-
-	// Setup Proxies (optional)
-	// You can comment this section
-	err := router.SetTrustedProxies([]string{configuration.Get("APP_URL")})
-	if err != nil {
-		panic(err)
-	}
-
-	// User Setup
-	userRepository := repository.NewUserRepository(database)
-	userService := service.NewUserService(&userRepository)
-	userController := controller.NewUserController(&userService)
-
-	// Course Setup
-	courseRepository := repository.NewCourseRepository()
-	courseService := service.NewCourseService(&courseRepository, database)
-	courseController := controller.NewCourseController(&courseService)
-
-	// Routing
-	userController.Route(router)
-	courseController.Route(router)
-
+	initialized := route.NewInitializedServer(configuration)
 	// Run
-	PORT := fmt.Sprintf(":%v", configuration.Get("PORT"))
+	PORT := fmt.Sprintf(":%v", configuration.Get("APP_PORT"))
 	teenager(PORT)
 
-	err = router.Run(PORT)
+	err := initialized.Run(PORT)
 	if err != nil {
 		panic(err)
 	}
@@ -50,8 +22,6 @@ func main() {
 
 func teenager(port string) {
 	fmt.Print(`
-
-	
 ┏━━━━┓
 ┃┏┓┏┓┃
 ┗┛┃┃┣┻━┳━━┳━┓┏━━┳━━┳━━┳━┓
