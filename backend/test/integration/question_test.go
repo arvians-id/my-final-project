@@ -36,9 +36,9 @@ var _ = Describe("Question API", func() {
 		server = router
 
 		createquestion = model.CreateQuestionRequest{
-			UserId:      2,
+			UserId:      1,
 			Title:       "Algoritma Naive Bayes",
-			ModuleId:    2,
+			ModuleId:    1,
 			Tags:        "#NaiveBayes",
 			Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 		}
@@ -127,8 +127,8 @@ var _ = Describe("Question API", func() {
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody["status"]).To(Equal("question successfully created"))
-				Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(2)))
-				Expect(responseBody["data"].(map[string]interface{})["module_id"]).To(Equal(float64(2)))
+				Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(1)))
+				Expect(responseBody["data"].(map[string]interface{})["module_id"]).To(Equal(float64(1)))
 				Expect(responseBody["data"].(map[string]interface{})["title"]).To(Equal("Algoritma Naive Bayes"))
 				Expect(responseBody["data"].(map[string]interface{})["tags"]).To(Equal("#NaiveBayes"))
 				Expect(responseBody["data"].(map[string]interface{})["description"]).To(Equal("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
@@ -220,7 +220,7 @@ var _ = Describe("Question API", func() {
 				// Update Question
 				questionData, _ = json.Marshal(updatequestion)
 				requestBody = strings.NewReader(string(questionData))
-				request = httptest.NewRequest(http.MethodPut, "/api/questions/update/2", requestBody)
+				request = httptest.NewRequest(http.MethodPut, "/api/questions/update/1", requestBody)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 
@@ -250,7 +250,7 @@ var _ = Describe("Question API", func() {
 				server.ServeHTTP(writer, request)
 
 				// Delete Question
-				request = httptest.NewRequest(http.MethodDelete, "/api/questions/2", nil)
+				request = httptest.NewRequest(http.MethodDelete, "/api/questions/1", nil)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 

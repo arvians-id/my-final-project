@@ -16,12 +16,13 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 )
 
-var _ = Describe("User Course API", func() {
+var _ = Describe("Answer API", func() {
 
 	var (
 		server *gin.Engine
 		token  string
 		ok     bool
+		answer model.CreateAnswerRequest
 	)
 
 	BeforeEach(func() {
@@ -35,15 +36,21 @@ var _ = Describe("User Course API", func() {
 		router := setup.ModuleSetup(configuration)
 		server = router
 
+		answer = model.CreateAnswerRequest{
+			QuestionId:  2,
+			UserId:      2,
+			Description: "test",
+		}
+
 		var user = model.UserRegisterResponse{
 			Name:           "akuntest",
 			Username:       "akuntest",
 			Email:          "akuntest@gmail.com",
 			Password:       "123456ll",
-			Role:           1,
+			Role:           2,
 			Phone:          "085156789011",
-			Gender:         1,
-			DisabilityType: 1,
+			Gender:         2,
+			DisabilityType: 2,
 			Birthdate:      "2002-04-01",
 		}
 
@@ -99,7 +106,26 @@ var _ = Describe("User Course API", func() {
 		}
 	})
 
-	Describe("", func() {
+	Describe("Create Answer", func() {
+		When("Answer is empty and question is empty", func() {
+			It("should return error", func() {
+				answerData, _ := json.Marshal(answer)
+				requestBody := strings.NewReader(string(answerData))
+				request := httptest.NewRequest(http.MethodPost, "/api/answers/create", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
 
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				body, _ := io.ReadAll(response.Body)
+				var responseBody map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody)
+
+				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+			})
+		})
 	})
 })
