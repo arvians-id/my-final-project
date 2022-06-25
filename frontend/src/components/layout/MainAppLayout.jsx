@@ -1,13 +1,9 @@
 import { Flex } from '@chakra-ui/layout';
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
-import Home from './pages/Home';
-import CoursePage from './pages/Course';
-import Submission from './pages/Submission';
+import Navbar from '../Navbar';
+import Sidebar from '../Sidebar';
 
-export default function Main() {
+export default function MainAppLayout({ children }) {
   return (
     <>
       <Navbar />
@@ -40,11 +36,7 @@ export default function Main() {
           left="80"
           marginTop={20}
         >
-          <Routes>
-            {/* <Route path="/course" element={<CoursePage />} /> */}
-            <Route path="submission/*" element={<Submission />} />
-            {/* <Route path="/" element={<Home />} /> */}
-          </Routes>
+          {children}
         </Flex>
         {/* Main */}
       </Flex>
