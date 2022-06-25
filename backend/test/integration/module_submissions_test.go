@@ -22,6 +22,9 @@ var _ = Describe("Module Submissions API", func() {
 		server     *gin.Engine
 		token      string
 		codeCourse string
+		idUser     int
+		idCourse   int
+		NameUser   string
 	)
 
 	BeforeEach(func() {
@@ -61,6 +64,15 @@ var _ = Describe("Module Submissions API", func() {
 		writer := httptest.NewRecorder()
 		server.ServeHTTP(writer, request)
 
+		responseRegister := writer.Result()
+
+		bodyRegister, _ := io.ReadAll(responseRegister.Body)
+		var responseBodyRegister map[string]interface{}
+		_ = json.Unmarshal(bodyRegister, &responseBodyRegister)
+
+		idUser = int(responseBodyRegister["data"].(map[string]interface{})["id"].(float64))
+		NameUser = responseBodyRegister["data"].(map[string]interface{})["name"].(string)
+
 		//Login User
 		userData, _ = json.Marshal(login)
 		requestBody = strings.NewReader(string(userData))
@@ -94,6 +106,7 @@ var _ = Describe("Module Submissions API", func() {
 		_ = json.Unmarshal(body, &responseBody)
 
 		codeCourse = responseBody["data"].(map[string]interface{})["code_course"].(string)
+		idCourse = int(responseBody["data"].(map[string]interface{})["id"].(float64))
 	})
 
 	AfterEach(func() {
@@ -407,6 +420,60 @@ var _ = Describe("Module Submissions API", func() {
 				Expect(responseBody2["status"]).To(Equal("OK"))
 				Expect(int(responseBody2["data"].(map[string]interface{})["id"].(float64))).To(Equal(int(responseBody["data"].(map[string]interface{})["id"].(float64))))
 				Expect(responseBody2["data"].(map[string]interface{})["code_course"]).To(Equal(codeCourse))
+			})
+		})
+	})
+
+	Describe("Find All User Submission in Teacher Module Submission Detail", func() {
+		When("the data is exists", func() {
+			It("should return successfully show all user's submissions response", func() {
+				// Create User Course
+				bodyUserCourse := fmt.Sprintf(`{"user_id": %v,"course_id": %v}`, idUser, idCourse)
+				requestBody := strings.NewReader(bodyUserCourse)
+				request := httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				// Create Module Submission
+				requestBody = strings.NewReader(`{"name": "tugas Olahraga Bang","description": "renang","deadline": "2022-06-21T15:21:38+07:00"}`)
+				request = httptest.NewRequest(http.MethodPost, "/api/courses/"+codeCourse+"/submissions", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				body, _ := io.ReadAll(response.Body)
+				var responseBody map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody)
+
+				// Find All User Submission in Teacher Module Submission Detail
+				id := int(responseBody["data"].(map[string]interface{})["id"].(float64))
+				request = httptest.NewRequest(http.MethodGet, fmt.Sprintf("/api/courses/%v/submissions/%v/get", codeCourse, id), nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer = httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response = writer.Result()
+
+				body, _ = io.ReadAll(response.Body)
+				var responseBody1 map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody1)
+
+				items := responseBody1["data"].([]interface{})
+				itemResponse := items[0].(map[string]interface{})
+
+				Expect(int(responseBody1["code"].(float64))).To(Equal(http.StatusOK))
+				Expect(responseBody1["status"]).To(Equal("OK"))
+				Expect(itemResponse["user_name"]).To(Equal(NameUser))
+				Expect(itemResponse["module_submission_name"]).To(Equal(responseBody["data"].(map[string]interface{})["name"]))
 			})
 		})
 	})
