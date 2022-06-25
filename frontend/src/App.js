@@ -15,6 +15,7 @@ import DashboardDataSiswa from './pages/DashboardDataSiswa';
 import HomeNonSiswa from './pages/HomeNonSiswa';
 import DashboardDataPengguna from './pages/DashboardDataPengguna';
 import CourseDetail from './pages/CourseDetail';
+import Answer from './pages/Answer';
 
 function App() {
   const user = useStore((state) => state.user);
@@ -46,11 +47,12 @@ function App() {
             <Route path="/register" element={<Navigate to="/" replace />} />
             <Route path="home" element={<Navigate to="/" replace />} />
             <Route path="course" element={<CoursePage replace />} />
-            <Route path="coursedetail" element={<CourseDetail />} />
+            <Route path="coursedetail" element={<CourseDetail replace />} />
             <Route path="submission" element={<Submission replace />} />
             <Route path="discussion" element={<Discussion replace />} />
             <Route path="profile" element={<Profile replace />} />
             <Route path="/" element={<Home replace />} />
+            <Route path="answer" element={<Answer replace />} />
           </Routes>
         ) : user.role === 'Guru' ? (
           <Routes>
