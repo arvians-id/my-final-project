@@ -105,6 +105,22 @@ var _ = Describe("Answer API", func() {
 			panic(err)
 		}
 	})
+	Describe("Get Answer", func() {
+		When("Answer is empty and question is empty", func() {
+			It("should return data", func() {
+				request := httptest.NewRequest(http.MethodGet, "/api/answers/all", nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
+			})
+		})
+	})
 
 	Describe("Create Answer", func() {
 		When("Answer is empty and question is empty", func() {
@@ -125,6 +141,65 @@ var _ = Describe("Answer API", func() {
 				_ = json.Unmarshal(body, &responseBody)
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+			})
+		})
+	})
+
+	Describe("Update Answer", func() {
+		When("Answer is empty and question is empty", func() {
+			It("should return error", func() {
+				answerData, _ := json.Marshal(answer)
+				requestBody := strings.NewReader(string(answerData))
+				request := httptest.NewRequest(http.MethodPut, "/api/answers/update/1", requestBody)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				body, _ := io.ReadAll(response.Body)
+				var responseBody map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody)
+
+				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+			})
+		})
+	})
+	Describe("Delete Answer", func() {
+		When("Answer is empty and question is empty", func() {
+			It("should return error", func() {
+				request := httptest.NewRequest(http.MethodDelete, "/api/answers/1", nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				body, _ := io.ReadAll(response.Body)
+				var responseBody map[string]interface{}
+				_ = json.Unmarshal(body, &responseBody)
+
+				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+			})
+		})
+	})
+	Describe("GetAnswers", func() {
+		When("Answer is empty and question is empty", func() {
+			It("should return data", func() {
+				request := httptest.NewRequest(http.MethodGet, "/api/answers/by-user/1", nil)
+				request.Header.Add("Content-Type", "application/json")
+				request.Header.Set("Authorization", token)
+
+				writer := httptest.NewRecorder()
+				server.ServeHTTP(writer, request)
+
+				response := writer.Result()
+
+				Expect(response.StatusCode).To(Equal(500))
 			})
 		})
 	})
