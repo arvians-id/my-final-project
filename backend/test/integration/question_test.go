@@ -148,6 +148,7 @@ var _ = Describe("Question API", func() {
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody["status"]).To(Equal("OK"))
+				Expect(responseBody["data"]).ShouldNot(BeNil())
 			})
 		})
 	})
@@ -170,6 +171,7 @@ var _ = Describe("Question API", func() {
 
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody["status"]).To(Equal("OK"))
+				Expect(responseBody["data"]).ShouldNot(BeNil())
 			})
 		})
 	})
@@ -199,7 +201,8 @@ var _ = Describe("Question API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusInternalServerError))
+				Expect(responseBody["data"]).Should(BeNil())
 			})
 		})
 	})
@@ -220,7 +223,8 @@ var _ = Describe("Question API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusInternalServerError))
+				Expect(responseBody["data"]).Should(BeNil())
 			})
 		})
 	})

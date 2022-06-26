@@ -170,7 +170,8 @@ var _ = Describe("Answer API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusInternalServerError))
+				Expect(responseBody["data"]).Should(BeNil())
 			})
 		})
 	})
@@ -199,7 +200,8 @@ var _ = Describe("Answer API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusInternalServerError))
+				Expect(responseBody["data"]).Should(BeNil())
 			})
 		})
 	})
@@ -219,7 +221,8 @@ var _ = Describe("Answer API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
-				Expect(int(responseBody["code"].(float64))).To(Equal(500))
+				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusInternalServerError))
+				Expect(responseBody["data"]).Should(BeNil())
 			})
 		})
 	})
@@ -235,7 +238,7 @@ var _ = Describe("Answer API", func() {
 
 				response := writer.Result()
 
-				Expect(response.StatusCode).To(Equal(200))
+				Expect(response.StatusCode).To(Equal(http.StatusOK))
 			})
 		})
 	})
