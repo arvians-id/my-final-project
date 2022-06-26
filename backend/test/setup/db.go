@@ -3,6 +3,7 @@ package setup
 import (
 	"database/sql"
 	"fmt"
+
 	"github.com/rg-km/final-project-engineering-12/backend/config"
 )
 

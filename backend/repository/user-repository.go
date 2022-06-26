@@ -31,11 +31,37 @@ func NewUserRepository() UserRepository {
 // Register is a function to register a new user to the database
 func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user entity.Users) error {
 	var id int
+	var email, username string
+	var emailArr, usernameArr []string
+
+	rowsCheck, err := tx.QueryContext(ctx, "SELECT email, username FROM users")
+
+	if err != nil {
+		return err
+	}
+
+	for rowsCheck.Next() {
+		rowsCheck.Scan(&email, &username)
+		emailArr = append(emailArr, email)
+		usernameArr = append(usernameArr, username)
+	}
+
+	for _, value := range usernameArr {
+		if value == user.Username {
+			return fmt.Errorf("username has been registered")
+		}
+	}
+
+	for _, value := range emailArr {
+		if value == user.Email {
+			return fmt.Errorf("email has been registered")
+		}
+	}
 
 	temp, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
 	user.Password = string(temp)
 
-	_, err := tx.ExecContext(ctx, "INSERT INTO users (name, username, email, password, role, email_verification, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", user.Name, user.Username, user.Email, user.Password, user.Role, user.EmailVerification, user.CreatedAt, user.UpdatedAt)
+	_, err = tx.ExecContext(ctx, "INSERT INTO users (name, username, email, password, role, email_verification, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", user.Name, user.Username, user.Email, user.Password, user.Role, user.EmailVerification, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		return err
