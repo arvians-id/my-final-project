@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="572c49c9-a3f6-4b4c-9c14-17bdddea45ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/middleware/middleware.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/middleware/middleware.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/repository/user-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/user-repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test/integration/userauth_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/userauth_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
