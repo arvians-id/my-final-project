@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"crypto/md5"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -15,12 +18,14 @@ import (
 type UserController struct {
 	UserService       service.UserServiceImplement
 	UserCourseService service.UserCourseService
+	EmailService      service.EmailService
 }
 
-func NewUserController(userService *service.UserServiceImplement, userCourseService *service.UserCourseService) UserController {
+func NewUserController(userService *service.UserServiceImplement, userCourseService *service.UserCourseService, emailService *service.EmailService) UserController {
 	return UserController{
 		UserService:       *userService,
 		UserCourseService: *userCourseService,
+		EmailService:      *emailService,
 	}
 }
 
@@ -46,6 +51,7 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))                 // done
 		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
 		api.GET("/users/submissions", middleware.UserHandler(controller.StudentSubmission))
+		api.GET("/users/verify", controller.VerifyEmail)
 	}
 	return router
 }
@@ -58,12 +64,29 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 		return
 	}
 
-	responses, err := controller.UserService.RegisterUser(ctx, user)
+	// Data email verification
+	timestamp := time.Now().Add(1 * time.Hour).Unix()
+	timestampString := strconv.Itoa(int(timestamp))
+	signature := md5.Sum([]byte(user.Email + timestampString))
+	signatureString := fmt.Sprintf("%x", signature)
 
+	responses, err := controller.UserService.RegisterUser(ctx, user, signatureString, int(timestamp))
 	if err != nil {
 		ctx.IndentedJSON(http.StatusUnauthorized, model.WebResponse{
 			Code:   401,
 			Status: err.Error(),
+		})
+		return
+	}
+
+	// Send email to user
+	message := fmt.Sprintf("visite this link to verification your email : http://localhost:8080/verification?email=%v&signature=%v", user.Email, signatureString)
+	err = controller.EmailService.SendEmailWithText(user.Email, message)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   400,
+			Status: err.Error(),
+			Data:   nil,
 		})
 		return
 	}
@@ -495,6 +518,7 @@ func (controller *UserController) deleteUser(ctx *gin.Context) {
 		Status: "Delete User Successfull",
 	})
 }
+
 func (controller *UserController) StudentSubmission(ctx *gin.Context) {
 	limit := -1
 	if ctx.Query("limit") != "" {
@@ -535,5 +559,29 @@ func (controller *UserController) StudentSubmission(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "OK",
 		Data:   studentSubmissions,
+	})
+}
+
+func (controller *UserController) VerifyEmail(ctx *gin.Context) {
+	var request model.GetEmailVerificationRequest
+	signature := ctx.Query("signature")
+	email := ctx.Query("email")
+
+	request.Email = email
+	request.Signature = signature
+	err := controller.EmailService.VerifyEmail(ctx, request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "email successfully verified",
+		Data:   nil,
 	})
 }
