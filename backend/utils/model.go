@@ -92,8 +92,24 @@ func ToUserTeacherCourseResponse(usercourse entity.UserTeacherCourse) model.GetU
 func ToQuestionResponse(question entity.Questions) model.GetQuestionResponse {
 	return model.GetQuestionResponse{
 		Id:          question.Id,
-		ModuleId:    question.ModuleId,
+		CourseId:    question.CourseId,
 		UserId:      question.UserId,
+		Title:       question.Title,
+		Tags:        question.Tags,
+		Description: question.Description,
+		CreatedAt:   question.CreatedAt,
+		UpdatedAt:   question.UpdatedAt,
+	}
+}
+
+func ToQuestionRelationResponse(question entity.QuestionCourse) model.GetQuestionRelationResponse {
+	return model.GetQuestionRelationResponse{
+		Id:          question.Id,
+		CourseId:    question.CourseId,
+		CourseName:  question.CourseName,
+		CourseClass: question.CourseClass,
+		UserId:      question.UserId,
+		UserName:    question.UserName,
 		Title:       question.Title,
 		Tags:        question.Tags,
 		Description: question.Description,

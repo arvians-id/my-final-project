@@ -22,6 +22,8 @@ var _ = Describe("Question API", func() {
 		token          string
 		ok             bool
 		createquestion model.CreateQuestionRequest
+		courseId       int
+		userId         int
 	)
 
 	BeforeEach(func() {
@@ -35,20 +37,12 @@ var _ = Describe("Question API", func() {
 		router := setup.ModuleSetup(configuration)
 		server = router
 
-		createquestion = model.CreateQuestionRequest{
-			UserId:      1,
-			Title:       "Algoritma Naive Bayes",
-			ModuleId:    1,
-			Tags:        "#NaiveBayes",
-			Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-		}
-
 		var user = model.UserRegisterResponse{
 			Name:           "akuntest",
 			Username:       "akuntest",
 			Email:          "akuntest@gmail.com",
 			Password:       "123456ll",
-			Role:           2,
+			Role:           1,
 			Phone:          "085156789011",
 			Gender:         1,
 			DisabilityType: 1,
@@ -69,6 +63,13 @@ var _ = Describe("Question API", func() {
 		writer := httptest.NewRecorder()
 		server.ServeHTTP(writer, request)
 
+		responseRegister := writer.Result()
+
+		body, _ := io.ReadAll(responseRegister.Body)
+		var responseBodyRegister map[string]interface{}
+		_ = json.Unmarshal(body, &responseBodyRegister)
+
+		userId = int(responseBodyRegister["data"].(map[string]interface{})["id"].(float64))
 		//Login User
 		userData, _ = json.Marshal(login)
 		requestBody = strings.NewReader(string(userData))
@@ -80,16 +81,39 @@ var _ = Describe("Question API", func() {
 
 		responseLogin := writer.Result()
 
-		body, _ := io.ReadAll(responseLogin.Body)
+		body, _ = io.ReadAll(responseLogin.Body)
 		var responseBodyLogin map[string]interface{}
 		_ = json.Unmarshal(body, &responseBodyLogin)
 
-		log.Println(responseBodyLogin["status"])
 		token, ok = responseBodyLogin["token"].(string)
 		if !ok {
 			panic("Can't get token")
 		} else {
 			log.Println("Token: ", token)
+		}
+
+		// Create Course
+		requestBody = strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
+		request = httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+		request.Header.Set("Authorization", token)
+
+		writer = httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
+
+		responseCourse := writer.Result()
+
+		body, _ = io.ReadAll(responseCourse.Body)
+		var responseBodyCourse map[string]interface{}
+		_ = json.Unmarshal(body, &responseBodyCourse)
+
+		courseId = int(responseBodyCourse["data"].(map[string]interface{})["id"].(float64))
+		createquestion = model.CreateQuestionRequest{
+			UserId:      userId,
+			Title:       "Algoritma Naive Bayes",
+			CourseId:    courseId,
+			Tags:        "#NaiveBayes",
+			Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 		}
 
 		questionData, _ := json.Marshal(createquestion)
@@ -109,8 +133,8 @@ var _ = Describe("Question API", func() {
 
 		Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 		Expect(responseBody["status"]).To(Equal("question successfully created"))
-		Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(1)))
-		Expect(responseBody["data"].(map[string]interface{})["module_id"]).To(Equal(float64(1)))
+		Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(userId)))
+		Expect(responseBody["data"].(map[string]interface{})["course_id"]).To(Equal(float64(courseId)))
 		Expect(responseBody["data"].(map[string]interface{})["title"]).To(Equal("Algoritma Naive Bayes"))
 		Expect(responseBody["data"].(map[string]interface{})["tags"]).To(Equal("#NaiveBayes"))
 		Expect(responseBody["data"].(map[string]interface{})["description"]).To(Equal("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
@@ -156,7 +180,7 @@ var _ = Describe("Question API", func() {
 		When("Question is empty", func() {
 			It("Should return data", func() {
 				// Get All Question
-				request := httptest.NewRequest(http.MethodGet, "/api/questions/by-user/1", nil)
+				request := httptest.NewRequest(http.MethodGet, "/api/questions/by-user/876", nil)
 				request.Header.Add("Content-Type", "application/json")
 				request.Header.Set("Authorization", token)
 
@@ -169,9 +193,10 @@ var _ = Describe("Question API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(body, &responseBody)
 
+				log.Println(responseBody["status"])
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody["status"]).To(Equal("OK"))
-				Expect(responseBody["data"]).ShouldNot(BeNil())
+				Expect(responseBody["data"]).To(BeNil())
 			})
 		})
 	})
@@ -179,9 +204,9 @@ var _ = Describe("Question API", func() {
 		When("Question is empty", func() {
 			It("Should return error", func() {
 				var updatequestion = model.UpdateQuestionRequest{
-					UserId:      1,
+					UserId:      userId,
 					Title:       "Algoritma Naive Bayes",
-					ModuleId:    1,
+					CourseId:    courseId,
 					Tags:        "#NaiveBayes",
 					Description: "labore et dolore magna aliqua.",
 				}

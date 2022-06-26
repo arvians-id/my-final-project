@@ -94,7 +94,7 @@ var _ = Describe("Answer API", func() {
 		createquestion = model.CreateQuestionRequest{
 			UserId:      1,
 			Title:       "Algoritma Naive Bayes",
-			ModuleId:    1,
+			CourseId:    1,
 			Tags:        "#NaiveBayes",
 			Description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
 		}
@@ -116,7 +116,7 @@ var _ = Describe("Answer API", func() {
 		Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 		Expect(responseBody["status"]).To(Equal("question successfully created"))
 		Expect(responseBody["data"].(map[string]interface{})["user_id"]).To(Equal(float64(1)))
-		Expect(responseBody["data"].(map[string]interface{})["module_id"]).To(Equal(float64(1)))
+		Expect(responseBody["data"].(map[string]interface{})["course_id"]).To(Equal(float64(1)))
 		Expect(responseBody["data"].(map[string]interface{})["title"]).To(Equal("Algoritma Naive Bayes"))
 		Expect(responseBody["data"].(map[string]interface{})["tags"]).To(Equal("#NaiveBayes"))
 		Expect(responseBody["data"].(map[string]interface{})["description"]).To(Equal("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."))
