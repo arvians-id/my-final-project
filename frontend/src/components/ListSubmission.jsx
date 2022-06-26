@@ -1,6 +1,6 @@
 import React from 'react';
-import { Flex, Text, Spacer, Badge, Button } from '@chakra-ui/react';
-export default function SubmissionCard({ name, status }) {
+import { Flex, Text, Spacer, Badge } from '@chakra-ui/react';
+export default function ListSubmission({ name, status }) {
   return (
     <Flex
       flexDirection="row"
@@ -16,7 +16,7 @@ export default function SubmissionCard({ name, status }) {
       </Text>
       <Spacer />
       {status ? (
-        <Badge colorScheme="green" px={3} py={1} borderRadius={5}>
+        <Badge colorScheme="green" px={3} py={3} borderRadius={5}>
           Sudah Terkumpul
         </Badge>
       ) : (
@@ -24,9 +24,6 @@ export default function SubmissionCard({ name, status }) {
           Belum Terkumpul
         </Badge>
       )}
-      <Button ml={4} size="xs" variant="solid">
-        Kumpul Disini
-      </Button>
     </Flex>
   );
 }
