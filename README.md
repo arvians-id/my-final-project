@@ -13,41 +13,40 @@
 All API must use this authentication
 Request:
 - Header:
-    - X-Api-Key: ``` "your secret api key" ```
+  - X-Api-Key: ``` "your secret api key" ```
 
 SUMMARY:
-- [Users](#users)                               (9/9) 100%
-- [User_course](#user-course)                   (4/4) 100%
-- [Courses](#courses)                           (5/5) 100%
-- [Modules](#modules)                           (5/5) 100% 
-- [Module_submissions](#module-submissions)     (5/5) 100%
-- [Module_articles](#module-articles)           (5/5) 100%
+- [Users](#users)                               (11/11) 100%
+- [User_course](#user-course)                   (5/5) 100%
+- [Courses](#courses)                           (7/7) 100%
+- [User_submissions](#user-submissions)         (4/4) 100%
+- [Module_submissions](#module-submissions)     (7/7) 100%
+- [Module_articles](#module-articles)           (7/7) 100%
 - [Answers](#answers)                           (5/5) 100%
 - [Questions](#questions)                       (5/5) 100%
 
 ## users
 ------------------------------
-## Register Users [x]
+## Create Users
 ------------------------------
 Request:
 - Method: ```POST ```
 - Endpoint: ```/api/users ```
 - Header:
-    - Content-Type: ``` application/json ```
-    - Accept: ``` application/json ```
+  - Content-Type: ``` application/json ```
+  - Accept: ``` application/json ```
 - Body:
 ``` json
     {
-        "name" : "string",
-        "username" : "string", // unique
-        "email" : "string", // unique
-        "password" : "string",
-        "role" : "integer", // enum(1,2)
-        "phone" : "string",
-        "gender" : "integer", // enum(1,2)
-        "type_of_disability" : "integer", // enum(0,1,2)
-        "birthdate" : "date"
-
+        "name": "string",
+        "username": "string",
+        "email": "string",
+        "password": "string",
+        "role": "integer", // enum (1, 2)
+        "phone": "string",
+        "gender": "integer", // enum (1, 2)
+        "type_of_disability": "integer", // enum (0, 1, 2)
+        "birthdate": "date"
     }
 ```
 Response:
@@ -56,158 +55,76 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "email" : "string", // unique
-            "password" : "string",
-            "role" : "integer", // enum(1,2)
-            "phone" : "string",
-            "gender" : "integer", // enum(1,2)
-            "type_of_disability" : "integer", // enum(0,1,2)
-            "birthdate" : "date",
-            "email_verified_at" : "timestamp", // timestamp
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "email": "string", // unique
+            "password": "string",
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "integer", // enum (1, 2)
+            "type_of_disability": "integer", // enum (0, 1, 2)
+            "birthdate": "string",
+            "email_verification": "timestamp",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         }
     }
 ```
 ------------------------------
-## Login Users [x]
-------------------------------
-Request:
-- Method: ```POST ```
-- Endpoint: ```/api/users/login ```
-- Header:
-    - Content-Type: ``` application/json ```
-    - Accept: ``` application/json ```
-- Body:
-``` json
-    {
-        "email" : "string",
-        "password" : "string",
-    }
-```
-Response:
-``` json
-    {   
-        "code" : "number",
-        "status" : "string",
-        "token" : "string",
-        "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "email" : "string", // unique
-            "role" : "integer", // enum(1,2)
-            "gender" : "integer", // enum(1,2)
-            "type_of_disability" : "integer", // enum(0,1,2)
-        }
-    }
-```
-------------------------------
-## Get Users Status [x]
-------------------------------
-Request:
-- Method: ```GET ```
-- Endpoint: ```/api/userstatus ```
-- Header:
-    - Content-Type: ``` application/json ```
-    - Accept: ``` application/json ```
-    - Authorization: ```{token} ```
-
-Response:
-``` json
-    {   
-        "code" : "number",
-        "status" : "string",
-        "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique,
-            "role" : "integer", // enum(1,2)
-            "phone" : "string",
-            "gender" : "integer", // enum(1,2)
-            "type_of_disability" : "integer", // enum(0,1,2)
-            "address": "string",
-            "birthdate" : "date",
-            "image" : "string",
-            "description": "string",
-        }
-    }
-```
-------------------------------
-## Logout Users [x]
-------------------------------
-Request:
-- Method: ```POST ```
-- Endpoint: ```/api/users/logout ```
-- Header:
-    - Content-Type: ``` application/json ```
-    - Accept: ``` application/json ```
-    - Authorization: ```{token} ```
-
-Response:
-``` json
-    {   
-        "code" : "number",
-        "status" : "string",
-    }
-```
-------------------------------
-## Get User By ID [x]
+## Get Users
 ------------------------------
 Request:
 - Method: ```GET```
 - Endpoint: ```/api/users/{id}```
 - Header:
-    - Accept: ```application/json```  
-    - Authorization: ```{token}```
-- Variable: ```id```
-
-Response:
+  - Accept: ```application/json```
+- Variable:
+  - id: ```integer```
+    Response:
 ``` json
     {
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "role" : "integer", // enum(1,2)
-            "phone" : "string",
-            "gender" : "integer", // enum(1,2)
-            "type_of_disability" : "integer", // enum(0,1,2)
-            "address" : "string",
-            "birthdate" : "date",
-            "image" : "string",
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "integer", // enum (1, 2)
+            "type_of_disability": "integer", // enum (0, 1, 2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
         }
     }
 ```
 ------------------------------
-## Update Users [x]
+## Update Users
 ------------------------------
 Request:
 - Method: ```PUT```
 - Endpoint: ```/api/users/{id}```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
-    - Authorization: ```{token}```
-- Variable: ```id```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+- Variable:
+  - id: ```integer```
 - Body:
 ``` json
     {
-        "name" : "string",
-        "username" : "string", // unique
-        "role" : "integer", // enum(1,2)
-        "phone" : "string",
-        "gender" : "integer", // enum(1,2)
-        "type_of_disability" : "integer", // enum(0,1,2)
-        "address" : "string",
-        "birthdate" : "date",
-        "image" : "string",
-        "description" : "string"
+        "name": "string",
+        "username": "string", // unique
+        "role": "integer", // enum (1, 2)
+        "phone": "string",
+        "gender": "integer", // enum (1, 2)
+        "type_of_disability": "integer", // enum (0, 1, 2)
+        "address": "string",
+        "birthdate": "string",
+        "image": "string",
+        "description": "string"
     }
 ```
 Response:
@@ -216,32 +133,32 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "name" : "string",
-            "username" : "string", // unique
-            "role" : "integer", // enum(1,2)
-            "phone" : "string",
-            "gender" : "integer", // enum(1,2)
-            "type_of_disability" : "integer", // enum(0,1,2)
-            "address" : "string",
-            "birthdate" : "date",
-            "image" : "string",
-            "description" : "string"
+            "id": "integer", // primary
+            "name": "string",
+            "username": "string", // unique
+            "role": "integer", // enum(1, 2)
+            "phone": "string",
+            "gender": "string", // enum (1, 2)
+            "type_of_disability": "integer", // enum(0, 1, 2)
+            "address": "string",
+            "birthdate": "string",
+            "image": "string",
+            "description": "string"
         }
     }
 ```
 ------------------------------
-## Update Users Role [x]
+## Update Users Role
 ------------------------------
 Request:
 - Method: ```PUT```
 - Endpoint: ```/api/users/roleupdate/{id}```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Variable:
-    - id: ```integer```
-Response:
+  - id: ```integer```
+    Response:
 ``` json
     {
         "code" : "number",
@@ -262,52 +179,94 @@ Response:
     }
 ```
 ------------------------------
-## List Users [x]
+## List Users
 ------------------------------
 Request:
 - Method: ```GET```
 - Endpoint: ```/api/users```
 - Header:
-    - Accept: ```application/json```
-    - Authorization: ```{token}```
-
-Response:
+  - Accept: ```application/json```
+- Query Param:
+  - size : ```number```
+  - page : ```number```
+    Response:
 ``` json
     {
         "code" : "number",
         "status" : "string",
         "data" : [
             {
-                "id" : "integer", // primary key
-                "name" : "string",
-                "username" : "string", // unique
-                "role" : "integer", // enum(1,2)
-                "phone" : "string",
-                "gender" : "integer", // enum(1,2)
-                "type_of_disability" : "integer", // enum(0,1,2)
-                "address" : "string",
-                "birthdate" : "date",
-                "image" : "string",
-                "description" : "string"
+                "id": "integer", // primary
+                "name": "string",
+                "username": "string", // unique
+                "role": "integer", // enum(1, 2)
+                "phone": "string",
+                "gender": "integer", // enum(1, 2)
+                "type_of_disability": "integer", // enum(0, 1, 2)
+                "address": "string",
+                "birthdate": "string",
+                "image": "string",
+                "description": "string"
             },
         ]
     }
 ```
 ------------------------------
-## Delete Users [x]
+## Delete Users
 ------------------------------
 Request:
 - Method: ```DELETE```
 - Endpoint: ```/api/users/{id}```
 - Header:
-    - Accept: ```application/json```
-    - Authorization: ```{token}```
-    
-Response:
+  - Accept: ```application/json```
+- Variable:
+  - id: ```integer```
+    Response:
 ``` json
     {
         "code" : "number",
         "status" : "string"
+    }
+```
+------------------------------
+## List User Submission
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/users/submissions```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - limit : ```number``` ```optional``` ```default = all list```
+
+Response:
+``` json
+    {
+        "id_module_submission": "integer",
+        "name_course": "string",
+        "name_module_submission": "string",
+        "grade": "integer",
+        "file": "string"
+    }
+```
+------------------------------
+## Verify Email User
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/users/verify?email=&signature=```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - signature : ```string``` ```required```
+  - email : ```string``` ```required```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : null
     }
 ```
 ## User course
@@ -316,12 +275,10 @@ Response:
 ------------------------------
 Request:
 - Method: ```POST```
-- Endpoint: ```/api/user_course```
+- Endpoint: ```/api/usercourse```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
-    - Authorization: ```{token} ```
-
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -345,11 +302,37 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/user_course/{user_id}/{course_id}```
+- Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
-    - Accept: ```application/json```
-    - Authorization: ```{token} ```
+  - Accept: ```application/json```
 
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "user_id" : "integer", // foreign key1
+            "course_id" : "integer" // foreign key2
+        }
+    }
+```
+------------------------------
+## Update User_course
+------------------------------
+Request:
+- Method: ```PUT```
+- Endpoint: ```/api/usercourse/{user_id}/{course_id}```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+- Body:
+``` json
+    {
+        "user_id" : "integer", // foreign key1
+        "course_id" : "integer" // foreign key2
+    }
+```
 Response:
 ``` json
     {
@@ -366,13 +349,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/user_course```
+- Endpoint: ```/api/usercourse```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
-    - Authorization: ```{token} ```
+  - size : ```number```
+  - page : ```number```
 
 Response:
 ``` json
@@ -392,10 +374,187 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/user_course/{user_id}/{course_id}```
+- Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
-    - Accept: ```application/json```
-    - Authorization: ```{token} ```
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string"
+    }
+```
+------------------------------
+## Find All Course By User Logged In
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/usercourse/courses```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id_course": "integer", // Primary Key
+            "course_name": "string",
+            "course_code": "string",
+            "course_class": "string"
+        }
+    }
+```
+## User details
+------------------------------
+## Create User_details
+------------------------------
+Request:
+- Method: ```POST```
+- Endpoint: ```/api/user_details```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+- Body:
+``` json
+    {
+        "user_id" : "integer", // foreign key1
+        "phone" : "string",
+        "gender" : "integer", // enum(1,2)
+        "type_of_disability" : "integer", // enum(1,2,3)
+        "address" : "string",
+        "birthdate" : "date", // date
+        "image" : "string",
+        "description" : "string"
+    }
+```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability" : "integer", // enum(1,2,3)
+            "address" : "string",
+            "birthdate" : "date", // date
+            "image" : "string",
+            "description" : "string"
+        }
+    }
+```
+------------------------------
+## Get User_details
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/user_details/{id}```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json    
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability" : "integer", // enum(1,2,3)
+            "address" : "string",
+            "birthdate" : "date", // date
+            "image" : "string",
+            "description" : "string"
+        }
+    }
+```
+------------------------------
+## Update User_details
+------------------------------
+Request:
+- Method: ```PUT```
+- Endpoint: ```/api/user_details/{id}```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+- Body:
+``` json
+    {
+        "user_id" : "integer", // foreign key1
+        "phone" : "string",
+        "gender" : "integer", // enum(1,2)
+        "type_of_disability" : "integer", // enum(1,2,3)
+        "address" : "string",
+        "birthdate" : "date", // date
+        "image" : "string",
+        "description" : "string"
+    }
+```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "phone" : "string",
+            "gender" : "integer", // enum(1,2)
+            "type_of_disability" : "integer", // enum(1,2,3)
+            "address" : "string",
+            "birthdate" : "date", // date
+            "image" : "string",
+            "description" : "string"
+        }
+    }
+```
+------------------------------
+## List User_details
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/user_details```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - size : ```number```
+  - page : ```number```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : [
+            {
+                "id" : "integer", // primary key
+                "user_id" : "integer", // foreign key1
+                "phone" : "string",
+                "gender" : "integer", // enum(1,2)
+                "type_of_disability" : "integer", // enum(1,2,3)
+                "address" : "string",
+                "birthdate" : "date", // date
+                "image" : "string",
+                "description" : "string"
+            },
+        ]
+    }
+```
+------------------------------
+## Delete User_details
+------------------------------
+Request:
+- Method: ```DELETE```
+- Endpoint: ```/api/user_details/{id}```
+- Header:
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -412,8 +571,8 @@ Request:
 - Method: ```POST```
 - Endpoint: ```/api/courses```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -437,6 +596,7 @@ Response:
             "class" : "string",
             "tools" : "string", // longtext
             "about" : "string", // longtext
+            "is_active" : "boolean",
             "description" : "string", // longtext
             "created_at" : "timestamp", // timestamp
             "updated_at" : "timestamp" // timestamp 
@@ -448,9 +608,9 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/courses/{id}```
+- Endpoint: ```/api/courses/{code}```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -465,6 +625,7 @@ Response:
             "tools" : "string", // longtext
             "about" : "string", // longtext
             "description" : "string", // longtext
+            "is_active" : "boolean",
             "created_at" : "timestamp", // timestamp
             "updated_at" : "timestamp" // timestamp 
         }
@@ -474,16 +635,15 @@ Response:
 ## Update Courses
 ------------------------------
 Request:
-- Method: ```PUT```
-- Endpoint: ```/api/courses/{id}```
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
         "name" : "string",
-        "code_course" : "string", // unique
         "class" : "string",
         "tools" : "string", // longtext
         "about" : "string", // longtext
@@ -496,13 +656,13 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
             "name" : "string",
             "code_course" : "string", // unique
             "class" : "string",
             "tools" : "string", // longtext
             "about" : "string", // longtext
             "description" : "string", // longtext
+            "is_active" : "boolean",
             "created_at" : "timestamp", // timestamp
             "updated_at" : "timestamp" // timestamp 
         }
@@ -513,12 +673,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/courses```
+- Endpoint: ```/api/courses?status=true&limit=1```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+  - status : ```boolean``` ```optional``` ```default = true```
+  - limit : ```number``` ```optional``` ```default = all list```
 
 Response:
 ``` json
@@ -534,6 +694,7 @@ Response:
                 "tools" : "string", // longtext
                 "about" : "string", // longtext
                 "description" : "string", // longtext
+                "is_active" : "boolean",
                 "created_at" : "timestamp", // timestamp
                 "updated_at" : "timestamp" // timestamp 
             },
@@ -545,159 +706,67 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/courses/{id}```
+- Endpoint: ```/api/courses/{code}```
 - Header:
-    - Accept: ```application/json```
-
-Response:
-``` json
-    {
-        "code" : "number",
-        "status" : "string"
-    }
-```
-## Modules
-------------------------------
-## Create Modules
-------------------------------
-Request:
-- Method: ```POST```
-- Endpoint: ```/api/modules```
-- Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
-- Body:
-``` json
-    {
-        "course_id" : "integer", // foreign key1
-        "name" : "string",
-        "is_locked" : "boolean",
-        "estimate" : "integer",
-        "deadline" : "timestamp", // timestamp
-        "grade" : "integer"
-    }
-```
-Response:
-``` json
-    {
-        "code" : "number",
-        "status" : "string",
-        "data" : {
-            "id" : "integer", // primary key
-            "course_id" : "integer", // foreign key1
-            "name" : "string",
-            "is_locked" : "boolean",
-            "estimate" : "integer",
-            "deadline" : "timestamp", // timestamp
-            "grade" : "integer"
-        }
-    }
-```
-------------------------------
-## Get Modules
-------------------------------
-Request:
-- Method: ```GET```
-- Endpoint: ```/api/modules/{id}```
-- Header:
-    - Accept: ```application/json```
-
-Response:
-``` json
-    {
-        "code" : "number",
-        "status" : "string",
-        "data" : {
-            "id" : "integer", // primary key
-            "course_id" : "integer", // foreign key1
-            "name" : "string",
-            "is_locked" : "boolean",
-            "estimate" : "integer",
-            "deadline" : "timestamp", // timestamp
-            "grade" : "integer"
-        }
-    }
-```
-------------------------------
-## Update Modules
-------------------------------
-Request:
-- Method: ```PUT```
-- Endpoint: ```/api/modules/{id}```
-- Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
-- Body:
-``` json
-    {
-        "course_id" : "integer", // foreign key1
-        "name" : "string",
-        "is_locked" : "boolean",
-        "estimate" : "integer",
-        "deadline" : "timestamp", // timestamp
-        "grade" : "integer"
-    }
-```
-Response:
-``` json
-    {
-        "code" : "number",
-        "status" : "string",
-        "data" : {
-            "id" : "integer", // primary key
-            "course_id" : "integer", // foreign key1
-            "name" : "string",
-            "is_locked" : "boolean",
-            "estimate" : "integer",
-            "deadline" : "timestamp", // timestamp
-            "grade" : "integer"
-        }
-    }
-```
-------------------------------
-## List Modules
-------------------------------
-Request:
-- Method: ```GET```
-- Endpoint: ```/api/modules```
-- Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+  - code : ```string```
 
 Response:
 ``` json
     {
         "code" : "number",
         "status" : "string",
-        "data" : [
-            {
-                "id" : "integer", // primary key
-                "course_id" : "integer", // foreign key1
-                "name" : "string",
-                "is_locked" : "boolean",
-                "estimate" : "integer",
-                "deadline" : "timestamp", // timestamp
-                "grade" : "integer"
-            },
-        ]
+        "data" : null
     }
 ```
 ------------------------------
-## Delete Modules
+## Deactivate Courses
 ------------------------------
 Request:
-- Method: ```DELETE```
-- Endpoint: ```/api/modules/{id}```
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}/status```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
+- Query Param:
+  - code : ```string```
+- Body:
+``` json
+    {
+        "is_active" : "boolean",
+    }
+```
 
 Response:
 ``` json
     {
         "code" : "number",
-        "status" : "string"
+        "status" : "string",
+        "data" : null
+    }
+```
+------------------------------
+## List Users In Course Detail
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/users```
+- Query Param:
+  - code : ```string```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id_user": "integer", // primary key
+            "user_name": "string",
+            "user_username": "string",
+            "user_email": "string"
+        }
     }
 ```
 ## Module submissions
@@ -706,10 +775,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```POST```
-- Endpoint: ```/api/module_submissions```
+- Endpoint: ```/api/courses/{code}/submissions```
+- Query Param:
+  - code : ```string```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -738,9 +809,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/module_submissions/{id}```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -760,11 +834,14 @@ Response:
 ## Update Module_submissions
 ------------------------------
 Request:
-- Method: ```PUT```
-- Endpoint: ```/api/module_submissions/{id}```
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -793,12 +870,14 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/module_submissions```
-- Header:
-    - Accept: ```application/json```
+- Endpoint: ```/api/courses/{code}/submissions```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+  - code : ```string```
+- Header:
+  - Accept: ```application/json```
+- Query Param:
+  - size : ```number```
+  - page : ```number```
 
 Response:
 ``` json
@@ -821,9 +900,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/module_submissions/{id}```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -832,21 +914,95 @@ Response:
         "status" : "string"
     }
 ```
+------------------------------
+## Next Module_submissions
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/next```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id": "integer", // primary key
+            "code_course": "string",
+        }
+    }
+```
+------------------------------
+## Previous Module_submissions
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/previous```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id": "integer", // primary key
+            "code_course": "string",
+        }
+    }
+```
+------------------------------
+## List User Module_submissions In Teacher
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/submissions/{submissionId}/get```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id_user_submission": "integer", // primary key
+            "user_name": "string",
+            "module_submission_name": "string",
+            "file": "string"
+        }
+    }
+```
 ## Module articles
 ------------------------------
 ## Create Module_articles
 ------------------------------
 Request:
 - Method: ```POST```
-- Endpoint: ```/api/module_articles```
+- Endpoint: ```/api/courses/{code}/articles```
+- Query Param:
+  - code : ```string```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
-        "module_id" : "integer", // foreign key1
-        "content" : "string" // longtext
+        "name": "string",
+        "content": "string",
+        "estimate": "integer"
     }
 ```
 Response:
@@ -855,9 +1011,11 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "content" : "string" // longtext
+            "id": "integer", // primary key
+            "course_id": "integer", // foreign key 
+            "name": "string",
+            "content": "string",
+            "estimate": "integer"
         }
     }
 ```
@@ -866,9 +1024,12 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/module_articles/{id}```
+- Endpoint: ```/api/courses/{code}/articles/{articleId}```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -876,9 +1037,11 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "content" : "string" // longtext
+            "id": "integer", // primary key
+            "course_id": "integer", // foreign key 
+            "name": "string",
+            "content": "string",
+            "estimate": "integer"
         }
     }
 ```
@@ -886,16 +1049,20 @@ Response:
 ## Update Module_articles
 ------------------------------
 Request:
-- Method: ```PUT```
-- Endpoint: ```/api/module_articles/{id}```
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/{code}/articles/{articleId}```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
-        "module_id" : "integer", // foreign key1
-        "content" : "string" // longtext
+        "name": "string",
+        "content": "string",
+        "estimate": "integer"
     }
 ```
 Response:
@@ -904,9 +1071,10 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "content" : "string" // longtext
+            "course_id": "integer", // foreign key 
+            "name": "string",
+            "content": "string",
+            "estimate": "integer"
         }
     }
 ```
@@ -915,12 +1083,11 @@ Response:
 ------------------------------
 Request:
 - Method: ```GET```
-- Endpoint: ```/api/module_articles```
-- Header:
-    - Accept: ```application/json```
+- Endpoint: ```/api/courses/{code}/articles```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+  - code : ```string```
+- Header:
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -930,8 +1097,10 @@ Response:
         "data" : [
             {
                 "id" : "integer", // primary key
-                "module_id" : "integer", // foreign key1
-                "content" : "string" // longtext
+                "course_id": "integer", // foreign key 
+                "name": "string",
+                "content": "string",
+                "estimate": "integer"
             },
         ]
     }
@@ -941,17 +1110,167 @@ Response:
 ------------------------------
 Request:
 - Method: ```DELETE```
-- Endpoint: ```/api/module_articles/{id}```
+- Endpoint: ```/api/courses/{code}/articles/{articleId}```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
     {
         "code" : "number",
-        "status" : "string"
+        "status" : "string",
+        "data": null
     }
 ```
+------------------------------
+## Next Module_articles
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/articles/{articleId}/next```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id": "integer", // primary key
+            "code_course": "string",
+        }
+    }
+```
+------------------------------
+## Previous Module_articles
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/{code}/articles/{articleId}/previous```
+- Query Param:
+  - code : ```string```
+  - articleId : ```number```
+- Header:
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data": {
+            "id": "integer", // primary key
+            "code_course": "string",
+        }
+    }
+```
+## User Submissions
+------------------------------
+## Submit File
+------------------------------
+Request:
+- Method: ```POST```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+- Header:
+  - Content-Type: ```multipart/form-data```
+- Body:
+``` json
+    {
+        "file" : "string",
+    }
+```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "module_submission_id" : "integer", //foreign key2
+            "file" : "string"
+        }
+    }
+```
+------------------------------
+## Update Grade
+------------------------------
+Request:
+- Method: ```PATCH```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit/:userSubmissionId```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+  - userSubmissionId : ```number```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+- Body:
+``` json
+    {
+        "grade" : "integer",
+    }
+```
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : null
+    }
+```
+------------------------------
+## Get User Submission
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit/:userSubmissionId```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+  - userSubmissionId : ```number```
+- Header:
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+            "id" : "integer", // primary key
+            "user_id" : "integer", // foreign key1
+            "module_submission_id" : "integer", //foreign key2
+            "file" : "string",
+            "grade" : "integer"
+        }
+    }
+```
+------------------------------
+## Download User Submission
+------------------------------
+Request:
+- Method: ```POST```
+- Endpoint: ```/api/courses/:code/submissions/:submissionId/user-submit/:userSubmissionId/download```
+- Query Param:
+  - code : ```string```
+  - submissionId : ```number```
+  - userSubmissionId : ```number```
+- Header:
+  - Content-Type: ```{mimetype}```
+  - Content-Disposition: ```{attachment; filename=file}```
+
 ## Answers
 ------------------------------
 ## Create Answers
@@ -960,8 +1279,8 @@ Request:
 - Method: ```POST```
 - Endpoint: ```/api/answers```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -992,7 +1311,7 @@ Request:
 - Method: ```GET```
 - Endpoint: ```/api/answers/{id}```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -1016,8 +1335,8 @@ Request:
 - Method: ```PUT```
 - Endpoint: ```/api/answers/{id}```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -1048,10 +1367,10 @@ Request:
 - Method: ```GET```
 - Endpoint: ```/api/answers```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+  - size : ```number```
+  - page : ```number```
 
 Response:
 ``` json
@@ -1077,7 +1396,7 @@ Request:
 - Method: ```DELETE```
 - Endpoint: ```/api/answers/{id}```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -1094,8 +1413,8 @@ Request:
 - Method: ```POST```
 - Endpoint: ```/api/questions```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -1130,7 +1449,7 @@ Request:
 - Method: ```GET```
 - Endpoint: ```/api/questions/{id}```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json
@@ -1156,8 +1475,8 @@ Request:
 - Method: ```PUT```
 - Endpoint: ```/api/questions/{id}```
 - Header:
-    - Content-Type: ```application/json```
-    - Accept: ```application/json```
+  - Content-Type: ```application/json```
+  - Accept: ```application/json```
 - Body:
 ``` json
     {
@@ -1192,10 +1511,10 @@ Request:
 - Method: ```GET```
 - Endpoint: ```/api/questions```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 - Query Param:
-    - size : ```number```
-    - page : ```number```
+  - size : ```number```
+  - page : ```number```
 
 Response:
 ``` json
@@ -1223,7 +1542,7 @@ Request:
 - Method: ```DELETE```
 - Endpoint: ```/api/questions/{id}```
 - Header:
-    - Accept: ```application/json```
+  - Accept: ```application/json```
 
 Response:
 ``` json

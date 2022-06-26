@@ -8,12 +8,12 @@ import (
 )
 
 type QuestionRepository interface {
-	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.Questions, error)
+	FindAll(ctx context.Context, tx *sql.Tx) ([]entity.QuestionCourse, error)
 	Create(ctx context.Context, tx *sql.Tx, question entity.Questions) (entity.Questions, error)
 	Delete(ctx context.Context, tx *sql.Tx, questionId int) error
-	FindById(ctx context.Context, tx *sql.Tx, questionId int) (entity.Questions, error)
+	FindById(ctx context.Context, tx *sql.Tx, questionId int) (entity.QuestionCourse, error)
 	Update(ctx context.Context, tx *sql.Tx, question entity.Questions, questionId int) (entity.Questions, error)
-	FindByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.Questions, error)
+	FindByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.QuestionCourse, error)
 }
 
 type questionRepository struct {
@@ -24,13 +24,13 @@ func NewQuestionRepository() QuestionRepository {
 }
 
 func (repository *questionRepository) Create(ctx context.Context, tx *sql.Tx, question entity.Questions) (entity.Questions, error) {
-	query := `INSERT INTO questions(user_id, module_id, title, tags, description, created_at, updated_at) VALUES(?,?,?,?,?,?,?)`
+	query := `INSERT INTO questions(user_id, course_id, title, tags, description, created_at, updated_at) VALUES(?,?,?,?,?,?,?)`
 
 	queryContext, err := tx.ExecContext(
 		ctx,
 		query,
 		question.UserId,
-		question.ModuleId,
+		question.CourseId,
 		question.Title,
 		question.Tags,
 		question.Description,
@@ -50,8 +50,11 @@ func (repository *questionRepository) Create(ctx context.Context, tx *sql.Tx, qu
 	return question, nil
 }
 
-func (repository *questionRepository) FindAll(ctx context.Context, tx *sql.Tx) ([]entity.Questions, error) {
-	query := `SELECT * FROM questions ORDER BY created_at DESC`
+func (repository *questionRepository) FindAll(ctx context.Context, tx *sql.Tx) ([]entity.QuestionCourse, error) {
+	query := `SELECT q.id,q.course_id,c.name,c.class,q.user_id,u.name,q.title,q.tags,q.description,q.created_at,q.updated_at FROM questions q
+			  LEFT JOIN courses c on c.id = q.course_id
+			  LEFT JOIN users u on u.id = q.user_id
+		      ORDER BY q.created_at DESC`
 	queryContext, err := tx.QueryContext(ctx, query)
 	if err != nil {
 		return nil, err
@@ -63,13 +66,16 @@ func (repository *questionRepository) FindAll(ctx context.Context, tx *sql.Tx) (
 		}
 	}(queryContext)
 
-	var questions []entity.Questions
+	var questions []entity.QuestionCourse
 	for queryContext.Next() {
-		var question entity.Questions
+		var question entity.QuestionCourse
 		err := queryContext.Scan(
 			&question.Id,
-			&question.ModuleId,
+			&question.CourseId,
+			&question.CourseName,
+			&question.CourseClass,
 			&question.UserId,
+			&question.UserName,
 			&question.Title,
 			&question.Tags,
 			&question.Description,
@@ -96,11 +102,15 @@ func (repository *questionRepository) Delete(ctx context.Context, tx *sql.Tx, qu
 	return nil
 }
 
-func (repository *questionRepository) FindById(ctx context.Context, tx *sql.Tx,  questionId int) (entity.Questions, error) {
-	query := `SELECT * FROM questions WHERE id = ?`
+func (repository *questionRepository) FindById(ctx context.Context, tx *sql.Tx, questionId int) (entity.QuestionCourse, error) {
+	query := `SELECT q.id,q.course_id,c.name,c.class,q.user_id,u.name,q.title,q.tags,q.description,q.created_at,q.updated_at FROM questions q
+			  LEFT JOIN courses c on c.id = q.course_id
+			  LEFT JOIN users u on u.id = q.user_id
+			  WHERE q.id = ?
+		      ORDER BY q.created_at DESC`
 	queryContext, err := tx.QueryContext(ctx, query, questionId)
 	if err != nil {
-		return entity.Questions{}, err
+		return entity.QuestionCourse{}, err
 	}
 	defer func(queryContext *sql.Rows) {
 		err := queryContext.Close()
@@ -109,12 +119,15 @@ func (repository *questionRepository) FindById(ctx context.Context, tx *sql.Tx, 
 		}
 	}(queryContext)
 
-	var question entity.Questions
+	var question entity.QuestionCourse
 	if queryContext.Next() {
 		err := queryContext.Scan(
 			&question.Id,
-			&question.ModuleId,
+			&question.CourseId,
+			&question.CourseName,
+			&question.CourseClass,
 			&question.UserId,
+			&question.UserName,
 			&question.Title,
 			&question.Tags,
 			&question.Description,
@@ -133,11 +146,11 @@ func (repository *questionRepository) FindById(ctx context.Context, tx *sql.Tx, 
 
 func (repository *questionRepository) Update(ctx context.Context, tx *sql.Tx, question entity.Questions, questionId int) (entity.Questions, error) {
 
-	query := `UPDATE questions SET module_id = ?, title = ?, tags = ?, description = ?, updated_at = ? WHERE id = ?`
+	query := `UPDATE questions SET course_id = ?, title = ?, tags = ?, description = ?, updated_at = ? WHERE id = ?`
 	_, err := tx.ExecContext(
 		ctx,
 		query,
-		question.ModuleId,
+		question.CourseId,
 		question.Title,
 		question.Tags,
 		question.Description,
@@ -151,11 +164,15 @@ func (repository *questionRepository) Update(ctx context.Context, tx *sql.Tx, qu
 	return question, nil
 }
 
-func (repository *questionRepository) FindByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.Questions, error) {
-	query := `SELECT * FROM questions WHERE user_id = ? ORDER BY created_at DESC`
+func (repository *questionRepository) FindByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.QuestionCourse, error) {
+	query := `SELECT q.id,q.course_id,c.name,c.class,q.user_id,u.name,q.title,q.tags,q.description,q.created_at,q.updated_at FROM questions q
+			  LEFT JOIN courses c on c.id = q.course_id
+			  LEFT JOIN users u on u.id = q.user_id
+			  WHERE q.user_id = ?
+		      ORDER BY q.created_at DESC`
 	queryContext, err := tx.QueryContext(ctx, query, userId)
 	if err != nil {
-		return []entity.Questions{}, err
+		return []entity.QuestionCourse{}, err
 	}
 	defer func(queryContext *sql.Rows) {
 		err := queryContext.Close()
@@ -164,13 +181,16 @@ func (repository *questionRepository) FindByUserId(ctx context.Context, tx *sql.
 		}
 	}(queryContext)
 
-	var questions []entity.Questions
+	var questions []entity.QuestionCourse
 	for queryContext.Next() {
-		var question entity.Questions
+		var question entity.QuestionCourse
 		err := queryContext.Scan(
 			&question.Id,
-			&question.ModuleId,
+			&question.CourseId,
+			&question.CourseName,
+			&question.CourseClass,
 			&question.UserId,
+			&question.UserName,
 			&question.Title,
 			&question.Tags,
 			&question.Description,

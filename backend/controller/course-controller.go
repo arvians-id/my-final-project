@@ -2,36 +2,70 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"net/http"
+	"strconv"
 )
 
 type CourseController struct {
-	CourseService service.CourseService
+	CourseService     service.CourseService
+	UserCourseService service.UserCourseService
 }
 
-func NewCourseController(courseService *service.CourseService) *CourseController {
+func NewCourseController(courseService *service.CourseService, userCourseService *service.UserCourseService) *CourseController {
 	return &CourseController{
-		CourseService: *courseService,
+		CourseService:     *courseService,
+		UserCourseService: *userCourseService,
 	}
 }
 
 func (controller *CourseController) Route(router *gin.Engine) *gin.Engine {
-	authorized := router.Group("/api")
+	authorized := router.Group("/api/courses")
 	{
-		authorized.GET("/courses", controller.FindAll)
-		authorized.GET("/courses/:code", controller.FindByCode)
-		authorized.POST("/courses", controller.Create)
-		authorized.PATCH("/courses/:code", controller.Update)
-		authorized.DELETE("/courses/:code", controller.Delete)
+		authorized.GET("", middleware.AdminHandler(controller.FindAll))
+		authorized.GET("/:code", middleware.UserHandler(controller.FindById))
+		authorized.GET("/:code/users", middleware.AdminHandler(controller.FindAllUserByCourseId))
+		authorized.POST("", middleware.AdminHandler(controller.Create))
+		authorized.PATCH("/:code", middleware.AdminHandler(controller.Update))
+		authorized.DELETE("/:code", middleware.AdminHandler(controller.Delete))
+		authorized.PATCH("/:code/status", middleware.AdminHandler(controller.ChangeStatus))
 	}
 
 	return router
 }
 
 func (controller *CourseController) FindAll(ctx *gin.Context) {
-	courses, err := controller.CourseService.FindAll(ctx.Request.Context())
+	status := true
+	if ctx.Query("status") != "" {
+		statuses, err := strconv.ParseBool(ctx.Query("status"))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+				Code:   http.StatusInternalServerError,
+				Status: err.Error(),
+				Data:   nil,
+			})
+			return
+		}
+		status = statuses
+	}
+
+	limit := -1
+	if ctx.Query("limit") != "" {
+		limits, err := strconv.Atoi(ctx.Query("limit"))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+				Code:   http.StatusInternalServerError,
+				Status: err.Error(),
+				Data:   nil,
+			})
+			return
+		}
+		limit = limits
+	}
+
+	courses, err := controller.CourseService.FindAll(ctx.Request.Context(), status, limit)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -48,9 +82,9 @@ func (controller *CourseController) FindAll(ctx *gin.Context) {
 	})
 }
 
-func (controller *CourseController) FindByCode(ctx *gin.Context) {
+func (controller *CourseController) FindById(ctx *gin.Context) {
 	code := ctx.Param("code")
-	course, err := controller.CourseService.FindByCourse(ctx.Request.Context(), code)
+	course, err := controller.CourseService.FindByCode(ctx.Request.Context(), code)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,
@@ -96,6 +130,25 @@ func (controller *CourseController) Create(ctx *gin.Context) {
 	})
 }
 
+func (controller *CourseController) FindAllUserByCourseId(ctx *gin.Context) {
+	code := ctx.Param("code")
+	responses, err := controller.UserCourseService.FindAllUserByCourseId(ctx, code)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   responses,
+	})
+}
+
 func (controller *CourseController) Update(ctx *gin.Context) {
 	var request model.UpdateCourseRequest
 	err := ctx.ShouldBindJSON(&request)
@@ -128,7 +181,6 @@ func (controller *CourseController) Update(ctx *gin.Context) {
 
 func (controller *CourseController) Delete(ctx *gin.Context) {
 	code := ctx.Param("code")
-
 	err := controller.CourseService.Delete(ctx.Request.Context(), code)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
@@ -142,6 +194,36 @@ func (controller *CourseController) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.WebResponse{
 		Code:   http.StatusOK,
 		Status: "course successfully deleted",
+		Data:   nil,
+	})
+}
+
+func (controller *CourseController) ChangeStatus(ctx *gin.Context) {
+	var request model.UpdateStatusCourseRequest
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, model.WebResponse{
+			Code:   http.StatusBadRequest,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	code := ctx.Param("code")
+	err = controller.CourseService.ChangeActiveCourse(ctx, request, code)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "course successfully updated",
 		Data:   nil,
 	})
 }

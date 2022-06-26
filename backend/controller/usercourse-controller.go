@@ -37,6 +37,7 @@ func (controller *UserCourseController) Route(router *gin.Engine) *gin.Engine {
 		api.POST("/usercourse", middleware.AdminHandler(controller.usercourseCreate))
 		api.GET("/usercourse/:id/:course", middleware.UserHandler(controller.getUserCourseByUserCourse))
 		api.GET("/usercourse", middleware.AdminHandler(controller.listUserCourse))
+		api.GET("/usercourse/courses", middleware.UserHandler(controller.FindAllCourseByUserId))
 		api.DELETE("/usercourse/:userid/:courseid", middleware.AdminHandler(controller.deleteUserCourse))
 	}
 	return router
@@ -179,5 +180,34 @@ func (controller *UserCourseController) deleteUserCourse(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, gin.H{
 		"code":   200,
 		"Status": "Delete User Course Successfull",
+	})
+}
+
+func (controller *UserCourseController) FindAllCourseByUserId(ctx *gin.Context) {
+	idUser, exists := ctx.Get("id_user")
+	if !exists {
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   http.StatusNotFound,
+			Status: "user not found",
+			Data:   nil,
+		})
+		return
+	}
+
+	id := int(idUser.(float64))
+	responses, err := controller.UserCourseService.FindAllCourseByUserId(ctx, id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Get All User Course Successfull",
+		Data:   responses,
 	})
 }
