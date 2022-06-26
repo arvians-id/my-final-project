@@ -2,29 +2,23 @@ import React from 'react';
 import { Box, Flex, Stack, VStack } from '@chakra-ui/react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import DiscussionCard from '../components/DiscussionCard';
+import QuestionCard from '../components/QuestionCard';
+import AnswerCard from '../components/AnswerCard';
 
-let discussionList = [
+let question = [
   {
     id: 1,
     question: 'Apa Saja Struktur Lapisan Bumi',
     module: 'Geografi',
     class: 'X IPS',
-    num: 'Jawaban 1',
+  },
+];
+
+let answerList = [
+  {
+    id: 1,
     answer:
-      'Crust (Kerak Bumi), Mantle (Mantel Bumi), Outer Core (Inti Luar), Inner Core / Inti Dalam',
-  },
-  {
-    id: 2,
-    question: 'Menentukan Asam Basa',
-    module: 'Kimia',
-    class: 'X IPA',
-  },
-  {
-    id: 3,
-    question: 'Menentukan Asam Basa',
-    module: 'Kimia',
-    class: 'X IPA',
+      '1. Crust (Kerak Bumi) Crust merupakan bagian terluar dari lapisan Bumi yang lebih tipis dibandingkan dengan lapisan lainnya. 2. Mantle (Mantel Bumi) Lapisan Bumi kedua adalah mantel yang merupakan lapisan paling tebal dengan ketebalan mencapai 2.900 km. lapisan ini juga disebut lapisan astenosfer karena fungsinya yaitu untuk melindungi inti Bumi. 3 .Outer Core (Inti Luar) Lapisan Bumi ini merupakan lapisan cair dengan ketebalan sekitar 2266 km yang terdiri dari besi dan nikel di atas inti dalam dan di bawah mantel. 4. Inner Core / Inti DalamSesuai dengan namanya, inti dalam merupakan lapisan Bumi paling dalam yang berbentuk bola padat berjari-jari sekitar 1.220 km.',
   },
 ];
 
@@ -67,7 +61,7 @@ export default function Discussion() {
               {/* Header */}
               <Box>
                 <Box as="h1" fontSize="2xl" fontWeight="semibold">
-                  Diskusi
+                  Jawaban
                 </Box>
                 <Box as="span" fontSize="l" fontWeight="semibold" color="grey">
                   Tanyakan Dan Temukan Jawaban pertanyaan Anda Bersama Teman
@@ -76,17 +70,22 @@ export default function Discussion() {
               </Box>
               <Box alignContent="flex-start">
                 <VStack spacing={8}>
-                  {discussionList.map((discussion, index) => {
+                  {question.map((discussion, index) => {
                     return (
-                      <DiscussionCard
+                      <QuestionCard
                         key={index}
                         question={discussion.question}
                         module={discussion.module}
                         moduleClass={discussion.class}
-                        answerNum={discussion.num}
-                        answer={discussion.answer}
                       />
                     );
+                  })}
+                </VStack>
+              </Box>
+              <Box alignContent="flex-start">
+                <VStack spacing={8}>
+                  {answerList.map((answer, index) => {
+                    return <AnswerCard key={index} answer={answer.answer} />;
                   })}
                 </VStack>
               </Box>
