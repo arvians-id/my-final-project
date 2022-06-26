@@ -150,6 +150,7 @@ Request:
 - Header:
   - Content-Type: ``` application/json ```
   - Accept: ``` application/json ```
+
 Response:
 ``` json
     {   
@@ -167,7 +168,8 @@ Request:
   - Accept: ```application/json```
 - Variable:
   - id: ```integer```
-    Response:
+
+Response:
 ``` json
     {
         "code" : "number",
@@ -244,7 +246,8 @@ Request:
   - Accept: ```application/json```
 - Variable:
   - id: ```integer```
-    Response:
+
+Response:
 ``` json
     {
         "code" : "number",
@@ -275,7 +278,8 @@ Request:
 - Query Param:
   - size : ```number```
   - page : ```number```
-    Response:
+
+Response:
 ``` json
     {
         "code" : "number",
@@ -307,7 +311,8 @@ Request:
   - Accept: ```application/json```
 - Variable:
   - id: ```integer```
-    Response:
+
+Response:
 ``` json
     {
         "code" : "number",
@@ -517,6 +522,7 @@ Request:
 - Query Param:
     - size : ```number```
     - page : ```number```
+    
 Response:
 ``` json
     {
