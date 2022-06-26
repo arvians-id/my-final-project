@@ -5,16 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="572c49c9-a3f6-4b4c-9c14-17bdddea45ce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/entity/questions.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/entity/questions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/model/question-model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/question-model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/repository/question-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/question-repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/question-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/question-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/answer_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/answer_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/question_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/question_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/model.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
