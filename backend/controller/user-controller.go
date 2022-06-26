@@ -36,14 +36,14 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("/users", controller.UserRegister)
-		api.POST("/users/login", controller.userLogin)
-		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
-		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
-		api.PUT("/users/roleupdate/:id", middleware.AdminHandler(controller.userRoleUpdate))
-		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))
-		api.GET("/users", middleware.AdminHandler(controller.listUser))
-		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))
+		api.POST("/users", controller.UserRegister)                                          // done
+		api.POST("/users/login", controller.userLogin)                                       // done
+		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))                // done
+		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))             // done
+		api.PUT("/users/roleupdate/:id", middleware.AdminHandler(controller.userRoleUpdate)) // done
+		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))                // done
+		api.GET("/users", middleware.AdminHandler(controller.listUser))                      // done
+		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))                 // done
 		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
 		api.GET("/users/submissions", middleware.UserHandler(controller.StudentSubmission))
 	}
@@ -61,6 +61,10 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 	responses, err := controller.UserService.RegisterUser(ctx, user)
 
 	if err != nil {
+		ctx.IndentedJSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: err.Error(),
+		})
 		return
 	}
 
@@ -69,7 +73,7 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusCreated, model.WebResponse{
 		Code:   201,
-		Status: "User Register Succesfully",
+		Status: "User Register Successfully",
 		Data:   responses,
 	})
 }
@@ -292,7 +296,7 @@ func (controller *UserController) userRoleUpdate(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
-		Status: "Update User Successfull",
+		Status: "Update User Role Successfull",
 		Data:   response,
 	})
 }
@@ -486,9 +490,9 @@ func (controller *UserController) deleteUser(ctx *gin.Context) {
 
 	ctx.Header("Accept", "application/json")
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{
-		"code":   200,
-		"Status": "Delete User Successfull",
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Delete User Successfull",
 	})
 }
 func (controller *UserController) StudentSubmission(ctx *gin.Context) {

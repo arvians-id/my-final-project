@@ -3,16 +3,17 @@ package integration
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"github.com/rg-km/final-project-engineering-12/backend/config"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
-	"io"
-	"net/http"
-	"net/http/httptest"
-	"strings"
 )
 
 var _ = Describe("Courses API", func() {

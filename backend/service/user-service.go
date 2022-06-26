@@ -49,7 +49,7 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 	user.Updated_at = time.Now()
 	user.EmailVerification = time.Now()
 
-	service.userRepository.Register(ctx, tx, entity.Users{
+	err = service.userRepository.Register(ctx, tx, entity.Users{
 		Name:              user.Name,
 		Username:          user.Username,
 		Email:             user.Email,
@@ -63,6 +63,10 @@ func (service *UserServiceImplement) RegisterUser(ctx *gin.Context, user model.U
 		CreatedAt:         user.Created_at,
 		UpdatedAt:         user.Updated_at,
 	})
+
+	if err != nil {
+		return model.UserRegisterResponse{}, err
+	}
 
 	temp, err := service.userRepository.GetLastInsertUser(ctx, tx)
 
@@ -207,10 +211,10 @@ func (service *UserServiceImplement) UpdateUser(ctx *gin.Context, id int, user m
 		Phone:          user.Phone,
 		Gender:         user.Gender,
 		DisabilityType: user.DisabilityType,
-		Address:        user.Address,
+		Address:        &user.Address,
 		Birthdate:      user.Birthdate,
-		Image:          user.Image,
-		Description:    user.Description,
+		Image:          &user.Image,
+		Description:    &user.Description,
 		UpdatedAt:      user.UpdateAt,
 	})
 
@@ -226,10 +230,10 @@ func (service *UserServiceImplement) UpdateUser(ctx *gin.Context, id int, user m
 		Phone:          user.Phone,
 		Gender:         user.Gender,
 		DisabilityType: user.DisabilityType,
-		Address:        user.Address,
+		Address:        &user.Address,
 		Birthdate:      user.Birthdate,
-		Image:          user.Image,
-		Description:    user.Description,
+		Image:          &user.Image,
+		Description:    &user.Description,
 	}
 
 	return response, nil

@@ -12,10 +12,10 @@ type Users struct {
 	Phone             string
 	Gender            int
 	DisabilityType    int
-	Address           string
+	Address           *string
 	Birthdate         string
-	Image             string
-	Description       string
+	Image             *string
+	Description       *string
 	EmailVerification time.Time
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
