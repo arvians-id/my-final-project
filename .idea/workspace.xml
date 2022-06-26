@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="572c49c9-a3f6-4b4c-9c14-17bdddea45ce" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +53,7 @@
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)">
+  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$" />
@@ -62,6 +64,30 @@
       <method v="2" />
     </configuration>
     <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="final-project-engineering-12" />
+      <working_directory value="$PROJECT_DIR$/backend/test/integration" />
+      <root_directory value="$PROJECT_DIR$/backend" />
+      <kind value="PACKAGE" />
+      <package value="github.com/rg-km/final-project-engineering-12/backend/test/integration" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestMainApi\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="final-project-engineering-12" />
+      <working_directory value="$PROJECT_DIR$/backend/test/integration" />
+      <root_directory value="$PROJECT_DIR$/backend" />
+      <kind value="PACKAGE" />
+      <package value="github.com/rg-km/final-project-engineering-12/backend/test/integration" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestMainApi\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
       <root_directory value="$PROJECT_DIR$/backend" />
@@ -97,6 +123,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)" />
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" />
       </list>
