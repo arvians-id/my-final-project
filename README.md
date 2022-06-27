@@ -1,4 +1,35 @@
-# Engineering 12 Final Project - Teenager
+
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/rg-km/final-project-engineering-12">
+    <img src="./frontend/src/image/Teenager.png" alt="Logo" width="200" height="270">
+  </a>
+
+  <h2 align="center">Teenager</h2>
+  <h2 align="center">Tempat Mengajar dan Berbagi Kecerdasan</h2>
+
+  <p align="center">
+    <strong>Teenager</strong> adalah sebuah Learning Management System(LMS) bagi yang mempunyai kekurangan dalam penglihatan dan pendengaran untuk tetap bisa melaksanakan pelajaran seperti orang normal. Anda akan dibantu dengan fitur-fitur yang mempermudah anda dalam menerima pelajaran dan mengerjakan tugas. Anda juga bisa menyampaikan pertanyaan dan melakukan konsultasi terkait kesulitan anda saat mempelajari materi atau mengerjakan tugas anda. Let's try with us.
+    <br />
+    <a href="https://docs.google.com/presentation/d/1Nv63b7pC7bpWNTzYF5R01pDb3pab2xCo0zCruKjGU7g/edit#slide=id.g1312c932fbf_2_222"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <!-- <a href="">View Demo</a>
+    ·
+    <a href="">Report Bug</a>
+    ·
+    <a href="">Request Feature</a> -->
+  </p>
+</p>
+
+## Table of Contents
+- [About the Project](#about-the-project)
+- [Built With](#built-with)
+- [Getting Started](#getting-started)
+- [Acknowledgements](#acknowledgements)
+- [API Specification](#api-specification)
+
 
 ## Collaborators
   1. Irfan Kurniawan - Product Manager - FE2110451 ([Irfan858](https://github.com/Irfan858))
