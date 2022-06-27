@@ -27,6 +27,11 @@
 - [API Specification](#api-specification)
 
 ## About the Project
+Project ini dibuat berdasarkan permasalahan yang ditemukan yaitu pengguna disabilitas kesulitan dalam memanagement pembelajaran yang ada pada LMS lainnya. Dengan adanya project ini, kita berharap dapat mengatasi kesulitan yang dihadapi oleh disabilitas terutama Tuna Netra dan Tuna Rungu dengan fasilitas yang ada pada LMS ini. LMS ini memiliki beberapa fitur, yaitu:
+- Mempelajari materi yang diberikan oleh guru melalui fitur course atau mata pelajaran
+- Mengerjakan tugas yang diberikan oleh guru melalui fitur assignment atau tugas
+- Menyampaikan pertanyaan dan konsultasi terkait kesulitan pembelajaran atau tugas yang diberikan oleh guru melalui fitur diskusi
+- Fitur disabilitas yang berupa Screen Reader
 
 ## Philosophy Logo
 Kami menggunakan logo yang menggambar kepala dengan wajah yang ceria dan bentuk buku berwana biru. Coba Lihat Detail filosofi logo kami lewat link di bawah ini.
@@ -43,12 +48,37 @@ Kami menggunakan logo yang menggambar kepala dengan wajah yang ceria dan bentuk 
 
 - Front End:
     - <a href="https://reactjs.org/"><strong>React</strong></a>
-    - <a href="https://www.scriptjs.in/index.html"><strong>ScriptJs</strong></a>
     - <a href="https://chakra-ui.com/"><strong>Chakra UI</strong></a>
     - <a href="https://docs.pmnd.rs/zustand/introduction"><strong>Zustand</strong></a>
     - <a href="https://axios-http.com/"><strong>Axios</strong></a>
 
 ## Getting Started
+1. Install Chrome Extension Screen Reader <br>
+<a href="https://chrome.google.com/webstore/detail/screen-reader/kgejglhpjiefppelpmljglcjbhoiplfn"><p>Click Here >></p></a>
+2. Clone the repo
+```sh
+git clone https://github.com/rg-km/final-project-engineering-12.git
+```
+3. Go to frontend
+```sh
+cd frontend
+```
+4. Install dependencies
+```sh
+install npm
+```
+5. Starting
+```sh
+npm start
+```
+6. Go to backend
+```sh
+cd ../backend
+```
+7. Run Go Main
+```sh
+go run main.go
+```
 
 ## Collaborators
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
