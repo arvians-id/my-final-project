@@ -19,13 +19,22 @@ import useStore from '../provider/zustand/store';
 let discussionList = [
   {
     id: 1,
-    title: 'Apa Saja Struktur Bumi',
+    question: 'Apa Saja Struktur Lapisan Bumi',
     module: 'Geografi',
     class: 'X IPS',
+    num: 'Jawaban 1',
+    answer:
+      'Crust (Kerak Bumi), Mantle (Mantel Bumi), Outer Core (Inti Luar), Inner Core / Inti Dalam',
   },
   {
     id: 2,
-    title: 'Menentukan Asam Basa',
+    question: 'Menentukan Asam Basa',
+    module: 'Kimia',
+    class: 'X IPA',
+  },
+  {
+    id: 3,
+    question: 'Menentukan Asam Basa',
     module: 'Kimia',
     class: 'X IPA',
   },
@@ -95,8 +104,8 @@ export default function Discussion() {
               )}
             </VStack>
           </Box>
-          {/* End Content */}
-        </Stack>
+          </Stack>
+        {/* End main */}
       </Box>
     </MainAppLayout>
   );
