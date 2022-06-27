@@ -33,12 +33,20 @@ Kami menggunakan logo yang menggambar kepala dengan wajah yang ceria dan bentuk 
 - <a href="https://docs.google.com/presentation/d/1K8uBD1yYwrpb8zCy_HI4Dj1CGIcJT7M1/edit#slide=id.p1"><strong>Explore the docs »</strong></a>
 
 ## Built With
-- <a href="https://go.dev/"><strong>Go</strong></a>
-- <a href="https://reactjs.org/"><strong>React</strong></a>
-- <a href="https://www.scriptjs.in/index.html"><strong>ScriptJs</strong></a>
-- <a href="https://chakra-ui.com/"><strong>Chakra UI</strong></a>
-- <a href="https://docs.pmnd.rs/zustand/introduction"><strong>Zustand</strong></a>
-- <a href="https://axios-http.com/"><strong>Axios</strong></a>
+- Back End:
+    - <a href="https://go.dev/"><strong>Go</strong></a>
+    - <a href="https://pkg.go.dev/github.com/dgrijalva/jwt-go@v3.2.0+incompatible"><strong>jwt-go</strong></a>
+    - <a href="https://pkg.go.dev/github.com/gin-contrib/cors@v1.3.1"><strong>gin</strong></a>
+    - <a href="https://pkg.go.dev/github.com/onsi/ginkgo@v1.16.5"><strong>ginkgo</strong></a>
+    - <a href="https://pkg.go.dev/gopkg.in/gomail.v2@v2.0.0-20160411212932-81ebce5c23df"><strong>gomail</strong></a>
+    - <a href="https://pkg.go.dev/github.com/mattn/go-sqlite3@v1.14.13"><strong>sqlite3</strong></a>
+
+- Front End:
+    - <a href="https://reactjs.org/"><strong>React</strong></a>
+    - <a href="https://www.scriptjs.in/index.html"><strong>ScriptJs</strong></a>
+    - <a href="https://chakra-ui.com/"><strong>Chakra UI</strong></a>
+    - <a href="https://docs.pmnd.rs/zustand/introduction"><strong>Zustand</strong></a>
+    - <a href="https://axios-http.com/"><strong>Axios</strong></a>
 
 ## Getting Started
 
