@@ -130,10 +130,10 @@ SUMMARY:
 - [Module_submissions](#module-submissions)     ```(8/8) 100%```
 - [Module_articles](#module-articles)           ```(7/7) 100%```
 - [User_Submissions](#user-submissions)		    ```(4/4) 100%```
-- [Answers](#answers)                           ```(5/5) 100%```
-- [Questions](#questions)                       ```(5/5) 100%```
+- [Answers](#answers)                           ```(6/6) 100%```
+- [Questions](#questions)                       ```(6/6) 100%```
 
-There are a total of ```52``` APIs
+There are a total of ```54``` APIs
 
 
 ## users
@@ -1490,6 +1490,35 @@ Response:
         "status" : "string"
     }
 ```
+------------------------------
+## Get Answers By Question Id
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/answers/{questionId}```
+- Header:
+  - Accept: ```application/json```
+  - Authorization: ``` Token ```
+- Query Param:
+  - questionId : ```number```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : [
+            {
+                "id" : "integer", // primary key
+                "question_id" : "integer", // foreign key1
+                "user_id" : "integer", // foreign key2
+                "description" : "string",
+                "created_at" : "timestamp", // timestamp
+                "updated_at" : "timestamp" // timestamp
+            },
+        ]
+    }
+```
 ## Questions
 ------------------------------
 ## Create Questions
@@ -1544,14 +1573,16 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "user_id" : "integer", // foreign key2
-            "title" : "string",
-            "tags" : "string",
-            "description" : "string",
-            "created_at" : "timestamp", // timestamp
-            "updated_at" : "timestamp" // timestamp
+                "id" : "integer", // primary key
+                "course_id" : "integer", // foreign key1
+                "course_name" : "string",
+                "user_id" : "integer", // foreign key2
+                "user_name" : "string",
+                "title" : "string",
+                "tags" : "string",
+                "description" : "string",
+                "created_at" : "timestamp", // timestamp
+                "updated_at" : "timestamp" // timestamp
         }
     }
 ```
@@ -1613,8 +1644,10 @@ Response:
         "data" : [
             {
                 "id" : "integer", // primary key
-                "module_id" : "integer", // foreign key1
+                "course_id" : "integer", // foreign key1
+                "course_name" : "string",
                 "user_id" : "integer", // foreign key2
+                "user_name" : "string",
                 "title" : "string",
                 "tags" : "string",
                 "description" : "string",
@@ -1639,5 +1672,36 @@ Response:
     {
         "code" : "number",
         "status" : "string"
+    }
+```
+------------------------------
+## Get Question By Id
+------------------------------
+Request:
+- Method: ```GET```
+- Endpoint: ```/api/questions/{id}```
+- Header:
+  - Accept: ```application/json```
+  - Authorization: ``` Token ```
+- Query Param:
+  - id : ```number```
+
+Response:
+``` json
+    {
+        "code" : "number",
+        "status" : "string",
+        "data" : {
+                "id" : "integer", // primary key
+                "course_id" : "integer", // foreign key1
+                "course_name" : "string",
+                "user_id" : "integer", // foreign key2
+                "user_name" : "string",
+                "title" : "string",
+                "tags" : "string",
+                "description" : "string",
+                "created_at" : "timestamp", // timestamp
+                "updated_at" : "timestamp" // timestamp
+        },
     }
 ```

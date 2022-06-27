@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="572c49c9-a3f6-4b4c-9c14-17bdddea45ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/assets/hLOFBAYjJmUziUcidmXq.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/controller/answer-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/answer-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/controller/question-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/question-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/repository/answer-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/answer-repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/answer-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/answer-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/question-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/question-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
