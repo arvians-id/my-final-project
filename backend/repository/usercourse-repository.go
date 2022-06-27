@@ -173,7 +173,7 @@ func (repository *usercourseRepository) Delete(ctx context.Context, tx *sql.Tx, 
 }
 
 func (repository *usercourseRepository) FindAllStudentSubmissions(ctx context.Context, tx *sql.Tx, userId int, limit int) ([]entity.StudentSubmissions, error) {
-	query := `SELECT ms.id,c.name,ms.name,us.grade,us.file FROM user_course uc
+	query := `SELECT ms.id,c.name,c.code_course,ms.name,us.grade,us.file FROM user_course uc
 			  LEFT JOIN courses c on c.id = uc.course_id
 			  LEFT JOIN module_submissions ms on c.id = ms.course_id
 			  LEFT JOIN user_submissions us on ms.id = us.module_submission_id
@@ -197,6 +197,7 @@ func (repository *usercourseRepository) FindAllStudentSubmissions(ctx context.Co
 		err := queryContext.Scan(
 			&studentSubmission.IdModuleSubmission,
 			&studentSubmission.CourseName,
+			&studentSubmission.CodeCourse,
 			&studentSubmission.ModuleSubmissionName,
 			&studentSubmission.Grade,
 			&studentSubmission.File,

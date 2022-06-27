@@ -168,7 +168,6 @@ func (service *usercourseService) Delete(ctx context.Context, code1 int, code2 i
 }
 
 func (service *usercourseService) FindAllStudentSubmissions(ctx context.Context, userId int, limit int) ([]model.GetStudentSubmissionsResponse, error) {
-
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return nil, err

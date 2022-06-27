@@ -27,6 +27,7 @@ type GetUserTeacherCourseResponse struct {
 type GetStudentSubmissionsResponse struct {
 	IdModuleSubmission   int     `json:"id_module_submission"`
 	NameCourse           string  `json:"name_course"`
+	CodeCourse           string  `json:"code_course"`
 	NameModuleSubmission string  `json:"name_module_submission"`
 	Grade                *int    `json:"grade,omitempty"`
 	File                 *string `json:"file,omitempty"`

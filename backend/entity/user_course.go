@@ -22,6 +22,7 @@ type UserTeacherCourse struct {
 type StudentSubmissions struct {
 	IdModuleSubmission   int
 	CourseName           string
+	CodeCourse           string
 	ModuleSubmissionName string
 	Grade                *int
 	File                 *string
