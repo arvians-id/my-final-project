@@ -1,12 +1,89 @@
-# Engineering 12 Final Project - Teenager
+
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/rg-km/final-project-engineering-12">
+    <img src="./frontend/src/image/Teenager.png" alt="Logo" width="200" height="270">
+  </a>
+
+  <h2 align="center">Teenager</h2>
+  <h2 align="center">Tempat Mengajar dan Berbagi Kecerdasan</h2>
+
+  <p align="center">
+    <strong>Teenager</strong> adalah sebuah Learning Management System(LMS) bagi yang mempunyai kekurangan dalam penglihatan dan pendengaran untuk tetap bisa melaksanakan pelajaran seperti orang normal. Anda akan dibantu dengan fitur-fitur yang mempermudah anda dalam menerima pelajaran dan mengerjakan tugas. Anda juga bisa menyampaikan pertanyaan dan melakukan konsultasi terkait kesulitan anda saat mempelajari materi atau mengerjakan tugas anda. Let's try with us.
+    <br />
+    <a href="https://docs.google.com/presentation/d/1Nv63b7pC7bpWNTzYF5R01pDb3pab2xCo0zCruKjGU7g/edit#slide=id.g1312c932fbf_2_222"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+  </p>
+</p>
+
+## Table of Contents
+- [About the Project](#about-the-project)
+    - [Philosophy Logo](#philosophy-logo)
+    - [Built With](#built-with)
+- [Getting Started](#getting-started)
+- [Collaborators](#collaborators)
+- [API Specification](#api-specification)
+
+## About the Project
+
+## Philosophy Logo
+Kami menggunakan logo yang menggambar kepala dengan wajah yang ceria dan bentuk buku berwana biru. Coba Lihat Detail filosofi logo kami lewat link di bawah ini.
+- <a href="https://docs.google.com/presentation/d/1K8uBD1yYwrpb8zCy_HI4Dj1CGIcJT7M1/edit#slide=id.p1"><strong>Explore the docs »</strong></a>
+
+## Built With
+- Back End:
+    - <a href="https://go.dev/"><strong>Go</strong></a>
+    - <a href="https://pkg.go.dev/github.com/dgrijalva/jwt-go@v3.2.0+incompatible"><strong>jwt-go</strong></a>
+    - <a href="https://pkg.go.dev/github.com/gin-contrib/cors@v1.3.1"><strong>gin</strong></a>
+    - <a href="https://pkg.go.dev/github.com/onsi/ginkgo@v1.16.5"><strong>ginkgo</strong></a>
+    - <a href="https://pkg.go.dev/gopkg.in/gomail.v2@v2.0.0-20160411212932-81ebce5c23df"><strong>gomail</strong></a>
+    - <a href="https://pkg.go.dev/github.com/mattn/go-sqlite3@v1.14.13"><strong>sqlite3</strong></a>
+
+- Front End:
+    - <a href="https://reactjs.org/"><strong>React</strong></a>
+    - <a href="https://www.scriptjs.in/index.html"><strong>ScriptJs</strong></a>
+    - <a href="https://chakra-ui.com/"><strong>Chakra UI</strong></a>
+    - <a href="https://docs.pmnd.rs/zustand/introduction"><strong>Zustand</strong></a>
+    - <a href="https://axios-http.com/"><strong>Axios</strong></a>
+
+## Getting Started
 
 ## Collaborators
-  1. Irfan Kurniawan - Product Manager - FE2110451 ([Irfan858](https://github.com/Irfan858))
-  2. Mohd Ryan Obillah - Frontend Developer - FE2163553 ([obillahh](https://github.com/obillahh))
-  3. Umbu Theofilus Dendimara - Backend Developer - BE2144668 ([Rendydinar](https://github.com/Rendydinar))
-  4. Widdy Arfiansyah - Backend Developer - BE2108902 ([arvians-id](https://github.com/arvians-id))
-  5. Muhammad Abid Fajar - Backend Developer - BE2219863 ([abid313](https://github.com/abid313))
-  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<table>
+    <tr>
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/62319616?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/Irfan858"><b>Irfan Kurniawan</b></sub></a>
+        </td>        
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/91462961?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/obillahh"><b>Mohd Ryan Obillah</b></sub></a>
+        </td>             
+        </td>        
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/50445892?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/Rendydinar"><b>Umbu Theofilus Dendimara</b></sub></a>
+        </td>             
+        </td> 
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/75376740?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/arvians-id"><b>Widdy Arfiansyah</b></sub></a>
+        </td>
+        </td>       
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/69112136?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/abid313"><b>Muhammad Abid Fajar</b></sub></a>
+        </td>             
+        </td>        
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/58127932?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/Reezyx"><b>Rudiansyah Wijaya Pratama</b></sub></a>
+        </td>             
+    </tr>
+</table>
 
 # API Specification
 
@@ -19,13 +96,13 @@ SUMMARY:
 - [Users](#users)                               ```(11/11) 100%```
 - [User_course](#user-course)                   ```(5/5) 100%```
 - [Courses](#courses)                           ```(7/7) 100%```
-- [Module_submissions](#module-submissions)     ```(7/7) 100%```
+- [Module_submissions](#module-submissions)     ```(8/8) 100%```
 - [Module_articles](#module-articles)           ```(7/7) 100%```
 - [User_Submissions](#user-submissions)		    ```(4/4) 100%```
 - [Answers](#answers)                           ```(5/5) 100%```
 - [Questions](#questions)                       ```(5/5) 100%```
 
-There are a total of ```51``` APIs
+There are a total of ```52``` APIs
 
 
 ## users
@@ -115,12 +192,9 @@ Request:
 - Header:
   - Content-Type: ``` application/json ```
   - Accept: ``` application/json ```
-- Body:
-``` json
-    {
-        "id": "integer"
-    }
-```
+  - Authorization: ``` Token ```
+
+
 Response:
 ``` json
     {   
@@ -150,6 +224,7 @@ Request:
 - Header:
   - Content-Type: ``` application/json ```
   - Accept: ``` application/json ```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -166,6 +241,7 @@ Request:
 - Endpoint: ```/api/users/{id}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 
@@ -198,6 +274,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 - Body:
@@ -244,6 +321,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 
@@ -275,6 +353,7 @@ Request:
 - Endpoint: ```/api/users```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -309,6 +388,7 @@ Request:
 - Endpoint: ```/api/users/{id}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 
@@ -327,6 +407,7 @@ Request:
 - Endpoint: ```/api/users/submissions```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - limit : ```number``` ```optional``` ```default = all list```
 
@@ -370,6 +451,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -396,6 +478,7 @@ Request:
 - Endpoint: ```/api/usercourse/{id}/{course}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -416,6 +499,7 @@ Request:
 - Endpoint: ```/api/usercourse```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -441,6 +525,7 @@ Request:
 - Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -457,6 +542,7 @@ Request:
 - Endpoint: ```/api/usercourse/courses```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -481,6 +567,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -519,6 +606,7 @@ Request:
 - Endpoint: ```/api/courses```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
     - size : ```number```
     - page : ```number```
@@ -552,6 +640,7 @@ Request:
 - Endpoint: ```/api/courses/{code}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -581,6 +670,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -617,6 +707,7 @@ Request:
 - Endpoint: ```/api/courses?status=true&limit=1```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - status : ```boolean``` ```optional``` ```default = true```
   - limit : ```number``` ```optional``` ```default = all list```
@@ -650,6 +741,7 @@ Request:
 - Endpoint: ```/api/courses/{code}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - code : ```string```
 
@@ -669,6 +761,7 @@ Request:
 - Endpoint: ```/api/courses/{code}/status```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - code : ```string```
 - Body:
@@ -696,6 +789,7 @@ Request:
   - code : ```string```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -722,6 +816,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -755,6 +850,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -782,6 +878,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -815,6 +912,7 @@ Request:
   - code : ```string```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -846,6 +944,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -865,6 +964,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -888,6 +988,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -911,6 +1012,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -937,6 +1039,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -970,6 +1073,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -997,6 +1101,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1028,6 +1133,7 @@ Request:
   - code : ```string```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1056,6 +1162,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1076,6 +1183,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1099,6 +1207,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1123,6 +1232,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Content-Type: ```multipart/form-data```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1155,6 +1265,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1182,6 +1293,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1210,6 +1322,7 @@ Request:
 - Header:
   - Content-Type: ```{mimetype}```
   - Content-Disposition: ```{attachment; filename=file}```
+  - Authorization: ``` Token ```
 
 ## Answers
 ------------------------------
@@ -1221,6 +1334,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1252,6 +1366,7 @@ Request:
 - Endpoint: ```/api/answers/by-user/{userId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1277,6 +1392,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1308,6 +1424,7 @@ Request:
 - Endpoint: ```/api/answers/all```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -1337,6 +1454,7 @@ Request:
 - Endpoint: ```/api/answers/{answerId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1355,6 +1473,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1390,6 +1509,7 @@ Request:
 - Endpoint: ```/api/questions/by-user/{userId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1417,6 +1537,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1452,6 +1573,7 @@ Request:
 - Endpoint: ```/api/questions/all```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -1483,6 +1605,7 @@ Request:
 - Endpoint: ```/api/questions/{questionId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
