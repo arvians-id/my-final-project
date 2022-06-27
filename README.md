@@ -859,10 +859,10 @@ Response:
         "status" : "string",
         "data" : {
             "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "file" : "string",
-            "type" : "string",
-            "max_size" : "integer"
+            "course_id": "integer", // foreign key
+            "name": "string",
+            "description": "string",
+            "deadline": "string"
         }
     }
 ```
@@ -882,10 +882,9 @@ Request:
 - Body:
 ``` json
     {
-        "module_id" : "integer", // foreign key1
-        "file" : "string",
-        "type" : "string",
-        "max_size" : "integer"
+        "name": "string",
+        "description": "string",
+        "deadline": "string"
     }
 ```
 Response:
@@ -894,11 +893,10 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "file" : "string",
-            "type" : "string",
-            "max_size" : "integer"
+            "course_id": "integer", // foreign key
+            "name": "string",
+            "description": "string",
+            "deadline": "string"
         }
     }
 ```
@@ -913,9 +911,6 @@ Request:
 - Header:
   - Accept: ```application/json```
   - Authorization: ``` Token ```
-- Query Param:
-  - size : ```number```
-  - page : ```number```
 
 Response:
 ``` json
@@ -924,11 +919,11 @@ Response:
         "status" : "string",
         "data" : [
             {
-                "id" : "integer", // primary key
-                "module_id" : "integer", // foreign key1
-                "file" : "string",
-                "type" : "string",
-                "max_size" : "integer"
+              "id" : "integer", // primary key
+              "course_id": "integer", // foreign key
+              "name": "string",
+              "description": "string",
+              "deadline": "string"
             },
         ]
     }
@@ -951,6 +946,7 @@ Response:
     {
         "code" : "number",
         "status" : "string"
+        "data": null
     }
 ```
 ------------------------------
