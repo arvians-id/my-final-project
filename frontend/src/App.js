@@ -14,6 +14,7 @@ import Profile from './pages/Profile';
 import DashboardDataSiswa from './pages/DashboardDataSiswa';
 import HomeNonSiswa from './pages/HomeNonSiswa';
 import DashboardDataPengguna from './pages/DashboardDataPengguna';
+import EditProfile from './pages/EditProfile';
 
 function App() {
     const user = useStore((state) => state.user);
@@ -42,11 +43,11 @@ function App() {
                 user.role === "Siswa" ?
                     <Routes>
                         <Route
-                            path="/login"
+                            path="login"
                             element={<Navigate to="/" replace />}
                         />
                         <Route
-                            path="/register"
+                            path="register"
                             element={<Navigate to="/" replace />}
                         />
                         <Route path="home" element={<Navigate to="/" replace />} />
@@ -54,22 +55,24 @@ function App() {
                         <Route path="submission" element={<Submission replace />} />
                         <Route path="discussion" element={<Discussion replace />} />
                         <Route path="profile" element={<Profile replace />} />
+                        <Route path="edit-profile" element={<EditProfile replace />} />
                         <Route path="/" element={<Home replace />} />
                     </Routes> : user.role === "Guru" ? <Routes>
                         <Route
-                            path="/login"
+                            path="login"
                             element={<Navigate to="/" replace />}
                         />
                         <Route
-                            path="/register"
+                            path="register"
                             element={<Navigate to="/" replace />}
                         />
                         <Route path="/" element={<HomeNonSiswa replace />} />
                         <Route path="dashboard-siswa" element={<DashboardDataSiswa replace />} />
                         <Route path="profile" element={<Profile replace />} />
+                        <Route path="edit-profile" element={<EditProfile replace />} />
                     </Routes> : <Routes>
                         <Route
-                            path="/login"
+                            path="login"
                             element={<Navigate to="/" replace />}
                         />
                         <Route
@@ -83,9 +86,9 @@ function App() {
             ) : (
                 <Routes>
                     <Route path="*" element={<Login />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/" element={<Login />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                    {/* <Route path="/" element={<Login />} /> */}
                 </Routes>
             )}
         </>

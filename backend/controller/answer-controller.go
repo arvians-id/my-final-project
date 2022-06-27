@@ -27,6 +27,7 @@ func (controller *AnswerController) Route(router *gin.Engine) *gin.Engine {
 		authorized.PUT("/answers/update/:answerId", middleware.UserHandler(controller.Update))
 		authorized.DELETE("/answers/:answerId", middleware.UserHandler(controller.Delete))
 		authorized.GET("/answers/by-user/:userId", middleware.UserHandler(controller.FindByUserId))
+		authorized.GET("/answers/by-question-id/:questionId", middleware.UserHandler(controller.FindByQuestionId))		
 	}
 
 	return router
@@ -133,6 +134,25 @@ func (controller *AnswerController) Update(ctx *gin.Context) {
 func (controller *AnswerController) FindByUserId(ctx *gin.Context) {
 	userId := utils.ToInt(ctx.Param("userId"))
 	answers, err := controller.AnswerService.FindByUserId(ctx.Request.Context(), userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   answers,
+	})
+}
+
+func (controller *AnswerController) FindByQuestionId(ctx *gin.Context) {
+	questionId := utils.ToInt(ctx.Param("questionId"))
+	answers, err := controller.AnswerService.FindByUserId(ctx.Request.Context(), questionId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,

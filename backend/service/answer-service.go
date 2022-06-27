@@ -166,3 +166,23 @@ func (service *answerService) FindByUserId(ctx context.Context, userId int) ([]m
 
 	return courseResponses, nil
 }
+
+func (service *answerService) FindByQuestionId(ctx context.Context, questionId int) ([]model.GetAnswerResponse, error) {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return []model.GetAnswerResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	courses, err := service.AnswerRepository.FindByQuestionId(ctx, tx, questionId)
+	if err != nil {
+		return []model.GetAnswerResponse{}, err
+	}
+
+	var courseResponses []model.GetAnswerResponse
+	for _, answer := range courses {
+		courseResponses = append(courseResponses, utils.ToAnswerResponse(answer))
+	}
+
+	return courseResponses, nil
+}

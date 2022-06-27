@@ -218,6 +218,7 @@ export default function Sidebar() {
                 colorScheme="blue"
                 width="full"
                 justifyContent="start"
+                onClick={() => gotoPage('/edit-profile')}
               >
                 <HStack spacing={3}>
                   <Box as="span" fontWeight="semibold">

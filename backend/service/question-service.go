@@ -16,16 +16,19 @@ type QuestionService interface {
 	Delete(ctx context.Context, questionId int) error
 	Update(ctx context.Context, request model.UpdateQuestionRequest, questionId int) (model.GetQuestionRelationResponse, error)
 	FindByUserId(ctx context.Context, userId int) ([]model.GetQuestionRelationResponse, error)
+	FindById(ctx context.Context, questionId int) (model.GetQuestionRelationResponse, error)
 }
 
 type questionService struct {
 	QuestionRepository repository.QuestionRepository
+	UserRepository    repository.UserRepository
 	DB                 *sql.DB
 }
 
-func NewQuestionService(questionRepository *repository.QuestionRepository, db *sql.DB) QuestionService {
+func NewQuestionService(questionRepository *repository.QuestionRepository, userRepository *repository.UserRepository, db *sql.DB) QuestionService {
 	return &questionService{
 		QuestionRepository: *questionRepository,
+		UserRepository:    *userRepository,
 		DB:                 db,
 	}
 }
@@ -36,6 +39,15 @@ func (service *questionService) Create(ctx context.Context, request model.Create
 		return model.GetQuestionResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
+	user, err := service.UserRepository.GetUserByID(ctx, tx, request.UserId)
+
+	if err != nil {
+		return model.GetQuestionResponse{}, err
+	}
+	
+	if(user.Id == 0 ){
+		return model.GetQuestionResponse{}, errors.New("user not found")
+	}
 
 	newQuestion := entity.Questions{
 		UserId:      request.UserId,
@@ -158,3 +170,19 @@ func (service *questionService) FindByUserId(ctx context.Context, userId int) ([
 
 	return courseResponses, nil
 }
+
+func (service *questionService) FindById(ctx context.Context, questionId int) (model.GetQuestionRelationResponse, error) {
+	tx, err := service.DB.Begin()
+	if err != nil {
+		return model.GetQuestionRelationResponse{}, err
+	}
+	defer utils.CommitOrRollback(tx)
+
+	questions, err := service.QuestionRepository.FindById(ctx, tx, questionId)
+	if err != nil {
+		return model.GetQuestionRelationResponse{}, err
+	}
+
+	return utils.ToQuestionRelationResponse(questions), nil
+}
+

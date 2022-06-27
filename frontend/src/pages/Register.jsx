@@ -26,6 +26,7 @@ import {
   mediumRegexPatternPassword,
   usernameRegexPattern,
 } from '../utils/reqex';
+import { checkIsValidUsername } from '../utils/user';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ export default function Register() {
       registerForm.disability === 0 ||
       registerForm.password !== registerForm.confirmPassword ||
       !checkIsValidPassword() ||
-      !checkIsValidUsername()
+      !checkIsValidUsername(registerForm.username)
     )
       return true;
     return false;
@@ -162,16 +163,6 @@ export default function Register() {
     if (
       strongRegexPatternPassword.test(registerForm.password) ||
       mediumRegexPatternPassword.test(registerForm.password)
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  const checkIsValidUsername = () => {
-    if (
-      usernameRegexPattern.test(registerForm.username) &&
-      registerForm.username.length > 2
     ) {
       return true;
     }

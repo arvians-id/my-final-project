@@ -27,6 +27,7 @@ func (controller *QuestionController) Route(router *gin.Engine) *gin.Engine {
 		authorized.PUT("/questions/update/:questionId", middleware.UserHandler(controller.Update))
 		authorized.DELETE("/questions/:questionId", middleware.UserHandler(controller.Delete))
 		authorized.GET("/questions/by-user/:userId", middleware.UserHandler(controller.FindByUserId))
+		authorized.GET("/questions/:questionId", middleware.UserHandler(controller.FindById))
 	}
 
 	return router
@@ -135,6 +136,25 @@ func (controller *QuestionController) Update(ctx *gin.Context) {
 func (controller *QuestionController) FindByUserId(ctx *gin.Context) {
 	userId := utils.ToInt(ctx.Param("userId"))
 	questions, err := controller.QuestionService.FindByUserId(ctx.Request.Context(), userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   questions,
+	})
+}
+
+func (controller *QuestionController) FindById(ctx *gin.Context) {
+	questionId := utils.ToInt(ctx.Param("questionId"))
+	questions, err := controller.QuestionService.FindById(ctx.Request.Context(), questionId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
 			Code:   http.StatusInternalServerError,

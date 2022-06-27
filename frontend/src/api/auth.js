@@ -1,9 +1,9 @@
-import Axios from 'axios';
-import { ENDPOINT_API_GET_CHECK_LOGIN_USER, ENDPOINT_API_GET_REGISTER_USER, ENDPOINT_API_POST_LOGIN_USER } from '../constant/api';
+import axios from 'axios';
+import { ENDPOINT_API_GET_CHECK_LOGIN_USER, ENDPOINT_API_POST_REGISTER_USER, ENDPOINT_API_POST_LOGIN_USER } from '../constant/api';
 import { axiosWithToken } from './axiosWithToken';
 
 export const API_LOGIN = async ({ email, password }) => {
-  const response = await Axios.post(ENDPOINT_API_POST_LOGIN_USER, {
+  const response = await axios.post(ENDPOINT_API_POST_LOGIN_USER, {
     email,
     password
   })
@@ -18,7 +18,7 @@ export const API_LOGIN = async ({ email, password }) => {
 };
 
 export const API_REGISTER = async ({ name, username, email, password, role, gender, type_of_disability, birthdate }) => {
-  const response = await Axios.post(ENDPOINT_API_GET_REGISTER_USER, {
+  const response = await axios.post(ENDPOINT_API_POST_REGISTER_USER, {
     name,
     username,
     email,
