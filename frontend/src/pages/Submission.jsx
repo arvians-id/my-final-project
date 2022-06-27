@@ -84,6 +84,10 @@ export default function Submission() {
                         key={index}
                         name={submission.name_course}
                         status={getStatusSubmision(submission)}
+                        type="submit"
+                        submissionId={submission.id_module_submission}
+                        courseCode={submission.course_code}
+                        getListSubmission={getListSubmission}
                       />
                     );
                   })}
