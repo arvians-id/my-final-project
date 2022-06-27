@@ -28,16 +28,43 @@
 - [Built With](#built-with)
 - [Getting Started](#getting-started)
 - [Acknowledgements](#acknowledgements)
+- [Collaborators](#collaborators)
 - [API Specification](#api-specification)
 
-
 ## Collaborators
-  1. Irfan Kurniawan - Product Manager - FE2110451 ([Irfan858](https://github.com/Irfan858))
-  2. Mohd Ryan Obillah - Frontend Developer - FE2163553 ([obillahh](https://github.com/obillahh))
-  3. Umbu Theofilus Dendimara - Backend Developer - BE2144668 ([Rendydinar](https://github.com/Rendydinar))
-  4. Widdy Arfiansyah - Backend Developer - BE2108902 ([arvians-id](https://github.com/arvians-id))
-  5. Muhammad Abid Fajar - Backend Developer - BE2219863 ([abid313](https://github.com/abid313))
-  6. Rudiansyah Wijaya Pratama - Backend Developer - BE2242991 ([Reezyx](https://github.com/Reezyx)) 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<table>
+    <tr>
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/62319616?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/Irfan858"><b>Irfan Kurniawan</b></sub></a>
+        </td>        
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/91462961?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/obillahh"><b>Mohd Ryan Obillah</b></sub></a>
+        </td>             
+        </td>        
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/50445892?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/Rendydinar"><b>Umbu Theofilus Dendimara</b></sub></a>
+        </td>             
+        </td> 
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/75376740?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/arvians-id"><b>Widdy Arfiansyah</b></sub></a>
+        </td>
+        </td>       
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/69112136?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/abid313"><b>Muhammad Abid Fajar</b></sub></a>
+        </td>             
+        </td>        
+        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/58127932?v=4" width="100px" alt="" />
+        <br />
+        <sub><a href="https://github.com/Reezyx"><b>Rudiansyah Wijaya Pratama</b></sub></a>
+        </td>             
+    </tr>
+</table>
 
 # API Specification
 
