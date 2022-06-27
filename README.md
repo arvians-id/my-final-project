@@ -35,7 +35,7 @@ Kami menggunakan logo yang menggambar kepala dengan wajah yang ceria dan bentuk 
 ## Built With
 - <a href="https://go.dev/"><strong>Go</strong></a>
 - <a href="https://www.scriptjs.in/index.html"><strong>ScriptJs</strong></a>
-- <a herf="https://chakra-ui.com/"><strong>Chakra UI</strong></a>
+- <a href="https://chakra-ui.com/"><strong>ChakraUI</strong></a>
 - <a href="https://docs.pmnd.rs/zustand/introduction"><strong>Zustand</strong></a>
 - <a href="https://axios-http.com/"><strong>Axios</strong></a>
 
