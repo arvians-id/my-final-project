@@ -4,6 +4,6 @@ type UserSubmissions struct {
 	Id                 int
 	UserId             int
 	ModuleSubmissionId int
-	File               string
+	File               *string
 	Grade              *int
 }

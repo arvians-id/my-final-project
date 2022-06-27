@@ -8,6 +8,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/service"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -120,7 +121,7 @@ func (controller *UserSubmissionsController) Create(ctx *gin.Context) {
 
 	request.UserId = int(idUser.(float64))
 	request.ModuleSubmissionId = submissionId
-	request.File = file.Filename
+	request.File = &file.Filename
 
 	userSubmission, err := controller.UserSubmissionsService.SubmitFile(ctx, request)
 	if err != nil {
@@ -200,7 +201,7 @@ func (controller *UserSubmissionsController) Download(ctx *gin.Context) {
 		})
 		return
 	}
-	if userSubmission.File == "" {
+	if userSubmission.File == nil {
 		ctx.JSON(http.StatusNotFound, model.WebResponse{
 			Code:   http.StatusNotFound,
 			Status: "no file",
@@ -209,7 +210,8 @@ func (controller *UserSubmissionsController) Download(ctx *gin.Context) {
 		return
 	}
 
-	path, err := utils.GetPath("/assets/", userSubmission.File)
+	log.Println(*userSubmission.File)
+	path, err := utils.GetPath("/assets/", *userSubmission.File)
 	f, err := os.Open(path)
 	if f != nil {
 		defer f.Close()
@@ -223,7 +225,7 @@ func (controller *UserSubmissionsController) Download(ctx *gin.Context) {
 		return
 	}
 
-	contentDisposition := fmt.Sprintf("attachment; filename=%s", userSubmission.File)
+	contentDisposition := fmt.Sprintf("attachment; filename=%s", *userSubmission.File)
 	ctx.Header("Content-Disposition", contentDisposition)
 
 	if _, err := io.Copy(ctx.Writer, f); err != nil {

@@ -22,13 +22,17 @@ type ModuleSubmissionsService interface {
 type moduleSubmissionsService struct {
 	ModuleSubmissionsRepository repository.ModuleSubmissionsRepository
 	CourseRepository            repository.CourseRepository
+	UserCourseService           repository.UserCourseRepository
+	UserSubmissionService       repository.UserSubmissionsRepository
 	DB                          *sql.DB
 }
 
-func NewModuleSubmissionsService(moduleSubmissionsRepository *repository.ModuleSubmissionsRepository, courseRepository *repository.CourseRepository, db *sql.DB) ModuleSubmissionsService {
+func NewModuleSubmissionsService(moduleSubmissionsRepository *repository.ModuleSubmissionsRepository, courseRepository *repository.CourseRepository, userCourseService *repository.UserCourseRepository, userSubmissionService *repository.UserSubmissionsRepository, db *sql.DB) ModuleSubmissionsService {
 	return &moduleSubmissionsService{
 		ModuleSubmissionsRepository: *moduleSubmissionsRepository,
 		CourseRepository:            *courseRepository,
+		UserCourseService:           *userCourseService,
+		UserSubmissionService:       *userSubmissionService,
 		DB:                          db,
 	}
 }
@@ -100,6 +104,19 @@ func (service *moduleSubmissionsService) Create(ctx context.Context, request mod
 	modsub, err := service.ModuleSubmissionsRepository.Create(ctx, tx, newModsub)
 	if err != nil {
 		return model.GetModuleSubmissionsResponse{}, err
+	}
+
+	// Insert to user submissions
+	findAllUser, err := service.UserCourseService.FindAllUserByCourseId(ctx, tx, modsub.CourseId)
+	if err != nil {
+		return model.GetModuleSubmissionsResponse{}, err
+	}
+
+	for _, value := range findAllUser {
+		err := service.UserSubmissionService.OnlyCreate(ctx, tx, value.IdUser, modsub.Id)
+		if err != nil {
+			return model.GetModuleSubmissionsResponse{}, err
+		}
 	}
 
 	return utils.ToModuleSubmissionsResponse(modsub), nil
