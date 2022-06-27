@@ -19,13 +19,13 @@ SUMMARY:
 - [Users](#users)                               ```(11/11) 100%```
 - [User_course](#user-course)                   ```(5/5) 100%```
 - [Courses](#courses)                           ```(7/7) 100%```
-- [Module_submissions](#module-submissions)     ```(7/7) 100%```
+- [Module_submissions](#module-submissions)     ```(8/8) 100%```
 - [Module_articles](#module-articles)           ```(7/7) 100%```
 - [User_Submissions](#user-submissions)		    ```(4/4) 100%```
 - [Answers](#answers)                           ```(5/5) 100%```
 - [Questions](#questions)                       ```(5/5) 100%```
 
-There are a total of ```51``` APIs
+There are a total of ```52``` APIs
 
 
 ## users
