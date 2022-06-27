@@ -2,11 +2,11 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/rg-km/final-project-engineering-12/backend/middleware"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/service"
-	"net/http"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
-	"github.com/rg-km/final-project-engineering-12/backend/middleware"	
+	"net/http"
 )
 
 type QuestionController struct {
@@ -27,6 +27,7 @@ func (controller *QuestionController) Route(router *gin.Engine) *gin.Engine {
 		authorized.PUT("/questions/update/:questionId", middleware.UserHandler(controller.Update))
 		authorized.DELETE("/questions/:questionId", middleware.UserHandler(controller.Delete))
 		authorized.GET("/questions/by-user/:userId", middleware.UserHandler(controller.FindByUserId))
+		authorized.GET("/questions/:id", middleware.UserHandler(controller.FindById))
 	}
 
 	return router
@@ -99,8 +100,6 @@ func (controller *QuestionController) Delete(ctx *gin.Context) {
 	})
 }
 
-
-
 func (controller *QuestionController) Update(ctx *gin.Context) {
 	var request model.UpdateQuestionRequest
 	err := ctx.ShouldBindJSON(&request)
@@ -114,7 +113,7 @@ func (controller *QuestionController) Update(ctx *gin.Context) {
 	}
 
 	questionId := utils.ToInt(ctx.Param("questionId"))
-	
+
 	question, err := controller.QuestionService.Update(ctx, request, questionId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
@@ -148,5 +147,24 @@ func (controller *QuestionController) FindByUserId(ctx *gin.Context) {
 		Code:   http.StatusOK,
 		Status: "OK",
 		Data:   questions,
+	})
+}
+
+func (controller *QuestionController) FindById(ctx *gin.Context) {
+	id := utils.ToInt(ctx.Param("id"))
+	question, err := controller.QuestionService.FindById(ctx.Request.Context(), id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   question,
 	})
 }
