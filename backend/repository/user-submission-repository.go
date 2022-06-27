@@ -8,7 +8,7 @@ import (
 )
 
 type UserSubmissionsRepository interface {
-	SubmitFile(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
+	OnlyCreate(ctx context.Context, tx *sql.Tx, userId int, moduleSubmissionId int) error
 	UpdateFile(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
 	UpdateGrade(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) error
 	FindUserSubmissionByOther(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error)
@@ -22,26 +22,19 @@ func NewUserSubmissionsRepository() UserSubmissionsRepository {
 	return &userSubmissionsRepository{}
 }
 
-func (repository *userSubmissionsRepository) SubmitFile(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error) {
-	query := `INSERT INTO user_submissions(user_id, module_submission_id, file) VALUES(?,?,?)`
-	queryContext, err := tx.ExecContext(
+func (repository *userSubmissionsRepository) OnlyCreate(ctx context.Context, tx *sql.Tx, userId int, moduleSubmissionId int) error {
+	query := `INSERT INTO user_submissions(user_id, module_submission_id) VALUES(?,?)`
+	_, err := tx.ExecContext(
 		ctx,
 		query,
-		userSubmission.UserId,
-		userSubmission.ModuleSubmissionId,
-		userSubmission.File,
+		userId,
+		moduleSubmissionId,
 	)
 	if err != nil {
-		return entity.UserSubmissions{}, err
+		return err
 	}
 
-	id, err := queryContext.LastInsertId()
-	if err != nil {
-		return entity.UserSubmissions{}, err
-	}
-	userSubmission.Id = int(id)
-
-	return userSubmission, nil
+	return nil
 }
 
 func (repository *userSubmissionsRepository) UpdateFile(ctx context.Context, tx *sql.Tx, userSubmission entity.UserSubmissions) (entity.UserSubmissions, error) {
