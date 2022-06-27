@@ -11,17 +11,10 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-export default function AnswerCard({ answer }) {
+export default function AnswerCard({ answer, value, onChange, submit }) {
   return (
     <>
-      <Box
-        variant="outline"
-        bgColor="white.200"
-        p={4}
-        width="1500px"
-        height="md"
-        borderRadius="10"
-      >
+      <Box variant="outline" bgColor="white.200" p={4} borderRadius="10">
         <Flex direction="column" alignContent="center" mt={20} width="full">
           <HStack>
             <Avatar
@@ -36,20 +29,15 @@ export default function AnswerCard({ answer }) {
               maxWidth="auto"
               variant="flushed"
               placeholder="Jawab"
+              value={value}
+              onChange={onChange}
             />
             <Spacer />
-            <Button>Insert</Button>
+            <Button onClick={submit}>Insert</Button>
             <Button>Cancel</Button>
           </HStack>
         </Flex>
-        <Box
-          mt={7}
-          bgColor="blue.100"
-          p={4}
-          width="1500px"
-          height="auto"
-          borderRadius="10"
-        >
+        <Box mt={7} bgColor="blue.100" p={4} height="auto" borderRadius="10">
           <HStack>
             <Avatar
               name="Irfan Kurniawan"

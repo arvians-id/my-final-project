@@ -1,9 +1,10 @@
 import React from 'react';
 import { Flex, Stack, Text, Spacer, Button } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 
-export default function DiscussionCard({ title, module, moduleClass }) {
+export default function DiscussionCard({ id, title, module, moduleClass }) {
   return (
-    <Flex bgColor="blue.300" p={4} width="full" height={24} borderRadius="10">
+    <Flex bgColor="blue.300" p={4} width="full" borderRadius="10">
       <Flex direction="column" alignContent="center">
         <Text as="h1" fontsize="xl" fontWeight="semibold" color="white">
           {title}
@@ -18,9 +19,11 @@ export default function DiscussionCard({ title, module, moduleClass }) {
         {/* </Stack> */}
       </Flex>
       <Spacer />
-      <Button mt={3} colorScheme="gray" size="sm" variant="solid">
-        Lihat Semua
-      </Button>
+      <Link to={`/discussion/${id}`}>
+        <Button mt={3} colorScheme="gray" size="sm" variant="solid">
+          Lihat Detail
+        </Button>
+      </Link>
     </Flex>
   );
 }

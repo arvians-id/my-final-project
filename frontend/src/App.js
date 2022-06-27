@@ -16,7 +16,14 @@ import HomeNonSiswa from './pages/HomeNonSiswa';
 import DashboardDataPengguna from './pages/DashboardDataPengguna';
 import EditProfile from './pages/EditProfile';
 import CourseDetail from './pages/CourseDetail';
-import Answer from './pages/Answer';
+// import Answer from './pages/Answer';
+import AdminUserList from './pages/Admin/AdminUserList';
+import AdminAddCourseModule from './pages/Admin/AdminAddCourseModule';
+import AdminAddCourseStudent from './pages/Admin/AdminAddCourseStudent';
+import AdminCourseDetail from './pages/Admin/AdminCourseDetail';
+import AdminCourseList from './pages/Admin/AdminCourseList';
+import AdminCourseSubmissionList from './pages/Admin/AdminCourseSubmissionList';
+import DetailDiscussion from './pages/DetailDiscussion';
 
 function App() {
   const user = useStore((state) => state.user);
@@ -58,8 +65,9 @@ function App() {
             <Route path="discussion" element={<Discussion replace />} />
             <Route path="profile" element={<Profile replace />} />
             <Route path="edit-profile" element={<EditProfile replace />} />
-            <Route path="coursedetail" element={<CourseDetail replace />} />
-            <Route path="answer" element={<Answer replace />} />
+            <Route path="course/:courseCode" element={<CourseDetail replace />} />
+            {/* <Route path="answer" element={<Answer replace />} /> */}
+            <Route path="discussion/:questionId" element={<DetailDiscussion replace />} />
 
             <Route path="/" element={<Home replace />} />
           </Routes> : user.role === "Guru" ? <Routes>
@@ -73,6 +81,12 @@ function App() {
             />
             <Route path="/" element={<HomeNonSiswa replace />} />
             <Route path="dashboard-siswa" element={<DashboardDataSiswa replace />} />
+            <Route path="add-course" element={<AdminAddCourseModule replace />} />
+            <Route path="add-student-to-course" element={<AdminAddCourseStudent replace />} />
+            <Route path="admin-course-detail" element={<AdminCourseDetail replace />} />
+            <Route path="dashbord-course" element={<AdminCourseList replace />} />
+            <Route path="dashboard-submission" element={<AdminCourseSubmissionList replace />} />
+            <Route path="dashboard-user" element={<AdminUserList replace />} />
             <Route path="profile" element={<Profile replace />} />
             <Route path="edit-profile" element={<EditProfile replace />} />
           </Routes> : <Routes>
@@ -85,7 +99,11 @@ function App() {
               element={<Navigate to="/" replace />}
             />
             <Route path="/" element={<HomeNonSiswa replace />} />
-            <Route path="dashboard-pengguna" element={<DashboardDataPengguna replace />} />
+            <Route path="add-course" element={<AdminAddCourseModule replace />} />
+            <Route path="add-student-to-course" element={<AdminAddCourseStudent replace />} />
+            <Route path="admin-course-detail" element={<AdminCourseDetail replace />} />
+            <Route path="dashbord-course" element={<AdminCourseList replace />} />
+            <Route path="dashboard-submission" element={<AdminCourseSubmissionList replace />} />
             <Route path="profile" element={<Profile replace />} />
             <Route path="edit-profile" element={<EditProfile replace />} />
           </Routes>

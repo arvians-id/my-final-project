@@ -21,6 +21,7 @@ export default function SubmissionCard({
     getListSubmission();
   };
 
+  // alert(type)
   return (
     <Box width="full">
       <Flex
@@ -48,7 +49,7 @@ export default function SubmissionCard({
           >
             {status ? 'Sudah Terkumpul' : 'Belum Terkumpul'}
           </Badge>
-          {type === 'submit' && status === 'Belum Terkumpul' && (
+          {type === 'submit' && status === false && (
             <Button colorScheme="green" h="30px" onClick={onToggleButtonSubmit}>
               Kumpul Tugas
             </Button>

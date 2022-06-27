@@ -48,11 +48,11 @@ export default function CourseCard({ course_code }) {
               60
             )} ...`}</Text>
           </Stack>
-          {/* <Link to="/course/:id"> */}
-          <Button mt={5} colorScheme="blue" width="full" bottom={2}>
-            Lanjutkan
-          </Button>
-          {/* </Link> */}
+          <Link to={`/course/${course_code}`}>
+            <Button mt={5} colorScheme="blue" width="full" bottom={2}>
+              Lanjutkan
+            </Button>
+          </Link>
         </>
       ) : (
         <Text>Course tidak ditemukan</Text>
