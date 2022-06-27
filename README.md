@@ -115,12 +115,9 @@ Request:
 - Header:
   - Content-Type: ``` application/json ```
   - Accept: ``` application/json ```
-- Body:
-``` json
-    {
-        "id": "integer"
-    }
-```
+  - Authorization: ``` Token ```
+
+
 Response:
 ``` json
     {   
@@ -150,6 +147,7 @@ Request:
 - Header:
   - Content-Type: ``` application/json ```
   - Accept: ``` application/json ```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -166,6 +164,7 @@ Request:
 - Endpoint: ```/api/users/{id}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 
@@ -198,6 +197,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 - Body:
@@ -244,6 +244,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 
@@ -275,6 +276,7 @@ Request:
 - Endpoint: ```/api/users```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -309,6 +311,7 @@ Request:
 - Endpoint: ```/api/users/{id}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Variable:
   - id: ```integer```
 
@@ -327,6 +330,7 @@ Request:
 - Endpoint: ```/api/users/submissions```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - limit : ```number``` ```optional``` ```default = all list```
 
@@ -370,6 +374,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -396,6 +401,7 @@ Request:
 - Endpoint: ```/api/usercourse/{id}/{course}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -416,6 +422,7 @@ Request:
 - Endpoint: ```/api/usercourse```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -441,6 +448,7 @@ Request:
 - Endpoint: ```/api/usercourse/{user_id}/{course_id}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -457,6 +465,7 @@ Request:
 - Endpoint: ```/api/usercourse/courses```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -481,6 +490,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -519,6 +529,7 @@ Request:
 - Endpoint: ```/api/courses```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
     - size : ```number```
     - page : ```number```
@@ -552,6 +563,7 @@ Request:
 - Endpoint: ```/api/courses/{code}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -581,6 +593,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -617,6 +630,7 @@ Request:
 - Endpoint: ```/api/courses?status=true&limit=1```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - status : ```boolean``` ```optional``` ```default = true```
   - limit : ```number``` ```optional``` ```default = all list```
@@ -650,6 +664,7 @@ Request:
 - Endpoint: ```/api/courses/{code}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - code : ```string```
 
@@ -669,6 +684,7 @@ Request:
 - Endpoint: ```/api/courses/{code}/status```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - code : ```string```
 - Body:
@@ -696,6 +712,7 @@ Request:
   - code : ```string```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -722,6 +739,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -755,6 +773,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -782,6 +801,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -815,6 +835,7 @@ Request:
   - code : ```string```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -846,6 +867,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -865,6 +887,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -888,6 +911,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -911,6 +935,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -937,6 +962,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -970,6 +996,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -997,6 +1024,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1028,6 +1056,7 @@ Request:
   - code : ```string```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1056,6 +1085,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1076,6 +1106,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1099,6 +1130,7 @@ Request:
   - articleId : ```number```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1123,6 +1155,7 @@ Request:
   - submissionId : ```number```
 - Header:
   - Content-Type: ```multipart/form-data```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1155,6 +1188,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1182,6 +1216,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1210,6 +1245,7 @@ Request:
 - Header:
   - Content-Type: ```{mimetype}```
   - Content-Disposition: ```{attachment; filename=file}```
+  - Authorization: ``` Token ```
 
 ## Answers
 ------------------------------
@@ -1221,6 +1257,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1252,6 +1289,7 @@ Request:
 - Endpoint: ```/api/answers/by-user/{userId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1277,6 +1315,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1308,6 +1347,7 @@ Request:
 - Endpoint: ```/api/answers/all```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -1337,6 +1377,7 @@ Request:
 - Endpoint: ```/api/answers/{answerId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1355,6 +1396,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1390,6 +1432,7 @@ Request:
 - Endpoint: ```/api/questions/by-user/{userId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
@@ -1417,6 +1460,7 @@ Request:
 - Header:
   - Content-Type: ```application/json```
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Body:
 ``` json
     {
@@ -1452,6 +1496,7 @@ Request:
 - Endpoint: ```/api/questions/all```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 - Query Param:
   - size : ```number```
   - page : ```number```
@@ -1483,6 +1528,7 @@ Request:
 - Endpoint: ```/api/questions/{questionId}```
 - Header:
   - Accept: ```application/json```
+  - Authorization: ``` Token ```
 
 Response:
 ``` json
