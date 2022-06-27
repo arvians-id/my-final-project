@@ -400,10 +400,10 @@ Response:
         "code" : "number",
         "status" : "string",
         "data" : {
-            "id_user": "integer", // Primary Key
-            "user_name": "string",
-            "user_username": "string",
-            "user_email": "string"
+            "id_course": "integer", // Primary Key
+            "course_name": "string",
+            "course_code": "string",
+            "course_class": "string"
         }
     }
 ```
