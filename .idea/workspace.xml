@@ -6,21 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="572c49c9-a3f6-4b4c-9c14-17bdddea45ce" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/assets/HpmKMrSMokLCgBRuJghr.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/assets/yfHbvRtZOsjLQDmrdCFa.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/controller/user-submission-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/user-submission-controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/entity/user_submissions.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/entity/user_submissions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/model/user-submissions-model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/user-submissions-model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/repository/user-submission-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/user-submission-repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/repository/usercourse-repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/repository/usercourse-repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/assets/nBMtrxZUYnsfnfHMCyRQ.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/assets/qfOdXMNqFHzsgeXgEVEn.docx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/route/base.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/route/base.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/modulesubmissions-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/modulesubmissions-service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/service/user-submission-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/user-submission-service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/usercourse-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/usercourse-service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/user_submissions_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/user_submissions_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/test/integration/userauth_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/userauth_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/file.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +57,7 @@
       <recent name="C:\laragon\www\final-project-engineering-12\backend\test\integration" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (4)">
+  <component name="RunManager" selected="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$" />
@@ -124,7 +115,7 @@
       <pattern value="^\QTestMainApi\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="final-project-engineering-12" />
       <working_directory value="$PROJECT_DIR$/backend/test/integration" />
       <root_directory value="$PROJECT_DIR$/backend" />
@@ -148,11 +139,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (5)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (4)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (3)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (2)" />
         <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration (1)" />
-        <item itemvalue="Go Test.TestMainApi in github.com/rg-km/final-project-engineering-12/backend/test/integration" />
       </list>
     </recent_temporary>
   </component>
