@@ -725,10 +725,9 @@ Request:
 - Body:
 ``` json
     {
-        "module_id" : "integer", // foreign key1
-        "file" : "string",
-        "type" : "string",
-        "max_size" : "integer"
+        "name": "string",
+        "description": "string",
+        "deadline": "string"
     }
 ```
 Response:
@@ -738,10 +737,10 @@ Response:
         "status" : "string",
         "data" : {
             "id" : "integer", // primary key
-            "module_id" : "integer", // foreign key1
-            "file" : "string",
-            "type" : "string",
-            "max_size" : "integer"
+            "course_id": "integer", // foreign key
+            "name": "string",
+            "description": "string",
+            "deadline": "string"
         }
     }
 ```

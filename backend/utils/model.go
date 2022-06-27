@@ -133,6 +133,7 @@ func ToStudentSubmissionsResponse(submission entity.StudentSubmissions) model.Ge
 	return model.GetStudentSubmissionsResponse{
 		IdModuleSubmission:   submission.IdModuleSubmission,
 		NameCourse:           submission.CourseName,
+		CodeCourse:           submission.CodeCourse,
 		NameModuleSubmission: submission.ModuleSubmissionName,
 		Grade:                submission.Grade,
 		File:                 submission.File,
