@@ -15,21 +15,31 @@
     <a href="https://docs.google.com/presentation/d/1Nv63b7pC7bpWNTzYF5R01pDb3pab2xCo0zCruKjGU7g/edit#slide=id.g1312c932fbf_2_222"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <!-- <a href="">View Demo</a>
-    ·
-    <a href="">Report Bug</a>
-    ·
-    <a href="">Request Feature</a> -->
   </p>
 </p>
 
 ## Table of Contents
 - [About the Project](#about-the-project)
-- [Built With](#built-with)
+    - [Philosophy Logo](#philosophy-logo)
+    - [Built With](#built-with)
 - [Getting Started](#getting-started)
-- [Acknowledgements](#acknowledgements)
 - [Collaborators](#collaborators)
 - [API Specification](#api-specification)
+
+## About the Project
+
+## Philosophy Logo
+Kami menggunakan logo yang menggambar kepala dengan wajah yang ceria dan bentuk buku berwana biru. Coba Lihat Detail filosofi logo kami lewat link di bawah ini.
+- <a href="https://docs.google.com/presentation/d/1K8uBD1yYwrpb8zCy_HI4Dj1CGIcJT7M1/edit#slide=id.p1"><strong>Explore the docs »</strong></a>
+
+## Built With
+- <a href="https://go.dev/"><strong>Go</strong></a>
+- <a href="https://www.scriptjs.in/index.html"><strong>ScriptJs</strong></a>
+- <a herf="https://chakra-ui.com/"><strong>Chakra UI</strong></a>
+- <a href="https://docs.pmnd.rs/zustand/introduction"><strong>Zustand</strong></a>
+- <a href="https://axios-http.com/"><strong>Axios</strong></a>
+
+## Getting Started
 
 ## Collaborators
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
