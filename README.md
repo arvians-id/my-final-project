@@ -27,6 +27,7 @@
 - [API Specification](#api-specification)
 
 ## About the Project
+<img src="./frontend/src/image/ss.png" alt="Logo" width="384,6" height="186px"> <br>
 Project ini dibuat berdasarkan permasalahan yang ditemukan yaitu pengguna disabilitas kesulitan dalam memanagement pembelajaran yang ada pada LMS lainnya. Dengan adanya project ini, kita berharap dapat mengatasi kesulitan yang dihadapi oleh disabilitas terutama Tuna Netra dan Tuna Rungu dengan fasilitas yang ada pada LMS ini. LMS ini memiliki beberapa fitur, yaitu:
 - Mempelajari materi yang diberikan oleh guru melalui fitur course atau mata pelajaran
 - Mengerjakan tugas yang diberikan oleh guru melalui fitur assignment atau tugas
@@ -84,31 +85,31 @@ go run main.go
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <table>
     <tr>
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/62319616?v=4" width="100px" alt="" />
+        <td align="center"><img src="https://avatars.githubusercontent.com/u/62319616?v=4" width="100px" alt="" />
         <br />
         <sub><a href="https://github.com/Irfan858"><b>Irfan Kurniawan</b></sub></a>
         </td>        
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/91462961?v=4" width="100px" alt="" />
+        <td align="center"><img src="https://avatars.githubusercontent.com/u/91462961?v=4" width="100px" alt="" />
         <br />
         <sub><a href="https://github.com/obillahh"><b>Mohd Ryan Obillah</b></sub></a>
         </td>             
         </td>        
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/50445892?v=4" width="100px" alt="" />
+        <td align="center"><img src="https://avatars.githubusercontent.com/u/50445892?v=4" width="100px" alt="" />
         <br />
         <sub><a href="https://github.com/Rendydinar"><b>Umbu Theofilus Dendimara</b></sub></a>
         </td>             
         </td> 
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/75376740?v=4" width="100px" alt="" />
+        <td align="center"><img src="https://avatars.githubusercontent.com/u/75376740?v=4" width="100px" alt="" />
         <br />
         <sub><a href="https://github.com/arvians-id"><b>Widdy Arfiansyah</b></sub></a>
         </td>
         </td>       
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/69112136?v=4" width="100px" alt="" />
+        <td align="center"><img src="https://avatars.githubusercontent.com/u/69112136?v=4" width="100px" alt="" />
         <br />
         <sub><a href="https://github.com/abid313"><b>Muhammad Abid Fajar</b></sub></a>
         </td>             
         </td>        
-        <td align="center"><a href=""><img src="https://avatars.githubusercontent.com/u/58127932?v=4" width="100px" alt="" />
+        <td align="center"><img src="https://avatars.githubusercontent.com/u/58127932?v=4" width="100px" alt="" />
         <br />
         <sub><a href="https://github.com/Reezyx"><b>Rudiansyah Wijaya Pratama</b></sub></a>
         </td>             
