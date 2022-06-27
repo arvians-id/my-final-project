@@ -1,9 +1,16 @@
 package entity
 
+import "time"
+
 type ModuleSubmissions struct {
-	ID       int
-	ModuleId int
-	File     string
-	Type     string
-	MaxSize  int
+	Id          int
+	CourseId    int
+	Name        string
+	Description string
+	Deadline    time.Time
+}
+
+type NextPreviousModuleSubmissions struct {
+	Id         int
+	CodeCourse string
 }

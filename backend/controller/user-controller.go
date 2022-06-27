@@ -1,8 +1,11 @@
 package controller
 
 import (
+	"crypto/md5"
+	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -13,12 +16,16 @@ import (
 )
 
 type UserController struct {
-	UserService service.UserServiceImplement
+	UserService       service.UserServiceImplement
+	UserCourseService service.UserCourseService
+	EmailService      service.EmailService
 }
 
-func NewUserController(userService *service.UserServiceImplement) UserController {
+func NewUserController(userService *service.UserServiceImplement, userCourseService *service.UserCourseService, emailService *service.EmailService) UserController {
 	return UserController{
-		UserService: *userService,
+		UserService:       *userService,
+		UserCourseService: *userCourseService,
+		EmailService:      *emailService,
 	}
 }
 
@@ -34,15 +41,17 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("/users", controller.UserRegister)
-		api.POST("/users/login", controller.userLogin)
-		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))
-		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))
-		api.PUT("/users/roleupdate/:id", middleware.AdminHandler(controller.userRoleUpdate))
-		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))
-		api.GET("/users", middleware.AdminHandler(controller.listUser))
-		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))
+		api.POST("/users", controller.UserRegister)                                          // done
+		api.POST("/users/login", controller.userLogin)                                       // done
+		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))                // done
+		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))             // done
+		api.PUT("/users/roleupdate/:id", middleware.AdminHandler(controller.userRoleUpdate)) // done
+		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))                // done
+		api.GET("/users", middleware.AdminHandler(controller.listUser))                      // done
+		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))                 // done
 		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
+		api.GET("/users/submissions", middleware.UserHandler(controller.StudentSubmission))
+		api.GET("/users/verify", controller.VerifyEmail)
 	}
 	return router
 }
@@ -55,9 +64,30 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 		return
 	}
 
-	responses, err := controller.UserService.RegisterUser(ctx, user)
+	// Data email verification
+	timestamp := time.Now().Add(1 * time.Hour).Unix()
+	timestampString := strconv.Itoa(int(timestamp))
+	signature := md5.Sum([]byte(user.Email + timestampString))
+	signatureString := fmt.Sprintf("%x", signature)
 
+	responses, err := controller.UserService.RegisterUser(ctx, user, signatureString, int(timestamp))
 	if err != nil {
+		ctx.IndentedJSON(http.StatusUnauthorized, model.WebResponse{
+			Code:   401,
+			Status: err.Error(),
+		})
+		return
+	}
+
+	// Send email to user
+	message := fmt.Sprintf("visite this link to verification your email : http://localhost:8080/verification?email=%v&signature=%v", user.Email, signatureString)
+	err = controller.EmailService.SendEmailWithText(user.Email, message)
+	if err != nil {
+		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   400,
+			Status: err.Error(),
+			Data:   nil,
+		})
 		return
 	}
 
@@ -66,7 +96,7 @@ func (controller *UserController) UserRegister(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusCreated, model.WebResponse{
 		Code:   201,
-		Status: "User Register Succesfully",
+		Status: "User Register Successfully",
 		Data:   responses,
 	})
 }
@@ -81,6 +111,7 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 			Status: "Bad Request",
 			Data:   "Please Check Your Input",
 		})
+		return
 	}
 
 	response, err := controller.UserService.UserLogin(ctx, user)
@@ -91,6 +122,7 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 			Status: "Bad Request",
 			Data:   "Please Check Your Input",
 		})
+		return
 	}
 
 	if response.Name == "" {
@@ -98,6 +130,7 @@ func (controller *UserController) userLogin(ctx *gin.Context) {
 			Code:   400,
 			Status: "User Not Found",
 		})
+		return
 	}
 
 	ctx.Header("Accept", "application/json")
@@ -286,7 +319,7 @@ func (controller *UserController) userRoleUpdate(ctx *gin.Context) {
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
 		Code:   200,
-		Status: "Update User Successfull",
+		Status: "Update User Role Successfull",
 		Data:   response,
 	})
 }
@@ -373,9 +406,8 @@ func (controller *UserController) getUserByID(ctx *gin.Context) {
 //Function to show list user
 func (controller *UserController) listUser(ctx *gin.Context) {
 	responses, err := controller.UserService.ListUser(ctx)
-
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
@@ -481,8 +513,75 @@ func (controller *UserController) deleteUser(ctx *gin.Context) {
 
 	ctx.Header("Accept", "application/json")
 
-	ctx.IndentedJSON(http.StatusOK, gin.H{
-		"code":   200,
-		"Status": "Delete User Successfull",
+	ctx.IndentedJSON(http.StatusOK, model.WebResponse{
+		Code:   200,
+		Status: "Delete User Successfull",
+	})
+}
+
+func (controller *UserController) StudentSubmission(ctx *gin.Context) {
+	limit := -1
+	if ctx.Query("limit") != "" {
+		limits, err := strconv.Atoi(ctx.Query("limit"))
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+				Code:   http.StatusInternalServerError,
+				Status: err.Error(),
+				Data:   nil,
+			})
+			return
+		}
+		limit = limits
+	}
+
+	idUser, exists := ctx.Get("id_user")
+	if !exists {
+		ctx.JSON(http.StatusNotFound, model.WebResponse{
+			Code:   http.StatusNotFound,
+			Status: "user not found",
+			Data:   nil,
+		})
+		return
+	}
+
+	id := int(idUser.(float64))
+	studentSubmissions, err := controller.UserCourseService.FindAllStudentSubmissions(ctx, id, limit)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data:   studentSubmissions,
+	})
+}
+
+func (controller *UserController) VerifyEmail(ctx *gin.Context) {
+	var request model.GetEmailVerificationRequest
+	signature := ctx.Query("signature")
+	email := ctx.Query("email")
+
+	request.Email = email
+	request.Signature = signature
+	err := controller.EmailService.VerifyEmail(ctx, request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.WebResponse{
+			Code:   http.StatusInternalServerError,
+			Status: err.Error(),
+			Data:   nil,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.WebResponse{
+		Code:   http.StatusOK,
+		Status: "email successfully verified",
+		Data:   nil,
 	})
 }

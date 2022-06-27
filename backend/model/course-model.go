@@ -10,6 +10,7 @@ type GetCourseResponse struct {
 	Tools       string    `json:"tools"`
 	About       string    `json:"about"`
 	Description string    `json:"description"`
+	IsActive    bool      `json:"is_active"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
 }
@@ -28,4 +29,8 @@ type UpdateCourseRequest struct {
 	Tools       string `json:"tools"`
 	About       string `json:"about"`
 	Description string `json:"description"`
+}
+
+type UpdateStatusCourseRequest struct {
+	IsActive bool `json:"is_active"`
 }
