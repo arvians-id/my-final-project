@@ -171,34 +171,7 @@ func (repository *userRepository) GetLastInsertUser(ctx context.Context, tx *sql
 
 // Update is a function to update a user by id to database
 func (repository *userRepository) Update(ctx context.Context, tx *sql.Tx, user entity.Users) error {
-	var email, username string
-	var emailArr, usernameArr []string
-
-	rowsCheck, err := tx.QueryContext(ctx, "SELECT email, username FROM users")
-
-	if err != nil {
-		return err
-	}
-
-	for rowsCheck.Next() {
-		rowsCheck.Scan(&email, &username)
-		emailArr = append(emailArr, email)
-		usernameArr = append(usernameArr, username)
-	}
-
-	for _, value := range usernameArr {
-		if value == user.Username {
-			return fmt.Errorf("username has been registered")
-		}
-	}
-
-	for _, value := range emailArr {
-		if value == user.Email {
-			return fmt.Errorf("email has been registered")
-		}
-	}
-
-	_, err = tx.ExecContext(ctx, "UPDATE users SET name = ?, username = ?, role = ?, updated_at = ? WHERE id = ?", user.Name, user.Username, user.Role, user.UpdatedAt, user.Id)
+	_, err := tx.ExecContext(ctx, "UPDATE users SET name = ?, username = ?, role = ?, updated_at = ? WHERE id = ?", user.Name, user.Username, user.Role, user.UpdatedAt, user.Id)
 
 	if err != nil {
 		return err
