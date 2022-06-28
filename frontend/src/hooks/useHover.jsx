@@ -17,17 +17,18 @@ export function useHoverTextToSpech(textInfo) {
 
   const handleMouseOver = () => {
     console.log('utterThis', utterThis);
-    if (utterThis) {
-      utterThis.lang = 'id';
-      synth.resume();
-      synth.speak(utterThis);
-      utterThis.onstart = function (event) {
-        console.log(
-          'We have started uttering this speech: ' + event.utterance.text
-        );
-      };
+    if (value === false) {
+      if (utterThis) {
+        utterThis.lang = 'id';
+        synth.speak(utterThis);
+        utterThis.onstart = function (event) {
+          console.log(
+            'We have started uttering this speech: ' + event.utterance.text
+          );
+        };
+      }
+      setValue(true);
     }
-    setValue(true);
   };
 
   const handleMouseOut = () => {
