@@ -3,6 +3,7 @@ package integration
 import (
 	"encoding/json"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -800,6 +801,7 @@ var _ = Describe("User API", func() {
 				var responseBodyListSubmissions map[string]interface{}
 				_ = json.Unmarshal(bodyListSubmissions, &responseBodyListSubmissions)
 
+				log.Println(responseBodyListSubmissions["data"])
 				userListSubmissions := responseBodyListSubmissions["data"].([]interface{})
 				userResponseListSubmissions1 := userListSubmissions[0].(map[string]interface{})
 

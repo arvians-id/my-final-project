@@ -43,7 +43,6 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 
 	// Module Submission Setup
 	moduleSubmissionRepository := repository.NewModuleSubmissionsRepository()
-	moduleSubmissionService := service.NewModuleSubmissionsService(&moduleSubmissionRepository, &courseRepository, database)
 
 	// User Submission Setup
 	userSubmissionRepository := repository.NewUserSubmissionsRepository()
@@ -52,10 +51,11 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 
 	// UserCourse Setup
 	userCourseRepository := repository.NewUserCourseRepository()
-	userCourseService := service.NewUserCourseService(&userCourseRepository, &courseRepository, &moduleSubmissionRepository, database)
+	userCourseService := service.NewUserCourseService(&userCourseRepository, &courseRepository, &moduleSubmissionRepository, &userSubmissionRepository, database)
 	userCourseController := controller.NewUserCourseController(&userCourseService)
 
 	// ---  Module Submission Setup
+	moduleSubmissionService := service.NewModuleSubmissionsService(&moduleSubmissionRepository, &courseRepository, &userCourseRepository, &userSubmissionRepository, database)
 	moduleSubmissionController := controller.NewModuleSubmissionsController(&moduleSubmissionService, &userCourseService)
 	// ---  Course Setup
 	courseController := controller.NewCourseController(&courseService, &userCourseService)

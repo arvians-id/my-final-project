@@ -16,7 +16,7 @@ type QuestionService interface {
 	Delete(ctx context.Context, questionId int) error
 	Update(ctx context.Context, request model.UpdateQuestionRequest, questionId int) (model.GetQuestionRelationResponse, error)
 	FindByUserId(ctx context.Context, userId int) ([]model.GetQuestionRelationResponse, error)
-	FindById(ctx context.Context, questionId int) (model.GetQuestionRelationResponse, error)
+	FindById(ctx context.Context, id int) (model.GetQuestionRelationResponse, error)
 }
 
 type questionService struct {
@@ -171,18 +171,17 @@ func (service *questionService) FindByUserId(ctx context.Context, userId int) ([
 	return courseResponses, nil
 }
 
-func (service *questionService) FindById(ctx context.Context, questionId int) (model.GetQuestionRelationResponse, error) {
+func (service *questionService) FindById(ctx context.Context, id int) (model.GetQuestionRelationResponse, error) {
 	tx, err := service.DB.Begin()
 	if err != nil {
 		return model.GetQuestionRelationResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
 
-	questions, err := service.QuestionRepository.FindById(ctx, tx, questionId)
+	question, err := service.QuestionRepository.FindById(ctx, tx, id)
 	if err != nil {
 		return model.GetQuestionRelationResponse{}, err
 	}
 
-	return utils.ToQuestionRelationResponse(questions), nil
+	return utils.ToQuestionRelationResponse(question), nil
 }
-

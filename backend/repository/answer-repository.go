@@ -14,7 +14,7 @@ type AnswerRepository interface {
 	FindById(ctx context.Context, tx *sql.Tx, answerId int) (entity.Answers, error)
 	Update(ctx context.Context, tx *sql.Tx, answer entity.Answers, answerId int) (entity.Answers, error)
 	FindByUserId(ctx context.Context, tx *sql.Tx, userId int) ([]entity.Answers, error)
-	FindByQuestionId(ctx context.Context, tx *sql.Tx, questionId int) ([]entity.Answers, error)
+	FindByIdQuestion(ctx context.Context, tx *sql.Tx, questionId int) ([]entity.Answers, error)
 }
 
 type answerRepository struct {
@@ -93,7 +93,7 @@ func (repository *answerRepository) Delete(ctx context.Context, tx *sql.Tx, answ
 	return nil
 }
 
-func (repository *answerRepository) FindById(ctx context.Context, tx *sql.Tx,  answerId int) (entity.Answers, error) {
+func (repository *answerRepository) FindById(ctx context.Context, tx *sql.Tx, answerId int) (entity.Answers, error) {
 	query := `SELECT * FROM answers WHERE id = ?`
 	queryContext, err := tx.QueryContext(ctx, query, answerId)
 	if err != nil {
@@ -178,11 +178,11 @@ func (repository *answerRepository) FindByUserId(ctx context.Context, tx *sql.Tx
 	return answers, nil
 }
 
-func (repository *answerRepository) FindByQuestionId(ctx context.Context, tx *sql.Tx, questionId int) ([]entity.Answers, error) {
+func (repository *answerRepository) FindByIdQuestion(ctx context.Context, tx *sql.Tx, questionId int) ([]entity.Answers, error) {
 	query := `SELECT * FROM answers WHERE question_id = ? ORDER BY created_at DESC`
 	queryContext, err := tx.QueryContext(ctx, query, questionId)
 	if err != nil {
-		return []entity.Answers{}, err
+		return nil, err
 	}
 	defer func(queryContext *sql.Rows) {
 		err := queryContext.Close()

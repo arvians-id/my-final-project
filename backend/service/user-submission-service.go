@@ -82,27 +82,24 @@ func (service *userSubmissionsService) SubmitFile(ctx context.Context, request m
 
 	before, err := service.UserSubmissionRepository.FindUserSubmissionByOther(ctx, tx, newSubmit)
 	if err != nil {
-		userSubmission, err := service.UserSubmissionRepository.SubmitFile(ctx, tx, newSubmit)
+		return model.GetUserSubmissionsResponse{}, err
+	}
+	if before.File != nil {
+		path, err := utils.GetPath("/assets/", *before.File)
 		if err != nil {
 			return model.GetUserSubmissionsResponse{}, err
 		}
-
-		return utils.ToUserSubmissionsResponse(userSubmission), nil
+		err = os.Remove(path)
+		if err != nil {
+			return model.GetUserSubmissionsResponse{}, err
+		}
 	}
+
 	userSubmission, err := service.UserSubmissionRepository.UpdateFile(ctx, tx, newSubmit)
 	if err != nil {
 		return model.GetUserSubmissionsResponse{}, err
 	}
-
-	path, err := utils.GetPath("/assets/", before.File)
-	if err != nil {
-		return model.GetUserSubmissionsResponse{}, err
-	}
-
-	err = os.Remove(path)
-	if err != nil {
-		return model.GetUserSubmissionsResponse{}, err
-	}
+	userSubmission.Id = before.Id
 
 	return utils.ToUserSubmissionsResponse(userSubmission), nil
 }

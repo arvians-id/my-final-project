@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/rg-km/final-project-engineering-12/backend/utils"
 	"io"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
@@ -20,7 +21,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
 )
 
-var _ = Describe("Module Submissions API", func() {
+var _ = Describe("User Submissions API", func() {
 
 	var (
 		server             *gin.Engine
@@ -92,7 +93,7 @@ var _ = Describe("Module Submissions API", func() {
 
 		token = responseBodyLogin["token"].(string)
 
-		// Create Course 1
+		// Create Course
 		requestBody = strings.NewReader(`{"name": "Teknik Komputer Jaringan","class": "TKJ-3","tools": "Router, RJ-45","about": "Pada pelajaran kali ini akan lebih difokuskan pada pembuatan tower","description": "Siswa mampu membuat tower sendiri"}`)
 		request = httptest.NewRequest(http.MethodPost, "/api/courses", requestBody)
 		request.Header.Add("Content-Type", "application/json")
@@ -108,6 +109,17 @@ var _ = Describe("Module Submissions API", func() {
 		_ = json.Unmarshal(body, &responseBody)
 
 		codeCourse = responseBody["data"].(map[string]interface{})["code_course"].(string)
+		idCourse := int(responseBody["data"].(map[string]interface{})["id"].(float64))
+
+		// Create User Course
+		rBody := fmt.Sprintf(`{"user_id":%v,"course_id":%v}`, idUser, idCourse)
+		requestBody = strings.NewReader(rBody)
+		request = httptest.NewRequest(http.MethodPost, "/api/usercourse", requestBody)
+		request.Header.Add("Content-Type", "application/json")
+		request.Header.Set("Authorization", token)
+
+		writer = httptest.NewRecorder()
+		server.ServeHTTP(writer, request)
 
 		// Create Module Submission
 		requestBody = strings.NewReader(`{"name": "tugas Olahraga Bang","description": "renang","deadline": "2022-06-21T15:21:38+07:00"}`)
@@ -167,6 +179,7 @@ var _ = Describe("Module Submissions API", func() {
 				var responseBody map[string]interface{}
 				_ = json.Unmarshal(resp, &responseBody)
 
+				log.Println(responseBody["status"])
 				Expect(int(responseBody["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody["status"]).To(Equal("user submission successfully created"))
 				Expect(int(responseBody["data"].(map[string]interface{})["user_id"].(float64))).To(Equal(idUser))
@@ -222,11 +235,13 @@ var _ = Describe("Module Submissions API", func() {
 				server.ServeHTTP(rec, request)
 
 				response = rec.Result()
+				log.Println(response.Status)
 
 				resp, _ = io.ReadAll(response.Body)
 				var responseBody1 map[string]interface{}
 				_ = json.Unmarshal(resp, &responseBody1)
 
+				log.Println(responseBody1["status"])
 				Expect(int(responseBody1["code"].(float64))).To(Equal(http.StatusOK))
 				Expect(responseBody1["status"]).To(Equal("OK"))
 				Expect(int(responseBody1["data"].(map[string]interface{})["id"].(float64))).To(Equal(idUserSubmission))
@@ -346,6 +361,8 @@ var _ = Describe("Module Submissions API", func() {
 				fileName := responseBody["data"].(map[string]interface{})["file"].(string)
 
 				// Download File Submission
+				log.Println(responseBody["status"])
+				log.Println(responseBody["data"])
 				idUserSubmission := int(responseBody["data"].(map[string]interface{})["id"].(float64))
 				request = httptest.NewRequest(http.MethodPost, fmt.Sprintf("/api/courses/%v/submissions/%v/user-submit/%v/download", codeCourse, idModuleSubmission, idUserSubmission), nil)
 				contentDisposition := fmt.Sprintf("attachment; filename=%s", fileName)

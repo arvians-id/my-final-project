@@ -25,14 +25,16 @@ type usercourseService struct {
 	UserCourseRepository       repository.UserCourseRepository
 	CourseRepository           repository.CourseRepository
 	ModuleSubmissionRepository repository.ModuleSubmissionsRepository
+	UserSubmissionRepository   repository.UserSubmissionsRepository
 	DB                         *sql.DB
 }
 
-func NewUserCourseService(usercourseRepository *repository.UserCourseRepository, courseRepository *repository.CourseRepository, moduleSubmissionRepository *repository.ModuleSubmissionsRepository, db *sql.DB) UserCourseService {
+func NewUserCourseService(usercourseRepository *repository.UserCourseRepository, courseRepository *repository.CourseRepository, moduleSubmissionRepository *repository.ModuleSubmissionsRepository, userSubmissionRepository *repository.UserSubmissionsRepository, db *sql.DB) UserCourseService {
 	return &usercourseService{
 		UserCourseRepository:       *usercourseRepository,
 		CourseRepository:           *courseRepository,
 		ModuleSubmissionRepository: *moduleSubmissionRepository,
+		UserSubmissionRepository:   *userSubmissionRepository,
 		DB:                         db,
 	}
 }
@@ -142,6 +144,17 @@ func (service *usercourseService) Create(ctx context.Context, request model.Crea
 	usercourse, err := service.UserCourseRepository.Create(ctx, tx, usercourses)
 	if err != nil {
 		return model.GetUserCourseResponse{}, err
+	}
+
+	// Create User Submission
+	allModuleSubmissions, _ := service.ModuleSubmissionRepository.FindAll(ctx, tx, usercourses.CourseId)
+	if allModuleSubmissions != nil {
+		for _, value := range allModuleSubmissions {
+			err := service.UserSubmissionRepository.OnlyCreate(ctx, tx, request.UserId, value.Id)
+			if err != nil {
+				return model.GetUserCourseResponse{}, err
+			}
+		}
 	}
 
 	return utils.ToUserCourseResponse(usercourse), nil
