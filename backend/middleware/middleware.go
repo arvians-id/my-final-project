@@ -95,7 +95,7 @@ func AdminHandler(handler func(ctx *gin.Context)) gin.HandlerFunc {
 		if !tkn.Valid {
 			ctx.JSON(http.StatusUnauthorized, model.WebResponse{
 				Code:   401,
-				Status: "Invalid token",
+				Status: "Session token is invalid",
 			})
 			return
 		}

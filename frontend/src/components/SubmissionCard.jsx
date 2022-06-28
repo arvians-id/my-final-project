@@ -1,16 +1,69 @@
-import React from 'react'
-import { Flex, Text, Spacer, Badge } from '@chakra-ui/react'
-export default function SubmissionCard({name, status}) {
-    return (
-        <Flex flexDirection="row" alignContent="center" bgColor="blue.500" p={4} width="full" height={14} borderRadius="10">
-            <Text as="span" fontsize="md" fontWeight="semibold" color="white">{name}</Text>
-            <Spacer />
-            {
-                status ?
-                <Badge colorScheme="green" px={3} py={1} borderRadius={5}>Sudah Terkumpul</Badge>
-                :
-                <Badge colorScheme="red" px={3} py={1} borderRadius={5}>Belum Terkumpul</Badge>
-            }
+import React, { useState } from 'react';
+import { Flex, Text, Spacer, Badge, Box, Button } from '@chakra-ui/react';
+import SubmitCard from './SubmitCard';
+
+export default function SubmissionCard({
+  name,
+  status,
+  type,
+  courseCode,
+  submissionId,
+  getListSubmission,
+}) {
+  const [openFormSubmit, setOpenFormSubmit] = useState(false);
+  const onToggleButtonSubmit = () => {
+    setOpenFormSubmit(!openFormSubmit);
+  };
+
+  const onSuccess = () => {
+    setOpenFormSubmit(false);
+    getListSubmission();
+  };
+
+  // alert(type)
+  return (
+    <Box width="full">
+      <Flex
+        flexDirection="row"
+        alignContent="center"
+        bgColor="blue.500"
+        p={4}
+        width="full"
+        borderRadius="10"
+      >
+        <Text as="span" fontsize="md" fontWeight="semibold" color="white">
+          {name}
+        </Text>
+        <Spacer />
+        <Flex alignItems="center" gap="15px">
+          <Badge
+            colorScheme={status ? 'green' : 'red'}
+            px={3}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            py={1}
+            h="30px"
+            borderRadius={5}
+          >
+            {status ? 'Sudah Terkumpul' : 'Belum Terkumpul'}
+          </Badge>
+          {type === 'submit' && status === false && (
+            <Button colorScheme="green" h="30px" onClick={onToggleButtonSubmit}>
+              Kumpul Tugas
+            </Button>
+          )}
         </Flex>
-    )
+      </Flex>
+      {openFormSubmit && (
+        <Box mt="4">
+          <SubmitCard
+            onSuccess={onSuccess}
+            courseCode={courseCode}
+            submissionId={submissionId}
+          />
+        </Box>
+      )}
+    </Box>
+  );
 }

@@ -49,15 +49,15 @@ type GetUserDetailUpdate struct {
 }
 
 type UserDetailResponse struct {
-	Id             int    `json:"id"`
-	Name           string `json:"name"`
-	Username       string `json:"username"`
-	Role           int    `json:"role"`
-	Phone          string `json:"phone"`
-	Gender         int    `json:"gender"`
-	DisabilityType int    `json:"type_of_disability"`
-	Address        string `json:"address"`
-	Birthdate      string `json:"birthdate"`
-	Image          string `json:"image"`
-	Description    string `json:"description"`
+	Id             int     `json:"id"`
+	Name           string  `json:"name"`
+	Username       string  `json:"username"`
+	Role           int     `json:"role"`
+	Phone          string  `json:"phone"`
+	Gender         int     `json:"gender"`
+	DisabilityType int     `json:"type_of_disability"`
+	Address        *string `json:"address,omitempty"`
+	Birthdate      string  `json:"birthdate"`
+	Image          *string `json:"image,omitempty"`
+	Description    *string `json:"description,omitempty"`
 }

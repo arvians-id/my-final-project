@@ -3,7 +3,9 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 
 	"github.com/rg-km/final-project-engineering-12/backend/entity"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
@@ -19,6 +21,8 @@ type UserRepository interface {
 	GetLastInsertUser(ctx context.Context, tx *sql.Tx) (entity.Users, error)
 	Delete(ctx context.Context, tx *sql.Tx, id int) error
 	Update(ctx context.Context, tx *sql.Tx, user entity.Users) error
+	CheckUserByEmail(ctx context.Context, tx *sql.Tx, email string) error
+	UpdateVerifiedAt(ctx context.Context, tx *sql.Tx, timeVerifiedAt time.Time, email string) error
 }
 
 type userRepository struct {
@@ -31,11 +35,37 @@ func NewUserRepository() UserRepository {
 // Register is a function to register a new user to the database
 func (repository *userRepository) Register(ctx context.Context, tx *sql.Tx, user entity.Users) error {
 	var id int
+	var email, username string
+	var emailArr, usernameArr []string
+
+	rowsCheck, err := tx.QueryContext(ctx, "SELECT email, username FROM users")
+
+	if err != nil {
+		return err
+	}
+
+	for rowsCheck.Next() {
+		rowsCheck.Scan(&email, &username)
+		emailArr = append(emailArr, email)
+		usernameArr = append(usernameArr, username)
+	}
+
+	for _, value := range usernameArr {
+		if value == user.Username {
+			return fmt.Errorf("username has been registered")
+		}
+	}
+
+	for _, value := range emailArr {
+		if value == user.Email {
+			return fmt.Errorf("email has been registered")
+		}
+	}
 
 	temp, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 12)
 	user.Password = string(temp)
 
-	_, err := tx.ExecContext(ctx, "INSERT INTO users (name, username, email, password, role, email_verification, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", user.Name, user.Username, user.Email, user.Password, user.Role, user.EmailVerification, user.CreatedAt, user.UpdatedAt)
+	_, err = tx.ExecContext(ctx, "INSERT INTO users (name, username, email, password, role, email_verification, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", user.Name, user.Username, user.Email, user.Password, user.Role, user.EmailVerification, user.CreatedAt, user.UpdatedAt)
 
 	if err != nil {
 		return err
@@ -141,7 +171,6 @@ func (repository *userRepository) GetLastInsertUser(ctx context.Context, tx *sql
 
 // Update is a function to update a user by id to database
 func (repository *userRepository) Update(ctx context.Context, tx *sql.Tx, user entity.Users) error {
-
 	_, err := tx.ExecContext(ctx, "UPDATE users SET name = ?, username = ?, role = ?, updated_at = ? WHERE id = ?", user.Name, user.Username, user.Role, user.UpdatedAt, user.Id)
 
 	if err != nil {
@@ -177,6 +206,36 @@ func (repository *userRepository) Delete(ctx context.Context, tx *sql.Tx, id int
 
 	_, err = tx.ExecContext(ctx, "DELETE FROM user_details WHERE user_id = ?", id)
 
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (repository *userRepository) CheckUserByEmail(ctx context.Context, tx *sql.Tx, email string) error {
+	query := "SELECT * FROM users WHERE email = ?"
+	queryContext, err := tx.QueryContext(ctx, query, email)
+	if err != nil {
+		return err
+	}
+	defer func(queryContext *sql.Rows) {
+		err := queryContext.Close()
+		if err != nil {
+			return
+		}
+	}(queryContext)
+
+	if queryContext.Next() {
+		return nil
+	}
+
+	return errors.New("the user with the email was not found")
+}
+
+func (repository *userRepository) UpdateVerifiedAt(ctx context.Context, tx *sql.Tx, timeVerifiedAt time.Time, email string) error {
+	query := "UPDATE users SET email_verification = ? WHERE email = ?"
+	_, err := tx.ExecContext(ctx, query, timeVerifiedAt, email)
 	if err != nil {
 		return err
 	}

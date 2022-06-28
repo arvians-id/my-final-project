@@ -63,19 +63,11 @@ export default function Sidebar() {
               </AccordionButton>
               {/* Acccordion Panel */}
               <AccordionPanel ml={5}>
-                <Button
-                  variant="ghost"
-                  onClick={() => gotoPage('/course')}
-                  colorScheme="blue"
-                  width="full"
-                  justifyContent="start"
-                >
-                  <HStack spacing={3}>
-                    <Box as="span" fontWeight="semibold">
-                      Pelajaran Anda
-                    </Box>
-                  </HStack>
-                </Button>
+                <ButtonAccordionPannel
+                  link="/course"
+                  gotoPage={gotoPage}
+                  title="Pelajaran Anda"
+                />
                 <Button
                   variant="ghost"
                   colorScheme="blue"
@@ -106,41 +98,68 @@ export default function Sidebar() {
             </AccordionItem>
           )}
           {user.role === 'Guru' && (
-            <AccordionItem>
-              {/* Accordion Button */}
-              <AccordionButton>
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  width="full"
-                  justifyContent="start"
-                >
-                  <HStack spacing={3}>
-                    <AiFillBook />
-                    <Box as="span" fontWeight="semibold">
-                      Manajemen Siswa
-                    </Box>
-                  </HStack>
-                </Button>
-                <AccordionIcon />
-              </AccordionButton>
-              {/* Acccordion Panel */}
-              <AccordionPanel ml={5}>
-                <Button
-                  variant="ghost"
-                  colorScheme="blue"
-                  width="full"
-                  justifyContent="start"
-                  onClick={() => gotoPage('/dashboard-siswa')}
-                >
-                  <HStack spacing={3}>
-                    <Box as="span" fontWeight="semibold">
-                      Data Siswa
-                    </Box>
-                  </HStack>
-                </Button>
-              </AccordionPanel>
-            </AccordionItem>
+            <>
+              <AccordionItem>
+                <AccordionButton>
+                  <ButtonAccordion
+                    icon={<AiFillBook />}
+                    title="Manajemen Siswa"
+                  />
+                </AccordionButton>
+                <AccordionPanel>
+                  <ButtonAccordionPannel
+                    link="/dashboard-user"
+                    gotoPage={gotoPage}
+                    title="Dashboard Siswa"
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+              <AccordionItem>
+                <AccordionButton>
+                  <ButtonAccordion
+                    icon={<AiFillBook />}
+                    title="Manajemen Course"
+                  />
+                </AccordionButton>
+                <AccordionPanel>
+                  <ButtonAccordionPannel
+                    link="/dashbord-course"
+                    gotoPage={gotoPage}
+                    title="Daftar Mata Pelajaran"
+                  />
+                  <ButtonAccordionPannel
+                    link="/add-course"
+                    gotoPage={gotoPage}
+                    title="Tambah Module"
+                  />
+                  <ButtonAccordionPannel
+                    link="/add-student-to-course"
+                    gotoPage={gotoPage}
+                    title="Tambah Siswa Kedalam Course"
+                  />
+                  <ButtonAccordionPannel
+                    link="/admin-course-detail"
+                    gotoPage={gotoPage}
+                    title="Course Detail"
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+              <AccordionItem>
+                <AccordionButton>
+                  <ButtonAccordion
+                    icon={<AiFillBook />}
+                    title="Manajemen Submission"
+                  />
+                </AccordionButton>
+                <AccordionPanel>
+                  <ButtonAccordionPannel
+                    link="/dashboard-submission"
+                    gotoPage={gotoPage}
+                    title="Dashboard Submission"
+                  />
+                </AccordionPanel>
+              </AccordionItem>
+            </>
           )}
           {user.role === 'Admin' && (
             <AccordionItem>
@@ -168,7 +187,7 @@ export default function Sidebar() {
                   colorScheme="blue"
                   width="full"
                   justifyContent="start"
-                  onClick={() => gotoPage('/dashboard-pengguna')}
+                  onClick={() => gotoPage('/dashboard-user')}
                 >
                   <HStack spacing={3}>
                     <Box as="span" fontWeight="semibold">
@@ -218,6 +237,7 @@ export default function Sidebar() {
                 colorScheme="blue"
                 width="full"
                 justifyContent="start"
+                onClick={() => gotoPage('/edit-profile')}
               >
                 <HStack spacing={3}>
                   <Box as="span" fontWeight="semibold">
@@ -244,3 +264,42 @@ export default function Sidebar() {
     </Box>
   );
 }
+
+const ButtonAccordionPannel = ({ link, gotoPage, title }) => {
+  return (
+    <Button
+      variant="ghost"
+      colorScheme="blue"
+      width="full"
+      justifyContent="start"
+      onClick={() => gotoPage(link)}
+    >
+      <HStack spacing={3}>
+        <Box as="span" fontWeight="semibold">
+          {title}
+        </Box>
+      </HStack>
+    </Button>
+  );
+};
+
+const ButtonAccordion = ({ icon, title }) => {
+  return (
+    <>
+      <Button
+        variant="ghost"
+        colorScheme="blue"
+        width="full"
+        justifyContent="start"
+      >
+        <HStack spacing={3}>
+          {icon}
+          <Box as="span" fontWeight="semibold">
+            {title}
+          </Box>
+        </HStack>
+      </Button>
+      <AccordionIcon />
+    </>
+  );
+};
