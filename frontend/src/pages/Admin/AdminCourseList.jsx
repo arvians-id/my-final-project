@@ -56,7 +56,6 @@ export default function AdminCourseList() {
     setLoadingGetCourse(true);
     const res = await API_GET_ALL_COURSE();
     if (res.status === 200) {
-      console.log('res.data.data', res.data.data);
       setListCourse(res.data.data ?? []);
     }
     setLoadingGetCourse(false);
@@ -64,7 +63,6 @@ export default function AdminCourseList() {
 
   const handleSubmitCourse = async () => {
     setLoadingAddCourse(true);
-    console.log('formAddCourse', formAddCourse);
     const res = await API_CREATE_COURSE(formAddCourse);
     if (res.status === 200) {
       toast({
@@ -257,7 +255,6 @@ const CourseListItem = ({
 
   const handleUpdateCourse = async () => {
     setLoadingUpdateCourse(true);
-    console.log('formUpdateCourse', formUpdateCourse);
     const res = await API_UPDATE_COURSE(course.code_course, formUpdateCourse);
     if (res.status === 200) {
       toast({

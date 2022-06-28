@@ -47,8 +47,6 @@ export default function Register() {
   });
 
   const onChangeRegisterForm = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
     setRegisterForm({
       ...registerForm,
       [e.target.name]: e.target.value,
@@ -111,7 +109,6 @@ export default function Register() {
         ...registerForm,
         loading: false,
       });
-      console.log('res', res);
       if (res.status === 201) {
         clearRegisterForm();
         gotoLoginPage();

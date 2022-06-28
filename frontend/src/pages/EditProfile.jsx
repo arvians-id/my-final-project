@@ -53,7 +53,6 @@ export default function EditProfile() {
     setLoadingGetUserDetail(true);
     const res = await API_GET_USER_DETAIL_BY_ID(user.id);
     if (res.status === 200) {
-      console.log('res.data.data', res.data.data);
       setUserDetail(res.data.data);
       setFormProfile({
         name: res.data.data.name,
@@ -147,7 +146,6 @@ export default function EditProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoadingSubmit(true);
-    console.log('formProfile', formProfile);
     const res = await API_UPDATE_USER_PROFILE_DETAIL(formProfile, user.id);
     if (res.status === 200) {
       toast({

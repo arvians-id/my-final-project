@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Flex,
@@ -17,12 +17,14 @@ import {
   TableCaption,
   TableContainer,
   Select,
+  createStandaloneToast,
 } from '@chakra-ui/react';
 import MainAppLayout from '../../components/layout/MainAppLayout';
 import { API_GET_LIST_USER } from '../../api/user';
+import { BASE_URL } from '../../constant/api';
+import { axiosWithToken } from '../../api/axiosWithToken';
 
 export default function AdminUserList() {
-  a;
   const [listAllUser, setListAllUser] = useState([]);
   let num = 1;
   let userList = [
@@ -67,7 +69,7 @@ export default function AdminUserList() {
 
   const updateRole = (type) => {
     axiosWithToken()
-      .put(`${BASE_URL}/api/users/roleupdate/${type}`)
+      .put(`${BASE_URL}/api/users/roleupdate/${Number(type.target.value)}`)
       .then((res) => {
         if (res.status === 200) {
           toast({
@@ -86,6 +88,7 @@ export default function AdminUserList() {
       });
   };
 
+  const { toast } = createStandaloneToast();
   const deleteUser = (id) => {
     axiosWithToken()
       .delete(`${BASE_URL}/api/users/${id}`)
@@ -157,13 +160,13 @@ export default function AdminUserList() {
                           <Td>{role_type(user.role)}</Td>
                           <Td>
                             <Stack direction="row" spacing={3}>
-                              <Button
+                              {/* <Button
                                 variant="solid"
                                 colorScheme="blue"
                                 size="sm"
                               >
                                 Ganti Role
-                              </Button>
+                              </Button> */}
                               <Select
                                 id="gender"
                                 placeholder="Select Gender"

@@ -58,23 +58,18 @@ export default function DetailDiscussion() {
   };
 
   const getQuestionDetail = async (questionId) => {
-    console.log('getQuestionDetail');
     axiosWithToken()
       .get(`${BASE_URL}/api/questions/${questionId}`)
       .then((res) => {
-        console.log('res.data.data', res.data.data);
         if (res.status === 200) {
           setQuestions(res.data.data);
         }
       });
   };
-
   const getAnswerBuQuestion = async (questionId) => {
-    console.log('getQuestionDetail');
     axiosWithToken()
-      .get(`${BASE_URL}/api/answers/by-question-id/${questionId}`)
+      .get(`${BASE_URL}/api/answers/${questionId}`)
       .then((res) => {
-        console.log(res.data.data);
         if (res.status === 200) {
           setListAnswer(res.data.data ?? []);
         }

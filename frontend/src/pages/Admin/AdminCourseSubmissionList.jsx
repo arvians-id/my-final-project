@@ -76,7 +76,6 @@ export default function AdminCourseSubmissionList() {
   const getListCourse = async () => {
     const res = await API_GET_ALL_COURSE();
     if (res.status === 200) {
-      console.log('res.data.data', res.data.data);
       const data = res.data.data ?? [];
       setListCourseFull(data);
       let result = [];

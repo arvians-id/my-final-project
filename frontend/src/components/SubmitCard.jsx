@@ -22,7 +22,6 @@ export default function SubmitCard({ courseCode, submissionId, onSuccess }) {
   const { toast } = createStandaloneToast();
 
   const onChange = (e) => {
-    console.log('e.target.files[0]', e.target.files[0]);
     setFile(e.target.files[0]);
   };
 

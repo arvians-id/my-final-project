@@ -36,7 +36,6 @@ function App() {
     if (res.status === 200) {
       setUser(adapterUserToFE(res.data.data));
     }
-    console.log('user', user);
     setIsReady(true);
   };
   // API_CHECK_STATUS

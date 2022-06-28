@@ -11,7 +11,6 @@ export default function SubmissionCard({
   getListSubmission,
 }) {
   const [openFormSubmit, setOpenFormSubmit] = useState(false);
-  console.log(courseCode, submissionId);
   const onToggleButtonSubmit = () => {
     setOpenFormSubmit(!openFormSubmit);
   };

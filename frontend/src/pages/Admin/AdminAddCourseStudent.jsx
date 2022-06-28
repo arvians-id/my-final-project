@@ -79,7 +79,6 @@ export default function AdminAddCourseStudent() {
   const getListCourse = async () => {
     const res = await API_GET_ALL_COURSE();
     if (res.status === 200) {
-      console.log('res.data.data', res.data.data);
       const data = res.data.data ?? [];
       setListCourseFull(data);
       let result = [];
@@ -94,8 +93,6 @@ export default function AdminAddCourseStudent() {
   };
 
   const onChangeCourse = (e) => {
-    console.log(listCourseFull);
-    console.log(e.target.value);
     setSelectedIdCourse(e.target.value);
     const selected = listCourseFull.filter(
       (course) => course.id === Number(e.target.value)

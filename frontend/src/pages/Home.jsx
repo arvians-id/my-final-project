@@ -116,7 +116,6 @@ export default function Home() {
     setLoadingGetSubmision(true);
     const res = await API_GET_SUBMISSION_BY_USER_LOGIN('?limit=3');
     if (res.status === 200) {
-      console.log('res', res);
       setListSubmission(res.data.data ?? []);
     }
     setLoadingGetSubmision(false);

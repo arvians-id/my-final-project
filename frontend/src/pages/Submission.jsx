@@ -39,7 +39,6 @@ export default function Submission() {
     setLoadingGetSubmision(true);
     const res = await API_GET_SUBMISSION_BY_USER_LOGIN('');
     if (res.status === 200) {
-      console.log('res', res);
       setListSubmission(res.data.data ?? []);
     }
     setLoadingGetSubmision(false);

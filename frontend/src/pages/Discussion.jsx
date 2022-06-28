@@ -98,7 +98,6 @@ export default function Discussion() {
       const data = res.data.data ?? [];
       let result = [];
       for (const course of data) {
-        console.log('course', course);
         result.push({
           label: `${course.course_name} - ${course.course_class}`,
           value: course.id_course,
