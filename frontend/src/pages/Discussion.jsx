@@ -17,7 +17,10 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import DiscussionCard from '../components/DiscussionCard';
 import MainAppLayout from '../components/layout/MainAppLayout';
-import { API_GET_QUESTION_BY_USER_ID } from '../api/question';
+import {
+  API_GET_ALL_QUESTION,
+  API_GET_QUESTION_BY_USER_ID,
+} from '../api/question';
 import useStore from '../provider/zustand/store';
 import {
   API_GET_ALL_COURSE,
@@ -61,7 +64,9 @@ let discussionList = [
 
 export default function Discussion() {
   const [listDiscusion, setListDiscusion] = useState([]);
+  const [listMyDiscusion, setListMyDiscusion] = useState([]);
   const [loadingGetDiscusion, setLoadingGetDiscusion] = useState(false);
+  const [loadingGetMyDiscusion, setLoadingGetMyDiscusion] = useState(false);
   const user = useStore((state) => state.user);
   const { toast } = createStandaloneToast();
   const [formDiscussion, setFormDiscussion] = useState({
@@ -76,6 +81,27 @@ export default function Discussion() {
 
   const getListDiscussion = async () => {
     setLoadingGetDiscusion(true);
+    // const res = await API_GET_QUESTION_BY_USER_ID(user.id);
+    const res = await API_GET_ALL_QUESTION();
+    if (res.status === 200) {
+      let data = [];
+      for (const discussion of res.data.data ?? []) {
+        data.push({
+          id: discussion.id,
+          title: discussion.title,
+          module: discussion.course_name,
+          class: discussion.course_class,
+          tags: discussion.tags ?? '',
+          description: discussion.description ?? '',
+        });
+      }
+      setListDiscusion(data);
+    }
+    setLoadingGetDiscusion(false);
+  };
+
+  const getMyQuestion = async () => {
+    setLoadingGetMyDiscusion(true);
     const res = await API_GET_QUESTION_BY_USER_ID(user.id);
     if (res.status === 200) {
       let data = [];
@@ -85,11 +111,14 @@ export default function Discussion() {
           title: discussion.title,
           module: discussion.course_name,
           class: discussion.course_class,
+          tags: discussion.tags ?? '',
+          description: discussion.description ?? '',
         });
+        console.log(discussion);
       }
-      setListDiscusion(data);
+      setListMyDiscusion(data);
     }
-    setLoadingGetDiscusion(false);
+    setLoadingGetMyDiscusion(false);
   };
 
   const getListCourse = async () => {
@@ -98,6 +127,7 @@ export default function Discussion() {
       const data = res.data.data ?? [];
       let result = [];
       for (const course of data) {
+        console.log('course', course);
         result.push({
           label: `${course.course_name} - ${course.course_class}`,
           value: course.id_course,
@@ -134,6 +164,7 @@ export default function Discussion() {
             description: 'Berhasil buat question',
           });
           getListDiscussion();
+          getMyQuestion();
         } else {
           toast({
             status: 'error',
@@ -147,6 +178,7 @@ export default function Discussion() {
   useEffect(() => {
     getListCourse();
     getListDiscussion();
+    getMyQuestion();
   }, []);
 
   return (
@@ -178,6 +210,41 @@ export default function Discussion() {
                       title={discussion.title}
                       module={discussion.module}
                       moduleClass={discussion.class}
+                      tags={discussion.tags}
+                      description={discussion.description}
+                    />
+                  );
+                })
+              ) : (
+                <Text>Belum Ada Discussion</Text>
+              )}
+            </VStack>
+          </Box>
+        </Stack>
+        <Stack spacing={6} mt="6">
+          {/* Header */}
+          <Box>
+            <Box as="h1" fontSize="2xl" fontWeight="semibold">
+              Pertanyaan Saya
+            </Box>
+          </Box>
+          {/* End Header */}
+          {/* Content */}
+          <Box alignContent="flex-start">
+            <VStack spacing={8}>
+              {loadingGetMyDiscusion ? (
+                <Spinner />
+              ) : listMyDiscusion.length > 0 ? (
+                listMyDiscusion.map((discussion, index) => {
+                  return (
+                    <DiscussionCard
+                      key={index}
+                      id={discussion.id}
+                      title={discussion.title}
+                      module={discussion.module}
+                      moduleClass={discussion.class}
+                      tags={discussion.tags}
+                      description={discussion.description}
                     />
                   );
                 })

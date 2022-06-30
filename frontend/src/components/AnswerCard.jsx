@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Flex,
@@ -9,13 +9,33 @@ import {
   Button,
   Avatar,
   Input,
+  VStack,
 } from '@chakra-ui/react';
+import { API_GET_USER_DETAIL_BY_ID } from '../api/user';
 
-export default function AnswerCard({ answer, value, onChange, submit }) {
+export default function AnswerCard({ answer }) {
+  const [siswa, setSiswa] = useState();
+
+  const getDetailSiswa = async () => {
+    const res = await API_GET_USER_DETAIL_BY_ID(answer.user_id);
+    if (res.status === 200) {
+      setSiswa(res.data.data);
+    }
+  };
+
+  useEffect(() => {
+    getDetailSiswa();
+  }, []);
   return (
     <>
-      <Box variant="outline" bgColor="white.200" p={4} borderRadius="10">
-        <Flex direction="column" alignContent="center" mt={20} width="full">
+      <Box
+        variant="outline"
+        w="full"
+        bgColor="white.200"
+        p={4}
+        borderRadius="10"
+      >
+        {/* <Flex direction="column" alignContent="center" mt={20} width="full">
           <HStack>
             <Avatar
               name="Irfan Kurniawan"
@@ -36,11 +56,11 @@ export default function AnswerCard({ answer, value, onChange, submit }) {
             <Button onClick={submit}>Insert</Button>
             <Button>Cancel</Button>
           </HStack>
-        </Flex>
-        <Box mt={7} bgColor="blue.100" p={4} height="auto" borderRadius="10">
+        </Flex> */}
+        <Box bgColor="blue.100" p={4} height="auto" borderRadius="10">
           <HStack>
             <Avatar
-              name="Irfan Kurniawan"
+              name={siswa?.username}
               src="https://bit.ly/dan-abramov"
               mr={4}
               w={10}
@@ -48,7 +68,7 @@ export default function AnswerCard({ answer, value, onChange, submit }) {
             />
             <Stack>
               <Text as="span" fontSize="lg" fontWeight="semibold">
-                Irfan Kurniawan
+                {siswa?.username}
               </Text>
               <Text
                 as="span"
@@ -61,16 +81,20 @@ export default function AnswerCard({ answer, value, onChange, submit }) {
               </Text>
             </Stack>
           </HStack>
-          <Stack mt={5} direction="row">
+          <VStack mt={4} alignItems="flex-start">
+            <Text as="span" fontSize="16px" fontWeight="semibold" color="black">
+              Jawab:
+            </Text>
             <Text
+              mt="0"
               as="span"
               fontSize="xl"
               fontWeight="semibold"
               color="blackAlpha.600"
             >
-              {answer}
+              {answer.description}
             </Text>
-          </Stack>
+          </VStack>
         </Box>
       </Box>
     </>

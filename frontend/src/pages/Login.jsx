@@ -74,7 +74,7 @@ export default function Login() {
         'Password atau Email tidak ditemukan'
       );
       synth.speak(utterThis);
-    } else if (res.status === 401) {
+    } else if (res.status !== 500) {
       toast({
         position: 'bottom',
         title: 'Error Login.',

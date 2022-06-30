@@ -1,23 +1,24 @@
 import React from 'react';
-import { Flex, Text, Spacer } from '@chakra-ui/react';
-export default function ListModule({ name, list }) {
+import { Flex, Text, Spacer, Box } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+export default function ListModule({ article, courseCode }) {
   return (
-    <Flex
-      flexDirection="row"
-      alignContent="center"
-      bgColor="blue.500"
-      p={4}
-      width="full"
-      height={14}
-      borderRadius="10"
-    >
-      <Text as="span" fontsize="md" fontWeight="semibold" color="white">
-        {name}
-      </Text>
-      <Spacer />
-      <Text as="span" fontsize="md" fontWeight="semibold" color="white">
-        {list}
-      </Text>
-    </Flex>
+    <Link to={`/course/${courseCode}/article/${article.id}`}>
+      <Box
+        bgColor="blue.500"
+        p={4}
+        width="full"
+        borderRadius="10"
+        _hover={{ cursor: 'pointer' }}
+      >
+        <Text as="span" fontSize="md" fontWeight="semibold" color="white">
+          Judul: {article.name}
+        </Text>
+        <Spacer />
+        <Text as="span" fontSize="md" fontWeight="semibold" color="white">
+          Deskripsi: {article.content.slice(0, 20)}...
+        </Text>
+      </Box>
+    </Link>
   );
 }

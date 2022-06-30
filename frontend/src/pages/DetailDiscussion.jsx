@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
+  createStandaloneToast,
   Flex,
   FormLabel,
   HStack,
   Spacer,
+  Spinner,
   Stack,
+  Text,
   Textarea,
   VStack,
 } from '@chakra-ui/react';
@@ -42,8 +45,9 @@ export default function DetailDiscussion() {
   let { questionId } = useParams();
   const [questions, setQuestions] = useState();
   const [listAnswer, setListAnswer] = useState([]);
+  const [loadingAnswer, setLoadingAnswer] = useState(false);
   const user = useStore((state) => state.user);
-
+  const { toast } = createStandaloneToast();
   const [formAnswer, setFormAnswer] = useState({
     question_id: Number(questionId),
     user_id: user.id,
@@ -57,11 +61,19 @@ export default function DetailDiscussion() {
     });
   };
 
+  const clear = () => {
+    setFormAnswer({
+      ...formAnswer,
+      description: '',
+    });
+  };
+
   const getQuestionDetail = async (questionId) => {
     axiosWithToken()
       .get(`${BASE_URL}/api/questions/${questionId}`)
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.data.data);
           setQuestions(res.data.data);
         }
       });
@@ -83,6 +95,20 @@ export default function DetailDiscussion() {
       .then((res) => {
         if (res.status === 200) {
           getAnswerBuQuestion(questionId);
+          clear();
+          toast({
+            duration: 4000,
+            title: 'Berhasil',
+            description: 'Berhasil membuat jawaban',
+            status: 'success',
+          });
+        } else {
+          toast({
+            duration: 4000,
+            title: 'Gagal',
+            description: 'Gagal membuat jawaban',
+            status: 'error',
+          });
         }
       });
   };
@@ -104,7 +130,7 @@ export default function DetailDiscussion() {
         bg="white"
         position="sticky"
         left="80"
-        marginTop={20}
+        marginTop={10}
         py="3"
       >
         <Box m={5}>
@@ -123,61 +149,53 @@ export default function DetailDiscussion() {
               {questions && (
                 <QuestionCard
                   question={questions.title}
+                  description={questions.description}
+                  tags={questions.tags}
                   module={questions.course_name}
                   moduleClass={questions.course_class}
+                  userName={questions.user_name}
                 />
               )}
             </Box>
+            <Box my="4">
+              <FormLabel htmlFor="full-name" fontWeight="bold">
+                Jawab
+              </FormLabel>
+              <Textarea
+                id="description"
+                name="description"
+                type="text"
+                maxWidth="full"
+                height={50}
+                placeholder="Jawab"
+                value={formAnswer.description}
+                onChange={change}
+                mb="2"
+              />
+              <Flex alignItems="center" gap="5">
+                <Button onClick={submit}>Insert</Button>
+                <Button onClick={clear}>Cancel</Button>
+              </Flex>
+            </Box>
+            <Text my="2" fontSize="24px" fontWeight="800">
+              Daftar Jawaban
+            </Text>
             <Box alignContent="flex-start" mb="10">
-              <VStack spacing={8}>
-                {listAnswer.map((answer, index) => {
-                  return (
-                    <AnswerCard
-                      key={index}
-                      answer={answer.answer}
-                      value={formAnswer.description}
-                      onChange={change}
-                      submit={submit}
-                    />
-                  );
-                })}
+              <VStack spacing={2}>
+                {loadingAnswer ? (
+                  <Spinner />
+                ) : listAnswer.length === 0 ? (
+                  <Text>Belum Ada Jawaban</Text>
+                ) : (
+                  listAnswer.map((answer, index) => {
+                    return <AnswerCard key={index} answer={answer} />;
+                  })
+                )}
               </VStack>
             </Box>
             {/* End Content */}
           </Stack>
         </Box>
-        {/* <HStack>
-          <Textarea
-            id="description"
-            name="description"
-            type="text"
-            maxWidth="full"
-            height={50}
-            placeholder="Description"
-            value={formAnswer.description}
-            onChange={change}
-          />
-          <Spacer />
-          <Button onClick={submit} mt="10" colorScheme="green">
-            Jawab
-          </Button>
-          <Button>Cancel</Button>
-        </HStack> */}
-        {/* <Box my="2">
-          <FormLabel htmlFor="full-name" fontWeight="bold">
-            Description
-          </FormLabel>
-          <Textarea
-            id="description"
-            name="description"
-            type="text"
-            maxWidth="full"
-            height={50}
-            placeholder="Description"
-            value={formAnswer.description}
-            onChange={change}
-          />
-        </Box> */}
       </Flex>
       {/* End main */}
     </MainAppLayout>

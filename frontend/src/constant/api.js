@@ -20,8 +20,9 @@ export const ENDPOINT_API_ADD_USER_IN_COURSE = `${BASE_URL}/api/usercourse`;
 export const ENDPOINT_API_GET_SUBMISSIONS_BY_USER = `${BASE_URL}/api/users/submissions`;
 export const ENDPOINT_API_USER_SUBMIT_SUBMISSIONS = (courseCode, submissionId) => `${BASE_URL}/api/courses/${courseCode}/submissions/${submissionId}/user-submit`;
 
-// DISCUSSION
+// DISCUSSION   
 export const ENDPOINT_API_GET_QUESTIONS_BY_USER = `${BASE_URL}/api/questions/by-user`;
+export const ENDPOINT_API_GET_ALL_QUESTIONS = `${BASE_URL}/api/questions/all`;
 
 // USER
 export const ENDPOINT_API_GET_USER_BY_ID = `${BASE_URL}/api/users`;
@@ -35,4 +36,4 @@ export const ENDPOINT_API_DELETE_MODULE_ARTICLES = (courseCode, articleId) => `$
 export const ENDPOINT_API_UPDATE_MODULE_ARTICLES = (courseCode, articleId) => `${BASE_URL}/api/courses/${courseCode}/articles/${articleId}`;
 export const ENDPOINT_API_NEXT_MODULE_ARTICLES = (courseCode, articleId) => `${BASE_URL}/api/courses/${courseCode}/articles/${articleId}/next`;
 export const ENDPOINT_API_PREV_MODULE_ARTICLES = (courseCode, articleId) => `${BASE_URL}/api/courses/${courseCode}/articles/${articleId}/previous`;
-
+export const ENDPOINT_API_GET_DETAIL_ARTICLE_COURSE_BY_ARTICLE_ID_AND_COURSE_CODE = (code, articleId) => `${BASE_URL}/api/courses/${code}/articles/${articleId}`
