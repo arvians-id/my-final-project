@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  Stack,
   Table,
   TableCaption,
   TableContainer,
@@ -13,42 +15,39 @@ import React from 'react';
 import MainAppLayout from '../components/layout/MainAppLayout';
 
 export default function DashboardDataPengguna() {
-  let num = 1
+  let num = 1;
   let userList = [
     {
       id: 1,
-      name: "Irfan Kurniawan",
+      name: 'Irfan Kurniawan',
       type_of_disability: 0,
-      role: 1
+      role: 1,
     },
     {
       id: 2,
-      name: "Rahmalina",
+      name: 'Rahmalina',
       type_of_disability: 2,
-      role: 2
-    }
-  ]
+      role: 2,
+    },
+  ];
 
   let disability_type = (type) => {
     if (type === 0) {
-      return "None"
+      return 'None';
+    } else if (type === 1) {
+      return 'Tuna Netra';
+    } else {
+      return 'Tuna Rungu';
     }
-    else if (type === 1) {
-      return "Tuna Netra"
-    }
-    else {
-      return "Tuna Rungu"
-    }
-  }
+  };
 
   let role_type = (role) => {
     if (role === 1) {
-      return "Guru"
+      return 'Guru';
+    } else {
+      return 'Siswa';
     }
-    else {
-      return "Siswa"
-    }
-  }
+  };
   return (
     <MainAppLayout>
       <Box m={5} width="full">
@@ -64,10 +63,12 @@ export default function DashboardDataPengguna() {
           </Box>
           {/* End Header */}
           {/* Content */}
-          <Button variant="solid" colorScheme="green" width="30%">Tambah User</Button>
+          <Button variant="solid" colorScheme="green" width="30%">
+            Tambah User
+          </Button>
           <Box>
             <TableContainer>
-              <Table variant='striped' colorScheme='blue'>
+              <Table variant="striped" colorScheme="blue">
                 <Thead>
                   <Tr>
                     <Th>No</Th>
@@ -78,24 +79,30 @@ export default function DashboardDataPengguna() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {
-                    userList.map((user) => {
-                      return (
-                        <Tr>
-                          <Td>{num++}</Td>
-                          <Td>{user.name}</Td>
-                          <Td>{disability_type(user.type_of_disability)}</Td>
-                          <Td>{role_type(user.role)}</Td>
-                          <Td>
-                            <Stack direction="row" spacing={3}>
-                              <Button variant="solid" colorScheme="blue" size="sm">Edit</Button>
-                              <Button variant="solid" colorScheme="red" size="sm">Hapus</Button>
-                            </Stack>
-                          </Td>
-                        </Tr>
-                      )
-                    })
-                  }
+                  {userList.map((user) => {
+                    return (
+                      <Tr>
+                        <Td>{num++}</Td>
+                        <Td>{user.name}</Td>
+                        <Td>{disability_type(user.type_of_disability)}</Td>
+                        <Td>{role_type(user.role)}</Td>
+                        <Td>
+                          <Stack direction="row" spacing={3}>
+                            <Button
+                              variant="solid"
+                              colorScheme="blue"
+                              size="sm"
+                            >
+                              Edit
+                            </Button>
+                            <Button variant="solid" colorScheme="red" size="sm">
+                              Hapus
+                            </Button>
+                          </Stack>
+                        </Td>
+                      </Tr>
+                    );
+                  })}
                 </Tbody>
               </Table>
             </TableContainer>

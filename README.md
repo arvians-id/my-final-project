@@ -133,7 +133,11 @@ SUMMARY:
 - [Answers](#answers)                           ```(6/6) 100%```
 - [Questions](#questions)                       ```(6/6) 100%```
 
+<<<<<<< HEAD
 There are a total of ```54``` APIs
+=======
+There are a total of ```52``` APIs
+>>>>>>> 8098cec33ae82cabd9d6e3390d843bb13908cf71
 
 
 ## users

@@ -21,12 +21,14 @@ type QuestionService interface {
 
 type questionService struct {
 	QuestionRepository repository.QuestionRepository
+	UserRepository    repository.UserRepository
 	DB                 *sql.DB
 }
 
-func NewQuestionService(questionRepository *repository.QuestionRepository, db *sql.DB) QuestionService {
+func NewQuestionService(questionRepository *repository.QuestionRepository, userRepository *repository.UserRepository, db *sql.DB) QuestionService {
 	return &questionService{
 		QuestionRepository: *questionRepository,
+		UserRepository:    *userRepository,
 		DB:                 db,
 	}
 }
@@ -37,6 +39,15 @@ func (service *questionService) Create(ctx context.Context, request model.Create
 		return model.GetQuestionResponse{}, err
 	}
 	defer utils.CommitOrRollback(tx)
+	user, err := service.UserRepository.GetUserByID(ctx, tx, request.UserId)
+
+	if err != nil {
+		return model.GetQuestionResponse{}, err
+	}
+	
+	if(user.Id == 0 ){
+		return model.GetQuestionResponse{}, errors.New("user not found")
+	}
 
 	newQuestion := entity.Questions{
 		UserId:      request.UserId,

@@ -1,28 +1,24 @@
 import React from 'react';
 import { Flex, Stack, HStack, Text, Avatar } from '@chakra-ui/react';
+import useStore from '../provider/zustand/store';
 
 export default function QuestionCard({ question, module, moduleClass }) {
+  const user = useStore((state) => state.user);
+
   return (
     <>
       <Flex
         bgColor="blue.200"
         p={4}
-        width="1500px"
-        height="md"
+        // width="700px"
         borderRadius="10"
       >
-        <Flex direction="column" alignContent="center" mt={20}>
+        <Flex direction="column" mt={20} w="full">
           <HStack>
-            <Avatar
-              name="Irfan Kurniawan"
-              src="https://bit.ly/dan-abramov"
-              mr={2}
-              w={14}
-              h={14}
-            />
+            <Avatar name={user.username} src="/user.png" mr={2} w={14} h={14} />
             <Stack>
               <Text as="span" fontSize="lg" fontWeight="semibold">
-                Irfan Kurniawan
+                {user.username}
               </Text>
               <Text
                 as="span"
@@ -38,17 +34,17 @@ export default function QuestionCard({ question, module, moduleClass }) {
           <Text
             mt={5}
             as="h1"
-            fontSize="5xl"
+            fontSize="2xl"
             fontWeight="semibold"
             color="white"
           >
             {question}
           </Text>
           <Stack mt={5} direction="row">
-            <Text as="span" fontSize="3xl" fontWeight="semibold" color="black">
+            <Text as="span" fontSize="xl" fontWeight="semibold" color="black">
               {module}
             </Text>
-            <Text as="span" fontSize="3xl" fontWeight="semibold" color="black">
+            <Text as="span" fontSize="xl" fontWeight="semibold" color="black">
               {moduleClass}
             </Text>
           </Stack>

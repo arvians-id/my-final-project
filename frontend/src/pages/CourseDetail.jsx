@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Flex,
@@ -15,6 +15,7 @@ import DetailCard from '../components/DetailCard';
 import ListModule from '../components/ListModule';
 
 export default function CourseDetail() {
+  const [iterate, setIterate] = useState(1);
   let moduleDetail = [
     {
       id: 1,
@@ -41,6 +42,11 @@ export default function CourseDetail() {
       list: 'Layout Responsif Menggunakan Flexbox',
     },
   ];
+
+  const handleClick = () => {
+    setIterate(iterate + 1);
+  };
+
   return (
     <>
       {/* Navbar */}
@@ -108,6 +114,7 @@ export default function CourseDetail() {
                             key={index}
                             name={submission.name}
                             list={submission.list}
+                            onClick={handleClick}
                           />
                         );
                       })}

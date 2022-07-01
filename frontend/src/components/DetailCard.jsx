@@ -12,7 +12,7 @@ export default function DetailCard({ name, className, description }) {
       h={350}
       borderRadius={10}
     >
-      <Stack spacing={3} height={36}>
+      <Stack spacing={3}>
         <Heading fontSize="6xl">{name}</Heading>
         <HStack spacing={3} mt={4}>
           {/* <Text fontWeight="semibold" color="grey">{courseTeacher}</Text> */}

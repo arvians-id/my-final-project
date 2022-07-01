@@ -27,6 +27,10 @@ func (controller *AnswerController) Route(router *gin.Engine) *gin.Engine {
 		authorized.PUT("/answers/update/:answerId", middleware.UserHandler(controller.Update))
 		authorized.DELETE("/answers/:answerId", middleware.UserHandler(controller.Delete))
 		authorized.GET("/answers/by-user/:userId", middleware.UserHandler(controller.FindByUserId))
+<<<<<<< HEAD
+=======
+		// authorized.GET("/answers/by-question-id/:questionId", middleware.UserHandler(controller.FindByQuestionId))		
+>>>>>>> 8098cec33ae82cabd9d6e3390d843bb13908cf71
 		authorized.GET("/answers/:questionId", middleware.UserHandler(controller.FindById))
 	}
 
