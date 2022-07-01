@@ -50,7 +50,7 @@ func ToModuleSubmissionsResponse(modsub entity.ModuleSubmissions) model.GetModul
 		CourseId:    modsub.CourseId,
 		Name:        modsub.Name,
 		Description: modsub.Description,
-		Deadline:    modsub.Deadline,
+		Deadline:    modsub.Deadline.String(),
 	}
 }
 

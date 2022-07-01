@@ -15,14 +15,18 @@ import ListModule from '../components/ListModule';
 import MainAppLayout from '../components/layout/MainAppLayout';
 import { useParams } from 'react-router';
 import { API_GET_COURSE_BY_CODE } from '../api/course';
-import { API_GET_ALL_ARTICLE_BY_COURSE_CODE } from '../api/moduleArticles';
+import {
+  API_GET_ALL_ARTICLE_BY_COURSE_CODE,
+  API_GET_ARTICLE_DETAIL,
+} from '../api/moduleArticles';
 
-export default function CourseDetail() {
+export default function CourseArticleDetail() {
   const [loadingGetDetailCourse, setLoadingGetDetailCourse] = useState(false);
   const [detailCourse, setDetailCourse] = useState();
   const [listArticle, setListArticle] = useState([]);
+  const [articleDetail, setArticleDetail] = useState();
 
-  const { courseCode } = useParams();
+  const { courseCode, articleId } = useParams();
 
   const getCourseDetail = async () => {
     setLoadingGetDetailCourse(true);
@@ -41,10 +45,23 @@ export default function CourseDetail() {
     }
   };
 
+  const getDetailArticle = async () => {
+    const res = await API_GET_ARTICLE_DETAIL(courseCode, articleId);
+    console.log('res', res);
+    if (res.status === 200) {
+      setArticleDetail(res.data.data);
+    }
+  };
+
   useEffect(() => {
     getCourseDetail();
     getListArticle();
+    getDetailArticle();
   }, []);
+
+  useEffect(() => {
+    getDetailArticle();
+  }, [articleId]);
 
   let moduleDetail = [
     {
@@ -115,89 +132,32 @@ export default function CourseDetail() {
                         </Text>
                       </Box>
                     )}
-                    {/* {moduleDetail.map((module, index) => {
-                      return (
-                        <DetailCard
-                          key={index}
-                          name={module.name}
-                          className={module.class}
-                          description={module.description}
-                        />
-                      );
-                    })} */}
                   </Box>
                 </HStack>
               </Box>
-              <Box
-                p={6}
-                m={4}
-                shadow="md"
-                borderWidth="1px"
-                // w={950}
-                // h={750}
-                borderRadius={10}
-                w="full"
-              >
-                <Text fontWeight="semibold" fontSize="xl" mt={4}>
-                  Tentang Pelajaran :
-                </Text>
-                <Text mt={4} align="justify">
-                  {detailCourse.about}
-                </Text>
-                {/* <Text fontWeight="semibold" fontSize="xl" mt={4}>
-                  Yang akan Dipelajari :
-                </Text>
-                <OrderedList>
-                  <ListItem>
-                    Di akhir pelatihan, peserta dapat membuat sebuah website
-                    sederhana menggunakan kode pemrograman yang sesuai standar
-                    global.
-                  </ListItem>
-                  <ListItem>
-                    Membangun website menggunakan kode HTML, CSS, dan JavaScript
-                    sederhana.
-                  </ListItem>
-                  <ListItem>
-                    Menerapkan struktur website yang baik menggunakan standar
-                    semantic HTML.{' '}
-                  </ListItem>
-                  <ListItem>
-                    Mendemonstrasikan penyusunan layout website menggunakan
-                    teknik float atau flexbox.
-                  </ListItem>
-                </OrderedList> */}
-                <Text fontWeight="semibold" fontSize="xl" mt={4}>
-                  Alat Yang Dibutuhkan Selama Pembelajaran :
-                </Text>
-                <OrderedList>
-                  {detailCourse?.tools?.split(',').map((tool, index) => (
-                    <ListItem key={index}>{tool}</ListItem>
-                  ))}
-                </OrderedList>
-                {/* <Text fontWeight="semibold" fontSize="xl" mt={4}>
-                  Target Pembelajaran :
-                </Text>
-                <UnorderedList>
-                  <ListItem>
-                    Kelas ditujukan bagi pemula yang ingin memulai karirnya di
-                    bidang web development (pembuatan web) dan membutuhkan dasar
-                    atau fondasi yang kuat sebelum belajar lebih dalam di bidang
-                    web
-                  </ListItem>
-                  <ListItem>
-                    Kelas dapat diikuti oleh siswa yang melek IT sehingga wajib
-                    memiliki dan dapat mengoperasikan komputer dengan baik.
-                  </ListItem>
-                  <ListItem>
-                    Kelas ini didesain untuk pemula sehingga tidak ada prasyarat
-                    dalam pemahaman pemrograman sebelumnya.{' '}
-                  </ListItem>
-                  <ListItem>
-                    Siswa harus bisa belajar mandiri, berkomitmen, benar-benar
-                    punya rasa ingin tahu, dan tertarik pada subjek materi,{' '}
-                  </ListItem>
-                </UnorderedList> */}
-              </Box>
+              {articleDetail ? (
+                <Box
+                  p={6}
+                  m={4}
+                  shadow="md"
+                  borderWidth="1px"
+                  // w={950}
+                  // h={750}
+                  borderRadius={10}
+                  w="full"
+                >
+                  <Text fontWeight="semibold" fontSize="xl" mt={4}>
+                    Judul : {articleDetail.name}
+                  </Text>
+
+                  <div
+                    dangerouslySetInnerHTML={{ __html: articleDetail.content }}
+                  />
+                </Box>
+              ) : (
+                <Text>Gagal Mendapatkan Detail Article Course</Text>
+              )}
+
               {detailCourse.is_active === false && (
                 <Box
                   position="absolute"

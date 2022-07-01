@@ -127,11 +127,14 @@ export default function Home() {
     if (res.status === 200) {
       let data = [];
       for (const discussion of res.data.data ?? []) {
+        console.log(discussion);
         data.push({
           id: discussion.id,
           title: discussion.title,
           module: discussion.course_name,
           class: discussion.course_class,
+          description: discussion.description,
+          tags: discussion.tags,
         });
       }
       setListDiscusion(data);
@@ -254,6 +257,8 @@ export default function Home() {
                         title={discussion.title}
                         module={discussion.module}
                         moduleClass={discussion.class}
+                        description={discussion.description}
+                        tags={discussion.tags}
                       />
                     );
                   })

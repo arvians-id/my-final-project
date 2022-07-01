@@ -24,6 +24,7 @@ import AdminCourseDetail from './pages/Admin/AdminCourseDetail';
 import AdminCourseList from './pages/Admin/AdminCourseList';
 import AdminCourseSubmissionList from './pages/Admin/AdminCourseSubmissionList';
 import DetailDiscussion from './pages/DetailDiscussion';
+import CourseArticleDetail from './pages/CourseArticleDetail';
 
 function App() {
   const user = useStore((state) => state.user);
@@ -65,6 +66,7 @@ function App() {
             <Route path="profile" element={<Profile replace />} />
             <Route path="edit-profile" element={<EditProfile replace />} />
             <Route path="course/:courseCode" element={<CourseDetail replace />} />
+            <Route path="course/:courseCode/article/:articleId" element={<CourseArticleDetail replace />} />
             {/* <Route path="answer" element={<Answer replace />} /> */}
             <Route path="discussion/:questionId" element={<DetailDiscussion replace />} />
 

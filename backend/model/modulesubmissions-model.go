@@ -1,13 +1,11 @@
 package model
 
-import "time"
-
 type GetModuleSubmissionsResponse struct {
-	Id          int       `json:"id,omitempty"`
-	CourseId    int       `json:"course_id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Deadline    time.Time `json:"deadline"`
+	Id          int    `json:"id,omitempty"`
+	CourseId    int    `json:"course_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Deadline    string `json:"deadline"`
 }
 
 type GetNextPreviousSubmissionsResponse struct {
@@ -16,15 +14,15 @@ type GetNextPreviousSubmissionsResponse struct {
 }
 
 type CreateModuleSubmissionsRequest struct {
-	CourseId    int       `json:"course_id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Deadline    time.Time `json:"deadline"`
+	CourseId    int    `json:"course_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Deadline    string `json:"deadline"`
 }
 
 type UpdateModuleSubmissionsRequest struct {
-	CourseId    int       `json:"course_id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Deadline    time.Time `json:"deadline"`
+	CourseId    int    `json:"course_id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Deadline    string `json:"deadline"`
 }
