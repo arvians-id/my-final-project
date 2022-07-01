@@ -17,6 +17,7 @@ import (
 	"github.com/rg-km/final-project-engineering-12/backend/config"
 	"github.com/rg-km/final-project-engineering-12/backend/model"
 	"github.com/rg-km/final-project-engineering-12/backend/test/setup"
+	"github.com/rg-km/final-project-engineering-12/backend/utils"
 )
 
 var _ = Describe("User API", func() {
@@ -734,13 +735,13 @@ var _ = Describe("User API", func() {
 						CourseId:    idCourse1,
 						Name:        "Tugas Biologi",
 						Description: "ini form untuk submissions biologi",
-						Deadline:    time.Now().Add(2 * time.Hour),
+						Deadline:    utils.TimeNow().Add(2 * time.Hour).Format("12:34:56"),
 					},
 					{
 						CourseId:    idCourse2,
 						Name:        "Tugas Matematika",
 						Description: "ini form untuk submissions matematika",
-						Deadline:    time.Now().Add(2 * time.Hour),
+						Deadline:    utils.TimeNow().Add(2 * time.Hour).Format("12:34:56"),
 					},
 				}
 

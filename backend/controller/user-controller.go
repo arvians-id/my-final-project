@@ -41,14 +41,14 @@ func (controller *UserController) Route(router *gin.Engine) *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("/users", controller.UserRegister)                                          // done
-		api.POST("/users/login", controller.userLogin)                                       // done
-		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))                // done
-		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))             // done
-		api.PUT("/users/roleupdate/:id", middleware.AdminHandler(controller.userRoleUpdate)) // done
-		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))                // done
-		api.GET("/users", middleware.AdminHandler(controller.listUser))                      // done
-		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))                 // done
+		api.POST("/users", controller.UserRegister)                                                // done
+		api.POST("/users/login", controller.userLogin)                                             // done
+		api.GET("/userstatus", middleware.UserHandler(controller.userStatus))                      // done
+		api.POST("/users/logout", middleware.UserHandler(controller.userLogout))                   // done
+		api.PUT("/users/roleupdate/:id/:role", middleware.AdminHandler(controller.userRoleUpdate)) // done
+		api.GET("/users/:id", middleware.UserHandler(controller.getUserByID))                      // done
+		api.GET("/users", middleware.AdminHandler(controller.listUser))                            // done
+		api.PUT("/users/:id", middleware.UserHandler(controller.updateUser))                       // done
 		api.DELETE("/users/:id", middleware.AdminHandler(controller.deleteUser))
 		api.GET("/users/submissions", middleware.UserHandler(controller.StudentSubmission))
 		api.GET("/users/verify", controller.VerifyEmail)
@@ -253,6 +253,12 @@ func (controller *UserController) userRoleUpdate(ctx *gin.Context) {
 		return
 	}
 
+	roleUpdate, err := strconv.Atoi(ctx.Param("role"))
+
+	if err != nil {
+		return
+	}
+
 	token := ctx.GetHeader("Authorization")
 
 	if token == "" {
@@ -296,7 +302,7 @@ func (controller *UserController) userRoleUpdate(ctx *gin.Context) {
 		return
 	}
 
-	response, err := controller.UserService.UpdateUserRole(ctx, id)
+	response, err := controller.UserService.UpdateUserRole(ctx, id, roleUpdate)
 
 	if err != nil {
 		ctx.IndentedJSON(http.StatusInternalServerError, model.WebResponse{
