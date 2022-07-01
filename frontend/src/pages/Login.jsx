@@ -14,11 +14,30 @@ import { API_LOGIN } from '../api/auth';
 import useStore from '../provider/zustand/store';
 import { adapterUserToFE } from '../utils/adapterToFE';
 import { localSaveToken } from '../utils/token';
+import { useHoverTextToSpech } from '../hooks/useHover';
 
+let utterThis;
+var synth = window.speechSynthesis;
 export default function Login() {
   const navigate = useNavigate();
   const setUser = useStore((state) => state.setUser);
   const { toast } = createStandaloneToast();
+  const [refTitle, isHoverTitle] = useHoverTextToSpech('Login Akun');
+  const [refInfo, hoverInfo] = useHoverTextToSpech(
+    'Silahkan Masukkan Email Dan Password Anda'
+  );
+  const [refFieldEmail, isEmailField] = useHoverTextToSpech('Email address');
+  const [refPasswordField, isPasswordField] = useHoverTextToSpech('Password');
+  const [refButtonLogin, isButtonLogin] = useHoverTextToSpech('Tombol Login');
+  const [infoLogin, isInfoLogin] = useHoverTextToSpech(
+    'Atau Anda Sudah Memiliki Akun'
+  );
+  const [inforTeenager, setInforTeenager] = useHoverTextToSpech('Teenager');
+  const [infoDetailTeenager, setInfoDetailTeenager] = useHoverTextToSpech(
+    'Tempat mengajar dan berbagi kecerdasan'
+  );
+  const [refButtonRegister, isButtonRegister] =
+    useHoverTextToSpech('Tombol Daftar');
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: '',
@@ -46,10 +65,16 @@ export default function Login() {
     });
     if (res.status === 200 && res.data) {
       localSaveToken(res.data.token);
+      utterThis = new SpeechSynthesisUtterance('Login Akun Berhasil');
+      synth.speak(utterThis);
       setUser(adapterUserToFE(res.data.data));
       clearLoginForm();
       navigate('/');
-    } else if (res.status === 401) {
+      utterThis = new SpeechSynthesisUtterance(
+        'Password atau Email tidak ditemukan'
+      );
+      synth.speak(utterThis);
+    } else if (res.status !== 500) {
       toast({
         position: 'bottom',
         title: 'Error Login.',
@@ -59,6 +84,8 @@ export default function Login() {
         isClosable: true,
       });
     } else {
+      utterThis = new SpeechSynthesisUtterance('Login Akun Gagal');
+      synth.speak(utterThis);
       toast({
         position: 'bottom',
         title: 'Error Login.',
@@ -84,6 +111,7 @@ export default function Login() {
       loading: false,
     });
   };
+
   return (
     <Flex minHeight="100vh" width="full" flexDirection="row">
       <Box width="60%" minheight="100%" display="flex" alignItems="center">
@@ -95,18 +123,22 @@ export default function Login() {
             fontWeight="bold"
             mb={3}
           >
-            <Heading as="h2" size="2xl">
+            <Heading ref={refTitle} as="h2" size="2xl">
               Login Akun
             </Heading>
           </Box>
-          <Box as="span" fontSize="m" color="grey">
+          <Box as="span" ref={refInfo} fontSize="m" color="grey">
             Silahkan Masukkan Email Dan Password Anda
           </Box>
           <Box maxWidth="80%" m={5}>
             <form onSubmit={handleSubmitLogin}>
               <VStack spacing={4} align="stretch">
                 <Box>
-                  <FormLabel htmlFor="email" fontWeight="bold">
+                  <FormLabel
+                    ref={refFieldEmail}
+                    htmlFor="email"
+                    fontWeight="bold"
+                  >
                     Email address
                   </FormLabel>
                   <Input
@@ -121,7 +153,11 @@ export default function Login() {
                   />
                 </Box>
                 <Box>
-                  <FormLabel htmlFor="email" fontWeight="bold">
+                  <FormLabel
+                    ref={refPasswordField}
+                    htmlFor="email"
+                    fontWeight="bold"
+                  >
                     Password
                   </FormLabel>
                   <Input
@@ -139,6 +175,7 @@ export default function Login() {
                 <Box>
                   <VStack spacing={3} mt={5}>
                     <Button
+                      ref={refButtonLogin}
                       isLoading={loginForm.loading}
                       disabled={disabledButtonLogin()}
                       onClick={handleSubmitLogin}
@@ -149,7 +186,13 @@ export default function Login() {
                     >
                       Login
                     </Button>
-                    <Box as="p" fontSize="m" color="grey" textAlign="center">
+                    <Box
+                      ref={infoLogin}
+                      as="p"
+                      fontSize="m"
+                      color="grey"
+                      textAlign="center"
+                    >
                       Atau Anda Sudah Memiliki Akun
                     </Box>
                     <Button
@@ -159,6 +202,7 @@ export default function Login() {
                       variant="outline"
                       width="full"
                       p={5}
+                      ref={refButtonRegister}
                     >
                       Daftar Sekarang
                     </Button>
@@ -181,10 +225,17 @@ export default function Login() {
         overflowY="auto"
       >
         <Box m={10} width="100%">
-          <Box as="h1" fontSize="6xl" fontWeight="bold" mb={3} color="#EEF3D2">
+          <Box
+            ref={inforTeenager}
+            as="h1"
+            fontSize="6xl"
+            fontWeight="bold"
+            mb={3}
+            color="#EEF3D2"
+          >
             Teenager
           </Box>
-          <Box as="span" fontSize="lg" color="#EEF3D2">
+          <Box as="span" fontSize="lg" ref={infoDetailTeenager} color="#EEF3D2">
             Tempat mengajar dan berbagi kecerdasan
           </Box>
           <Box as="p" fontSize="m" color="grey"></Box>

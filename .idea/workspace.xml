@@ -5,9 +5,70 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="572c49c9-a3f6-4b4c-9c14-17bdddea45ce" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/assets-2/CWJrzygKQwdGpTVJRBPL.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/assets-2/MrscDLHbCVCIWjGtAfcN.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/assets-2/YIoYUniHdwUrKjitkuPW.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/assets-2/dhqAWudvmcrrLGroHsCL.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/assets-2/oefMoaFWYZYYmcmlRNPO.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/teenager-2.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/teenager-3.db" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/public/user.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/course.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/moduleArticles.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/question.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/submission.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/api/user.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/ModalCustom.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/hooks/useHover.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin/AdminAddCourseModule.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin/AdminAddCourseStudent.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin/AdminCourseDetail.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin/AdminCourseList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin/AdminCourseSubmissionList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin/AdminUserList.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/CourseArticleDetail.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/DetailDiscussion.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/EditProfile.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/utils/formatBytes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/utils/submission.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/utils/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controller/answer-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/answer-controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/entity/module_submissions.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/entity/module_submissions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/model/modulesubmissions-model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/modulesubmissions-model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/route/base.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/route/base.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/modulesubmissions-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/modulesubmissions-service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/service/question-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/question-service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/utils/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/utils/time.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/time.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/axiosWithToken.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/axiosWithToken.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/AnswerCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/AnswerCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/CourseCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/CourseCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/DetailCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/DetailCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/DiscussionCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/DiscussionCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ListModule.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ListModule.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/QuestionCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/QuestionCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/SubmissionCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SubmissionCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/SubmitCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SubmitCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/constant/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/constant/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Answer.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Course.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Course.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/CourseDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/CourseDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/DashboardDataPengguna.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/DashboardDataPengguna.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Discussion.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Discussion.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Home.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Home.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Profile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Register.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Register.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Submission.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Submission.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

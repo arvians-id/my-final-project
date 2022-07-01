@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import { localLoadToken } from '../utils/token';
 import { localClearToken } from '../utils/token';
 
@@ -14,7 +14,7 @@ export const axiosWithToken = (options = {}) => {
             },
         }
         : {};
-    const instance = Axios.create(config);
+    const instance = axios.create(config);
 
     instance.interceptors.response.use(
         function (response) {

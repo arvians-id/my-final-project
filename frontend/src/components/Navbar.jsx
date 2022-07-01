@@ -76,11 +76,15 @@ export default function Navbar() {
                 >
                   <HStack>
                     <Avatar
-                      name={user?.username}
-                      src={user?.profile_image ?? 'https://bit.ly/dan-abramov'}
+                      name={user.username}
+                      src={user.profile_image}
                       mr={2}
                       w={8}
                       h={8}
+                      borderRadius="100%"
+                      objectFit="cover"
+                      objectPosition="center"
+                      fallbackSrc="/user.png"
                     />
                     <Stack>
                       <Text as="span" fontSize="md" fontWeight="semibold">

@@ -64,7 +64,7 @@ func NewInitializedServer(configuration config.Config) *gin.Engine {
 
 	// Question Setup
 	questionRepository := repository.NewQuestionRepository()
-	questionService := service.NewQuestionService(&questionRepository, database)
+	questionService := service.NewQuestionService(&questionRepository, &userRepository, database)
 	questionController := controller.NewQuestionController(&questionService)
 
 	// Answer Setup
