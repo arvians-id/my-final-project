@@ -106,7 +106,7 @@ export default function Sidebar() {
                     title="Manajemen Siswa"
                   />
                 </AccordionButton>
-                <AccordionPanel>
+                <AccordionPanel ml={5}>
                   <ButtonAccordionPannel
                     link="/dashboard-user"
                     gotoPage={gotoPage}
@@ -121,7 +121,7 @@ export default function Sidebar() {
                     title="Manajemen Course"
                   />
                 </AccordionButton>
-                <AccordionPanel>
+                <AccordionPanel ml={5}>
                   <ButtonAccordionPannel
                     link="/dashbord-course"
                     gotoPage={gotoPage}
@@ -151,7 +151,12 @@ export default function Sidebar() {
                     title="Manajemen Submission"
                   />
                 </AccordionButton>
-                <AccordionPanel>
+                <AccordionPanel ml={5}>
+                  <ButtonAccordionPannel
+                    link="/add-submission"
+                    gotoPage={gotoPage}
+                    title="Tambah Submission"
+                  />
                   <ButtonAccordionPannel
                     link="/dashboard-submission"
                     gotoPage={gotoPage}

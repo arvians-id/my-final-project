@@ -106,6 +106,12 @@ export default function AdminCourseDetail() {
     }
   };
 
+  const handleEdit = (moduleId) => {
+    navigate(
+      `/add-course?action=edit&moduleId=${moduleId}&codeCourse=${selectedCodeCourse}`
+    );
+  };
+
   useEffect(() => {
     getListCourse();
   }, []);
@@ -218,6 +224,7 @@ export default function AdminCourseDetail() {
                                       variant="solid"
                                       colorScheme="blue"
                                       size="sm"
+                                      onClick={() => handleEdit(module.id)}
                                     >
                                       Edit
                                     </Button>

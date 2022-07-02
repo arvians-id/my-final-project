@@ -11,7 +11,6 @@ export default function QuestionCard({
   userName,
 }) {
   const user = useStore((state) => state.user);
-  console.log(userName);
   return (
     <>
       <Flex

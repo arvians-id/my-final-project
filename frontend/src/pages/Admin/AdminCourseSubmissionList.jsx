@@ -26,18 +26,27 @@ import {
   useDisclosure,
   Input,
   Select,
+  createStandaloneToast,
 } from '@chakra-ui/react';
 import { MdStackedBarChart } from 'react-icons/md';
 import MainAppLayout from '../../components/layout/MainAppLayout';
 import { API_GET_ALL_COURSE } from '../../api/course';
+import { axiosWithToken } from '../../api/axiosWithToken';
+import { BASE_URL } from '../../constant/api';
 
+import fileDownload from 'js-file-download';
 export default function AdminCourseSubmissionList() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [listCourse, setListCourse] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState();
   const [listCourseFull, setListCourseFull] = useState([]);
+  const [listSubmission, setListSubmission] = useState([]);
   const [selectedCodeCourse, setSelectedCodeCourse] = useState();
-
+  const [selectedIdSubmission, setSelectedIdSubmission] = useState(0);
+  const [listSiswaAssignment, setListSiswaAssignment] = useState([]);
+  const [selectedSiswaToGrade, setSelectedSiswaToGrade] = useState();
+  const [valueGrade, setValueGrade] = useState(0);
+  const { toast } = createStandaloneToast();
   let num = 1;
   let courseModule = [
     {
@@ -66,11 +75,15 @@ export default function AdminCourseSubmissionList() {
   ];
 
   let scoreStatus = (score) => {
-    if (score !== null) {
+    if (score) {
       return score;
     } else {
       return 'Belum Dinilai';
     }
+  };
+
+  const onChangeValueGrade = (e) => {
+    setValueGrade(e.target.value);
   };
 
   const getListCourse = async () => {
@@ -95,6 +108,105 @@ export default function AdminCourseSubmissionList() {
       (course) => course.code_course === e.target.value
     )[0];
     setSelectedCourse(selected);
+    getListSubmission(e.target.value);
+  };
+
+  const onChangeSubmission = (e) => {
+    setSelectedIdSubmission(Number(e.target.value));
+    const selected = listSubmission.filter(
+      (course) => course.code_course === Number(e.target.value)
+    )[0];
+    getListSiswaAssignSubmission(Number(e.target.value));
+  };
+
+  const getListSubmission = async (courseCode) => {
+    axiosWithToken()
+      .get(`${BASE_URL}/api/courses/${courseCode}/submissions`)
+      .then((res) => {
+        if (res.status === 200) {
+          setListSubmission(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getListSiswaAssignSubmission = async (submissionId) => {
+    axiosWithToken()
+      .get(
+        `${BASE_URL}/api/courses/${selectedCodeCourse}/submissions/${submissionId}/get`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setListSiswaAssignment(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const downloadSiswaAssign = async (filename, userSubmissionId) => {
+    axiosWithToken()
+      .post(
+        `${BASE_URL}/api/courses/${selectedCodeCourse}/submissions/${selectedIdSubmission}/user-submit/${userSubmissionId}/download`,
+        {
+          responseType: 'blob',
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          fileDownload(res.data, `${filename}.pdf`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onOpenDialog = (idUserSubmission) => {
+    const selectedSiswa = listSiswaAssignment.filter(
+      (siswa) => siswa.id_user_submission === Number(idUserSubmission)
+    )[0];
+    setSelectedSiswaToGrade(selectedSiswa);
+    onOpen();
+  };
+
+  const onCloseDialog = () => {
+    setSelectedSiswaToGrade(undefined);
+    onClose();
+  };
+
+  const handleGradeSiswa = async () => {
+    axiosWithToken()
+      .patch(
+        `${BASE_URL}/api/courses/${selectedCodeCourse}/submissions/${selectedIdSubmission}/user-submit/${selectedSiswaToGrade.id_user_submission}`,
+        {
+          grade: Number(valueGrade),
+        }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          toast({
+            status: 'success',
+            title: 'Berhasil',
+            description: 'Berhasil memberikan nilai siswa',
+          });
+          getListSiswaAssignSubmission(selectedIdSubmission);
+          setValueGrade(0);
+          onCloseDialog();
+        } else {
+          toast({
+            status: 'error',
+            title: 'Gagal',
+            description: 'Gagal memberikan nilai siswa',
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -137,7 +249,7 @@ export default function AdminCourseSubmissionList() {
                 ))}
               </Select>
               {selectedCourse && (
-                <Stack>
+                <Stack my={4}>
                   <Box as="h1" fontSize="2xl" fontWeight="semibold">
                     {selectedCourse.name}
                   </Box>
@@ -159,71 +271,105 @@ export default function AdminCourseSubmissionList() {
                   </Box>
                 </Stack>
               )}
+
+              {selectedCourse && (
+                <Box my={4}>
+                  <Text as="h2" fontSize="xl" fontWeight="semibold">
+                    Pilih Submission
+                  </Text>
+                  <Select
+                    id="submission"
+                    name="submission"
+                    placeholder="Select Submission"
+                    value={selectedIdSubmission}
+                    onChange={onChangeSubmission}
+                    required
+                  >
+                    {listSubmission.map((course, index) => (
+                      <option value={course.id} key={index}>
+                        {course.name}
+                      </option>
+                    ))}
+                  </Select>
+                </Box>
+              )}
             </Box>
             {/* End Header */}
             {/* Content */}
-            <Box>
-              <TableContainer>
-                <Table variant="striped" colorScheme="blue">
-                  <Thead>
-                    <Tr>
-                      <Th>No</Th>
-                      <Th>Nama Siswa</Th>
-                      <Th>Waktu Pengumpulan</Th>
-                      <Th>Nilai</Th>
-                      <Th>Aksi</Th>
-                    </Tr>
-                  </Thead>
-                  {
-                    <Tbody>
-                      {studentSubmission.map((submission) => {
-                        return (
-                          <Tr>
-                            <Td>{num++}</Td>
-                            <Td>{submission.name}</Td>
-                            <Td>{submission.time}</Td>
-                            <Td>{scoreStatus(submission.score)}</Td>
-                            <Td>
-                              <Stack direction="row" spacing={3}>
-                                <Button
-                                  variant="solid"
-                                  colorScheme="green"
-                                  size="sm"
-                                  onClick={onOpen}
-                                >
-                                  Nilai
-                                </Button>
-                                <Button
-                                  variant="solid"
-                                  colorScheme="blue"
-                                  size="sm"
-                                >
-                                  Dowload
-                                </Button>
-                                <Button
-                                  variant="solid"
-                                  colorScheme="red"
-                                  size="sm"
-                                >
-                                  Hapus
-                                </Button>
-                              </Stack>
-                            </Td>
-                          </Tr>
-                        );
-                      })}
-                    </Tbody>
-                  }
-                </Table>
-              </TableContainer>
-            </Box>
+            {selectedIdSubmission && (
+              <Box>
+                <TableContainer>
+                  <Table variant="striped" colorScheme="blue">
+                    <Thead>
+                      <Tr>
+                        <Th>No</Th>
+                        <Th>Nama Siswa</Th>
+                        <Th>Waktu Pengumpulan</Th>
+                        <Th>Nilai</Th>
+                        <Th>Aksi</Th>
+                      </Tr>
+                    </Thead>
+                    {listSiswaAssignment.length > 0 ? (
+                      <Tbody>
+                        {listSiswaAssignment.map((assign, index) => {
+                          return (
+                            <Tr key={index}>
+                              <Td>{index + 1}</Td>
+                              <Td>{assign.user_name}</Td>
+                              <Td>{new Date().toString()}</Td>
+                              <Td>{scoreStatus(assign.grade)}</Td>
+                              <Td>
+                                <Stack direction="row" spacing={3}>
+                                  <Button
+                                    variant="solid"
+                                    colorScheme="green"
+                                    size="sm"
+                                    onClick={() =>
+                                      onOpenDialog(assign.id_user_submission)
+                                    }
+                                  >
+                                    Nilai
+                                  </Button>
+                                  <Button
+                                    variant="solid"
+                                    colorScheme="blue"
+                                    size="sm"
+                                    onClick={() =>
+                                      downloadSiswaAssign(
+                                        `${assign.user_name}-${assign.module_submission_name}`,
+                                        assign.id_user_submission
+                                      )
+                                    }
+                                  >
+                                    Dowload
+                                  </Button>
+                                  <Button
+                                    variant="solid"
+                                    colorScheme="red"
+                                    size="sm"
+                                  >
+                                    Hapus
+                                  </Button>
+                                </Stack>
+                              </Td>
+                            </Tr>
+                          );
+                        })}
+                      </Tbody>
+                    ) : (
+                      <Text>Tidak ada siswa</Text>
+                    )}
+                  </Table>
+                </TableContainer>
+              </Box>
+            )}{' '}
             {/* End Content */}
           </Stack>
         </Box>
       </Flex>
       {/* End main */}
       {/* Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onCloseDialog}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Penilaian Tugas Siswa</ModalHeader>
@@ -235,21 +381,26 @@ export default function AdminCourseSubmissionList() {
               </Text>
               <Input
                 placeholder="Masukkan Nama Mata Pelajaran"
-                value="Irfan Kurniawan"
+                value={selectedSiswaToGrade?.user_name}
                 disabled
               />
               <Text as="h3" fontSize="md" fontWeight="semibold">
                 Nilai
               </Text>
-              <Input type="number" placeholder="Masukkan nilai" />
+              <Input
+                type="number"
+                value={valueGrade}
+                onChange={onChangeValueGrade}
+                placeholder="Masukkan nilai"
+              />
             </Stack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button colorScheme="blue" mr={3} onClick={handleGradeSiswa}>
               Berikan Nilai
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onCloseDialog}>
               Cancel
             </Button>
           </ModalFooter>

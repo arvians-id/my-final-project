@@ -28,6 +28,9 @@ import {
   Spinner,
   createStandaloneToast,
   Textarea,
+  FormControl,
+  FormLabel,
+  Switch,
 } from '@chakra-ui/react';
 import MainAppLayout from '../../components/layout/MainAppLayout';
 import {
@@ -37,6 +40,8 @@ import {
   API_UPDATE_COURSE,
 } from '../../api/course';
 import ModalCustom from '../../components/ModalCustom';
+import { BASE_URL } from '../../constant/api';
+import { axiosWithToken } from '../../api/axiosWithToken';
 
 export default function AdminCourseList() {
   const [loadingGetCourse, setLoadingGetCourse] = useState(false);
@@ -144,6 +149,7 @@ export default function AdminCourseList() {
                       <Th>No</Th>
                       <Th>Mata Pelajaran</Th>
                       <Th>Kelas</Th>
+                      <Th>Status</Th>
                       <Th>Aksi</Th>
                     </Tr>
                   </Thead>
@@ -199,10 +205,10 @@ const CourseListItem = ({
 }) => {
   const [loadingDeleteCourse, setLoadingDeleteCourse] = useState(false);
   const [loadingUpdateCourse, setLoadingUpdateCourse] = useState(false);
+  const [isActive, setIsActive] = useState(course.is_active);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dialogDelete = useDisclosure();
   const { toast } = createStandaloneToast();
-
   const [formUpdateCourse, setFormUpdateCourse] = useState({
     name: course.name,
     class: course.class,
@@ -275,12 +281,55 @@ const CourseListItem = ({
     setLoadingUpdateCourse(false);
   };
 
+  const changeStatusCourse = async (e) => {
+    axiosWithToken()
+      .patch(`${BASE_URL}/api/courses/${course.code_course}/status`, {
+        is_active: !isActive,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          toast({
+            status: 'success',
+            title: 'Berhasil',
+            description: 'Berhasil update status kelas',
+          });
+          setIsActive(!isActive);
+        } else {
+          toast({
+            status: 'error',
+            title: 'Gagal',
+            description: 'Gagal update status kelas',
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          status: 'error',
+          title: 'Gagal',
+          description: 'Gagal update status kelas',
+        });
+      });
+  };
+
   return (
     <>
       <Tr key={index}>
         <Td>{index + 1}</Td>
         <Td>{course.name}</Td>
         <Td>{course.class}</Td>
+        <Td>
+          <FormControl display="flex" alignItems="center">
+            <FormLabel htmlFor="active" mb="0">
+              Aktif ?
+            </FormLabel>
+            <Switch
+              size="lg"
+              id="active"
+              isChecked={isActive}
+              onChange={changeStatusCourse}
+            />
+          </FormControl>
+        </Td>
         <Td>
           <Stack direction="row" spacing={3}>
             <Button variant="solid" colorScheme="teal" size="sm">

@@ -29,7 +29,6 @@ export default function CourseDetail() {
     const res = await API_GET_COURSE_BY_CODE(courseCode);
     if (res.status === 200) {
       setDetailCourse(res.data.data);
-      console.log(res.data.data);
     }
     setLoadingGetDetailCourse(false);
   };

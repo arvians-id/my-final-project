@@ -19,7 +19,6 @@ export default function DiscussionCard({
   moduleClass,
   tags,
 }) {
-  console.log('tags', tags);
   return (
     <Flex bgColor="blue.300" p={4} width="full" borderRadius="10">
       <Flex direction="column" alignContent="center">

@@ -25,6 +25,8 @@ import { BASE_URL } from '../../constant/api';
 import { axiosWithToken } from '../../api/axiosWithToken';
 
 export default function AdminUserList() {
+  const { toast } = createStandaloneToast();
+
   const [listAllUser, setListAllUser] = useState([]);
   let num = 1;
   let userList = [
@@ -67,9 +69,9 @@ export default function AdminUserList() {
     }
   };
 
-  const updateRole = (type) => {
+  const updateRole = (id) => {
     axiosWithToken()
-      .put(`${BASE_URL}/api/users/roleupdate/${Number(type.target.value)}`)
+      .put(`${BASE_URL}/api/users/roleupdate/${Number(id)}`)
       .then((res) => {
         if (res.status === 200) {
           toast({
@@ -88,7 +90,6 @@ export default function AdminUserList() {
       });
   };
 
-  const { toast } = createStandaloneToast();
   const deleteUser = (id) => {
     axiosWithToken()
       .delete(`${BASE_URL}/api/users/${id}`)
@@ -160,23 +161,16 @@ export default function AdminUserList() {
                           <Td>{role_type(user.role)}</Td>
                           <Td>
                             <Stack direction="row" spacing={3}>
-                              {/* <Button
-                                variant="solid"
-                                colorScheme="blue"
-                                size="sm"
-                              >
-                                Ganti Role
-                              </Button> */}
-                              <Select
-                                id="gender"
-                                placeholder="Select Gender"
-                                name="gender"
-                                onChange={updateRole}
-                                value={user.role}
-                              >
-                                <option value={1}>Guru</option>
-                                <option value={2}>Siswa</option>
-                              </Select>
+                              {user.role === 2 && (
+                                <Button
+                                  variant="solid"
+                                  colorScheme="blue"
+                                  size="sm"
+                                  onClick={() => updateRole(user.id)}
+                                >
+                                  Ganti Role Guru
+                                </Button>
+                              )}
                               <Button
                                 variant="solid"
                                 colorScheme="red"

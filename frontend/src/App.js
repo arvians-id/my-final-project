@@ -25,6 +25,7 @@ import AdminCourseList from './pages/Admin/AdminCourseList';
 import AdminCourseSubmissionList from './pages/Admin/AdminCourseSubmissionList';
 import DetailDiscussion from './pages/DetailDiscussion';
 import CourseArticleDetail from './pages/CourseArticleDetail';
+import AdminAddSubmisionStudent from './pages/Admin/AdminAddSubmisionStudent';
 
 function App() {
   const user = useStore((state) => state.user);
@@ -83,6 +84,7 @@ function App() {
             <Route path="/" element={<HomeNonSiswa replace />} />
             <Route path="dashboard-siswa" element={<DashboardDataSiswa replace />} />
             <Route path="add-course" element={<AdminAddCourseModule replace />} />
+            <Route path="add-submission" element={<AdminAddSubmisionStudent replace />} />
             <Route path="add-student-to-course" element={<AdminAddCourseStudent replace />} />
             <Route path="admin-course-detail" element={<AdminCourseDetail replace />} />
             <Route path="dashbord-course" element={<AdminCourseList replace />} />

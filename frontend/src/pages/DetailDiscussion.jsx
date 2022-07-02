@@ -73,7 +73,6 @@ export default function DetailDiscussion() {
       .get(`${BASE_URL}/api/questions/${questionId}`)
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data.data);
           setQuestions(res.data.data);
         }
       });

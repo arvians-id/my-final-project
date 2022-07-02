@@ -24,8 +24,9 @@ func NewCourseRepository() CourseRepository {
 }
 
 func (repository *courseRepository) FindAll(ctx context.Context, tx *sql.Tx, status bool, limit int) ([]entity.Courses, error) {
-	query := `SELECT * FROM courses WHERE is_active = ? ORDER BY created_at DESC LIMIT ?`
-	queryContext, err := tx.QueryContext(ctx, query, status, limit)
+	// query := `SELECT * FROM courses WHERE is_active = ? ORDER BY created_at DESC LIMIT ?`
+	query := `SELECT * FROM courses ORDER BY created_at DESC LIMIT ?` // disable WHERE clause `is_active` 
+	queryContext, err := tx.QueryContext(ctx, query, limit)
 	if err != nil {
 		return nil, err
 	}

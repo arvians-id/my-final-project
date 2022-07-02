@@ -33,7 +33,6 @@ export default function CourseArticleDetail() {
     const res = await API_GET_COURSE_BY_CODE(courseCode);
     if (res.status === 200) {
       setDetailCourse(res.data.data);
-      console.log(res.data.data);
     }
     setLoadingGetDetailCourse(false);
   };
@@ -47,7 +46,6 @@ export default function CourseArticleDetail() {
 
   const getDetailArticle = async () => {
     const res = await API_GET_ARTICLE_DETAIL(courseCode, articleId);
-    console.log('res', res);
     if (res.status === 200) {
       setArticleDetail(res.data.data);
     }
