@@ -15,7 +15,7 @@ import (
 type UserRepository interface {
 	Register(ctx context.Context, tx *sql.Tx, user entity.Users) error
 	Login(ctx context.Context, tx *sql.Tx, data model.GetUserLogin) (entity.Users, error)
-	UpdateRole(ctx context.Context, tx *sql.Tx, id int) (entity.Users, error)
+	UpdateRole(ctx context.Context, tx *sql.Tx, id int, role int) (entity.Users, error)
 	GetUserByID(ctx context.Context, tx *sql.Tx, id int) (entity.Users, error)
 	ListUser(ctx context.Context, tx *sql.Tx) ([]entity.Users, error)
 	GetLastInsertUser(ctx context.Context, tx *sql.Tx) (entity.Users, error)
@@ -107,10 +107,10 @@ func (repository *userRepository) Login(ctx context.Context, tx *sql.Tx, data mo
 }
 
 // UpdateRole is a function to update a user's role by database
-func (repository *userRepository) UpdateRole(ctx context.Context, tx *sql.Tx, id int) (entity.Users, error) {
+func (repository *userRepository) UpdateRole(ctx context.Context, tx *sql.Tx, id int, role int) (entity.Users, error) {
 	var user entity.Users
 
-	_, err := tx.ExecContext(ctx, "UPDATE users SET role = ? WHERE id = ?", 1, id)
+	_, err := tx.ExecContext(ctx, "UPDATE users SET role = ? WHERE id = ?", role, id)
 
 	if err != nil {
 		return entity.Users{}, err

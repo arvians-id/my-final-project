@@ -33,7 +33,14 @@
       <change afterPath="$PROJECT_DIR$/frontend/src/utils/submission.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/frontend/src/utils/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/backend/assets/hLOFBAYjJmUziUcidmXq.png" beforeDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+>>>>>>> 9143c5078cf8f7ff53d7b5aa75983415cfc4f584
       <change beforePath="$PROJECT_DIR$/backend/controller/answer-controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controller/answer-controller.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/entity/module_submissions.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/entity/module_submissions.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/model/modulesubmissions-model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/model/modulesubmissions-model.go" afterDir="false" />
@@ -41,6 +48,10 @@
       <change beforePath="$PROJECT_DIR$/backend/service/modulesubmissions-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/modulesubmissions-service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/service/question-service.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/service/question-service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/teenager.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/teenager.db" afterDir="false" />
+<<<<<<< HEAD
+>>>>>>> 8098cec33ae82cabd9d6e3390d843bb13908cf71
+=======
+>>>>>>> 9143c5078cf8f7ff53d7b5aa75983415cfc4f584
       <change beforePath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test/integration/teenager_test.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/utils/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/utils/time.go" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/time.go" afterDir="false" />

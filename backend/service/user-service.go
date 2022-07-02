@@ -15,7 +15,7 @@ import (
 type UserService interface {
 	RegisterUser(ctx context.Context, user model.UserRegisterResponse, signature string, expired int) (model.UserRegisterResponse, error)
 	UserLogin(ctx context.Context, user model.GetUserLogin) (model.UserLoginResponse, error)
-	UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error)
+	UpdateUserRole(ctx context.Context, id int, role int) (model.UserDetailResponse, error)
 	ListUser(ctx context.Context) ([]model.UserDetailResponse, error)
 	GetUserbyID(ctx context.Context, id int) (model.UserDetailResponse, error)
 	UpdateUser(ctx context.Context, id int, user model.UserDetailResponse) (model.UserDetailResponse, error)
@@ -149,7 +149,7 @@ func (service *UserServiceImplement) UserLogin(ctx *gin.Context, data model.GetU
 }
 
 // UpdateUserRole is used to update user role
-func (service *UserServiceImplement) UpdateUserRole(ctx context.Context, id int) (model.UserDetailResponse, error) {
+func (service *UserServiceImplement) UpdateUserRole(ctx context.Context, id int, role int) (model.UserDetailResponse, error) {
 	var response model.UserDetailResponse
 
 	tx, err := service.DB.Begin()
@@ -159,7 +159,7 @@ func (service *UserServiceImplement) UpdateUserRole(ctx context.Context, id int)
 	}
 	defer utils.CommitOrRollback(tx)
 
-	user, err := service.userRepository.UpdateRole(ctx, tx, id)
+	user, err := service.userRepository.UpdateRole(ctx, tx, id, role)
 
 	if err != nil {
 		return model.UserDetailResponse{}, err
